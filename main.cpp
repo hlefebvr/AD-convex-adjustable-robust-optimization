@@ -10,5 +10,15 @@ int main() {
 
     std::cout << instance << std::endl;
 
+    // SeparationProblem(const Instance&);
+    // -> update(const FirstStageProposition&)
+    // -> solve()
+    // -> RobustCertificate get_solution()
+
+    // MasterProblem(const Instance&)
+    // -> update(const RobustCertificate&)
+    // -> solve()
+    // -> FirstStageProposition get_solution()
+
     return 0;
 }
