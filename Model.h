@@ -17,6 +17,7 @@ public:
     Model();
     void solve();
     void export_model(const std::string& t_model);
+    double objective_value() const { return m_model.get(GRB_DoubleAttr_ObjVal); }
 };
 
 

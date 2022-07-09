@@ -19,4 +19,6 @@ void Model::export_model(const std::string &t_model) {
     m_model.write(t_model);
 }
 
-Model::Model() : m_model(m_env) {}
+Model::Model() : m_model(m_env) {
+    m_model.set(GRB_IntParam_OutputFlag, 0);
+}

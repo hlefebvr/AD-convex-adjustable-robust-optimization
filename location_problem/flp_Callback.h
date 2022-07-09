@@ -18,6 +18,7 @@ class flp::Callback : public GRBCallback {
 protected:
     SeparationProblem& m_separation;
     const Instance& m_instance;
+    const double m_tolerance = 1e-6;
 
     std::vector<GRBVar> m_x;
     GRBVar m_tau;

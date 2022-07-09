@@ -16,7 +16,6 @@ namespace flp {
 
 class flp::MasterProblem : public Model {
     const Instance& m_instance;
-    const double m_deviation;
     std::vector<GRBVar> m_x;
     GRBVar m_tau;
 
@@ -24,7 +23,7 @@ class flp::MasterProblem : public Model {
     void create_variable_tau();
     void create_objective();
 public:
-    MasterProblem(const Instance& t_instance, double t_deviation);
+    explicit MasterProblem(const Instance& t_instance);
     void set_callback(Callback& t_cb);
 };
 

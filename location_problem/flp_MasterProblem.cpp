@@ -6,12 +6,14 @@
 #include "flp_Instance.h"
 #include "flp_Callback.h"
 
-flp::MasterProblem::MasterProblem(const flp::Instance &t_instance, double t_deviation)
-        : m_instance(t_instance), m_deviation(t_deviation) {
+flp::MasterProblem::MasterProblem(const flp::Instance &t_instance)
+        : m_instance(t_instance) {
 
     create_variables_x();
     create_variable_tau();
     create_objective();
+
+    m_model.set(GRB_IntParam_LazyConstraints, 1);
 
 }
 
@@ -31,7 +33,7 @@ void flp::MasterProblem::create_objective() {
         expr += m_instance.f(i) * m_x[i];
     }
 
-    m_model.setObjective(expr, GRB_MAXIMIZE);
+    m_model.setObjective(expr, GRB_MINIMIZE);
 }
 
 void flp::MasterProblem::set_callback(Callback &t_cb) {

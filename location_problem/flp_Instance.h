@@ -26,6 +26,9 @@ protected:
     std::vector<double> m_d;
     std::vector<std::vector<double>> m_t;
 
+    double m_gamma = 0.;
+    double m_deviation = 0.;
+
     friend std::ostream& ::operator<<(std::ostream& t_os, const flp::Instance& t_instance);
 
     Instance() = default;
@@ -43,6 +46,13 @@ public:
     double b() const { return m_b; }
     [[nodiscard]] double d(unsigned int t_j) const { return m_d[t_j]; }
     [[nodiscard]] double t(unsigned int t_i, unsigned int t_j) const { return m_t[t_i][t_j]; }
+    double gamma() const { return m_gamma; }
+    double deviation() const { return m_deviation; }
+
+    void set_robust_parameters(double t_gamma, double t_deviation) {
+        m_gamma = t_gamma;
+        m_deviation = t_deviation;
+    }
 };
 
 #endif //CONVEX_ARO_FLP_INSTANCE_H

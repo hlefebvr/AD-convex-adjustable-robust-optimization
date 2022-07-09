@@ -7,7 +7,7 @@
 #include "flp_Instance.h"
 #include "flp_FirstStageProposition.h"
 
-flp::SeparationProblem::SeparationProblem(const flp::Instance &t_instance, double t_gamma, double t_max_deviation)
+flp::SeparationProblem::SeparationProblem(const flp::Instance &t_instance)
     : m_instance(t_instance) {
 
     create_variables_pi();
@@ -20,10 +20,10 @@ flp::SeparationProblem::SeparationProblem(const flp::Instance &t_instance, doubl
     create_constraint_simplex();
     create_constraints_perspective_conjugate();
     create_constraints_farkas();
-    create_constraint_budget(t_gamma);
+    create_constraint_budget();
     create_linearization_constraints();
 
-    create_objective_without_x(t_max_deviation);
+    create_objective_without_x();
 }
 
 void flp::SeparationProblem::create_variables_pi() {
@@ -89,7 +89,7 @@ void flp::SeparationProblem::create_constraints_farkas() {
     }
 }
 
-void flp::SeparationProblem::create_objective_without_x(double t_max_deviation) {
+void flp::SeparationProblem::create_objective_without_x() {
     const unsigned int n_sites = m_instance.n_sites();
     const unsigned int n_clients = m_instance.n_clients();
 
@@ -99,19 +99,19 @@ void flp::SeparationProblem::create_objective_without_x(double t_max_deviation) 
     }
     for (unsigned int j = 0 ; j < n_clients ; j += 1) {
         expr += m_pi[0][j] * m_instance.d(j);
-        expr += m_z[j] * m_instance.d(j) * t_max_deviation;
+        expr += m_z[j] * m_instance.d(j) * m_instance.deviation();
     }
     m_model.setObjective(expr, GRB_MAXIMIZE);
 }
 
-void flp::SeparationProblem::create_constraint_budget(double t_gamma) {
+void flp::SeparationProblem::create_constraint_budget() {
     const unsigned int n_clients = m_instance.n_clients();
 
     GRBLinExpr expr = 0;
     for (unsigned int j = 0 ; j < n_clients ; j += 1) {
         expr += m_xi[j];
     }
-    m_model.addConstr(expr <= t_gamma);
+    m_model.addConstr(expr <= m_instance.gamma());
 }
 
 void flp::SeparationProblem::create_linearization_constraints() {
@@ -132,4 +132,28 @@ void flp::SeparationProblem::update(const FirstStageProposition &t_proposition) 
     for (unsigned int i = 0 ; i < n_sites ; i += 1) {
         m_pi[2][i].set(GRB_DoubleAttr_Obj, -1.0 * m_instance.q(i) * t_proposition.x(i));
     }
+}
+
+flp::RobustCertificate flp::SeparationProblem::get_certificate() const {
+    RobustCertificate result(m_instance);
+
+    const unsigned int n_sites = m_instance.n_sites();
+    const unsigned int n_clients = m_instance.n_clients();
+
+    result.set_objective_value(m_model.get(GRB_DoubleAttr_ObjVal));
+
+    for (unsigned int j = 0 ; j < n_clients ; j += 1) {
+        result.set_pi_value(0, j, m_pi[0][j].get(GRB_DoubleAttr_X));
+        result.set_xi_value(j, m_xi[j].get(GRB_DoubleAttr_X));
+    }
+    for (unsigned int i = 0 ; i < n_sites ; i += 1) {
+        result.set_pi_value(1, i, m_pi[1][i].get(GRB_DoubleAttr_X));
+        result.set_pi_value(2, i, m_pi[2][i].get(GRB_DoubleAttr_X));
+        result.set_v_value(i, m_v[i].get(GRB_DoubleAttr_X));
+        result.set_theta_value(i, m_theta[i].get(GRB_DoubleAttr_X));
+    }
+    result.set_mu_value(m_mu.get(GRB_DoubleAttr_X));
+
+
+    return result;
 }

@@ -6,6 +6,7 @@
 #define CONVEX_ARO_FLP_SEPARATIONPROBLEM_H
 
 #include "../Model.h"
+#include "flp_RobustCertificate.h"
 
 namespace flp {
     class SeparationProblem;
@@ -31,12 +32,13 @@ class flp::SeparationProblem : public Model {
     void create_constraint_simplex();
     void create_constraints_perspective_conjugate();
     void create_constraints_farkas();
-    void create_objective_without_x(double t_max_deviation);
-    void create_constraint_budget(double t_gamma);
+    void create_objective_without_x();
+    void create_constraint_budget();
     void create_linearization_constraints();
 public:
-    SeparationProblem(const Instance& t_instance, double t_gamma, double t_max_deviation);
+    explicit SeparationProblem(const Instance& t_instance);
     void update(const FirstStageProposition& t_proposition);
+    RobustCertificate get_certificate() const;
 };
 
 
