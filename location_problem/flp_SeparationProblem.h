@@ -5,7 +5,7 @@
 #ifndef CONVEX_ARO_FLP_SEPARATIONPROBLEM_H
 #define CONVEX_ARO_FLP_SEPARATIONPROBLEM_H
 
-#include <gurobi_c++.h>
+#include "../Model.h"
 
 namespace flp {
     class SeparationProblem;
@@ -13,10 +13,8 @@ namespace flp {
     class FirstStageProposition;
 }
 
-class flp::SeparationProblem {
+class flp::SeparationProblem : public Model {
     const Instance& m_instance;
-    GRBEnv m_env;
-    GRBModel m_model;
     std::vector<std::vector<GRBVar>> m_pi;
     std::vector<GRBVar> m_theta;
     std::vector<GRBVar> m_v;
@@ -24,7 +22,6 @@ class flp::SeparationProblem {
     std::vector<GRBVar> m_z;
     GRBVar m_mu;
 
-    void create_variables(std::vector<GRBVar>& t_dest, unsigned int t_n, double t_lb, double t_ub, char t_type);
     void create_variables_pi();
     void create_variables_theta();
     void create_variables_v();
@@ -39,8 +36,6 @@ class flp::SeparationProblem {
     void create_linearization_constraints();
 public:
     SeparationProblem(const Instance& t_instance, double t_gamma, double t_max_deviation);
-    void solve();
-    void export_model(const std::string& t_model);
     void update(const FirstStageProposition& t_proposition);
 };
 

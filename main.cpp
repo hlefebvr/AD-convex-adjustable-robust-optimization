@@ -2,27 +2,26 @@
 #include "location_problem/flp_Instance.h"
 #include "location_problem/flp_RandomInstance.h"
 #include "location_problem/flp_SeparationProblem.h"
+#include "location_problem/flp_MasterProblem.h"
+#include "location_problem/flp_CuttingPlaneCallback.h"
 
 int main() {
 
     using namespace flp;
 
-    RandomInstance instance(100, 50, 1.5);
+    const double Gamma = 2;
+    const double deviation = .25;
+
+    RandomInstance instance(10, 5, 1.5);
 
 
-    SeparationProblem separation(instance, 2, .25);
-    separation.export_model("separation.lp");
-    separation.solve();
+    SeparationProblem separation(instance, Gamma, deviation);
+    CuttingPlaneCallback cb(instance, separation);
 
-    // SeparationProblem(const Instance&);
-    // -> update(const FirstStageProposition&)
-    // -> solve()
-    // -> RobustCertificate get_solution()
-
-    // MasterProblem(const Instance&)
-    // -> update(const RobustCertificate&)
-    // -> solve()
-    // -> FirstStageProposition get_solution()
+    MasterProblem master(instance, deviation);
+    master.export_model("master.lp");
+    master.set_callback(cb);
+    master.solve();
 
     return 0;
 }

@@ -15,18 +15,13 @@ namespace flp {
 class flp::FirstStageProposition {
     std::vector<double> m_x_values;
     double m_tau_value = 0;
-    double m_objective_value = 0;
 public:
-    explicit FirstStageProposition(const flp::Instance& t_instance);
+    explicit FirstStageProposition(const flp::Instance& t_instance) : m_x_values(t_instance.n_sites()) {}
 
     double x(unsigned int t_i) const { return m_x_values[t_i]; }
     void set_x_value(unsigned int t_i, double t_v) { m_x_values[t_i] = t_v; }
     double tau() const { return m_tau_value; }
     void set_tau_value(double t_v) { m_tau_value = t_v; }
-    double objective_value() const { return m_objective_value; }
-    void set_objective_value(double t_v) { m_objective_value = t_v; }
 };
-
-flp::FirstStageProposition::FirstStageProposition(const flp::Instance &t_instance) : m_x_values(t_instance.n_sites()) {}
 
 #endif //CONVEX_ARO_FLP_FIRSTSTAGEPROPOSITION_H

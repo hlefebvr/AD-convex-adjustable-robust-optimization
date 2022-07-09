@@ -8,7 +8,7 @@
 #include "flp_FirstStageProposition.h"
 
 flp::SeparationProblem::SeparationProblem(const flp::Instance &t_instance, double t_gamma, double t_max_deviation)
-    : m_instance(t_instance), m_model(m_env) {
+    : m_instance(t_instance) {
 
     create_variables_pi();
     create_variables_theta();
@@ -24,15 +24,6 @@ flp::SeparationProblem::SeparationProblem(const flp::Instance &t_instance, doubl
     create_linearization_constraints();
 
     create_objective_without_x(t_max_deviation);
-}
-
-void
-flp::SeparationProblem::create_variables(std::vector<GRBVar> &t_dest, unsigned int t_n, double t_lb, double t_ub,
-                                             char t_type) {
-    t_dest.reserve(t_n);
-    for (unsigned int i = 0 ; i < t_n ; i += 1) {
-        t_dest.emplace_back(m_model.addVar(t_lb, t_ub, 0.0, t_type));
-    }
 }
 
 void flp::SeparationProblem::create_variables_pi() {
@@ -74,10 +65,6 @@ void flp::SeparationProblem::create_constraint_simplex() {
     m_model.addConstr(expr == 1);
 }
 
-void flp::SeparationProblem::export_model(const std::string &t_model) {
-    m_model.write(t_model);
-}
-
 void flp::SeparationProblem::create_constraints_perspective_conjugate() {
     const unsigned int n_sites = m_instance.n_sites();
     for (unsigned int i = 0 ; i < n_sites ; i += 1) {
@@ -100,10 +87,6 @@ void flp::SeparationProblem::create_constraints_farkas() {
             m_model.addConstr(m_pi[0][j] - m_pi[1][i] - m_instance.t(i,j) * m_mu == 0);
         }
     }
-}
-
-void flp::SeparationProblem::solve() {
-    m_model.optimize();
 }
 
 void flp::SeparationProblem::create_objective_without_x(double t_max_deviation) {
@@ -144,7 +127,7 @@ void flp::SeparationProblem::create_linearization_constraints() {
 void flp::SeparationProblem::update(const FirstStageProposition &t_proposition) {
     const unsigned int n_sites = m_instance.n_sites();
 
-    m_mu.set(GRB_DoubleAttr_Obj, -1.0 * t_proposition.objective_value());
+    m_mu.set(GRB_DoubleAttr_Obj, -1.0 * t_proposition.tau());
 
     for (unsigned int i = 0 ; i < n_sites ; i += 1) {
         m_pi[2][i].set(GRB_DoubleAttr_Obj, -1.0 * m_instance.q(i) * t_proposition.x(i));
