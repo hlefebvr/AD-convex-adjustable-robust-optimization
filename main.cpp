@@ -1,19 +1,15 @@
 #include <iostream>
-#include <fstream>
-#include <chrono>
-#include "location_problem/flp_Instance.h"
 #include "location_problem/flp_RandomInstance.h"
 #include "location_problem/flp_SeparationProblem.h"
 #include "location_problem/flp_MasterProblem.h"
 #include "location_problem/flp_CuttingPlaneCallback.h"
-#include "location_problem/flp_InstanceFromFile.h"
 
-template<class T> void solve(const flp::Instance& t_instance) {
+void solve_with_branch_and_cut(const flp::Instance& t_instance) {
 
     using namespace flp;
 
     SeparationProblem separation(t_instance);
-    T cb(t_instance, separation);
+    CuttingPlaneCallback cb(t_instance, separation);
 
     MasterProblem master(t_instance);
     master.set_callback(cb);
@@ -38,8 +34,6 @@ int main() {
 
     const double deviation = .15;
 
-    // InstanceFromFile instance("instance.txt");
-
     const std::vector<std::pair<unsigned int, unsigned int>> configs = {
             { 10, 20 },
             { 10, 30 },
@@ -63,7 +57,7 @@ int main() {
 
                 instance.set_robust_parameters(Gamma, deviation);
 
-                solve<CuttingPlaneCallback>(instance);
+                solve_with_branch_and_cut(instance);
 
             }
 

@@ -38,6 +38,7 @@ void flp::MasterProblem::create_objective() {
 
 void flp::MasterProblem::set_callback(Callback &t_cb) {
     m_model.setCallback(&t_cb);
+    t_cb.set_model(m_model);
     t_cb.set_variables_x(m_x);
     t_cb.set_variable_tau(m_tau);
 }

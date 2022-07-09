@@ -24,6 +24,7 @@ protected:
     unsigned int m_n_solved_separation = 0;
     unsigned int m_n_generated_scenarios = 0;
 
+    GRBModel* m_model;
     std::vector<GRBVar> m_x;
     GRBVar m_tau;
     FirstStageProposition get_proposition();
@@ -33,6 +34,7 @@ protected:
 public:
     Callback(const Instance& t_instance, SeparationProblem& t_separation);
 
+    void set_model(GRBModel& t_model) { m_model = &t_model; }
     void set_variables_x(const std::vector<GRBVar>& t_x) { m_x = t_x; }
     void set_variable_tau(const GRBVar& t_tau) { m_tau = t_tau; }
 
