@@ -4,7 +4,7 @@
 #include "flp_Callback.h"
 #include "flp_SeparationProblem.h"
 
-flp::Callback::Callback(Instance &t_instance, SeparationProblem &t_separation)
+flp::Callback::Callback(const Instance &t_instance, SeparationProblem &t_separation)
     : m_instance(t_instance), m_separation(t_separation) {}
 
 flp::FirstStageProposition flp::Callback::get_proposition() {

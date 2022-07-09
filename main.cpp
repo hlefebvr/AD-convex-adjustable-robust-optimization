@@ -8,6 +8,30 @@
 #include "location_problem/flp_CuttingPlaneCallback.h"
 #include "location_problem/flp_InstanceFromFile.h"
 
+template<class T> void solve(const flp::Instance& t_instance) {
+
+    using namespace flp;
+
+    SeparationProblem separation(t_instance);
+    T cb(t_instance, separation);
+
+    MasterProblem master(t_instance);
+    master.set_callback(cb);
+    master.solve();
+
+    std::cout << "RESULT," << t_instance.n_sites() << ','
+              << t_instance.n_clients() << ','
+              << t_instance.gamma() << ','
+              << t_instance.deviation() << ','
+              << master.timer().cumulative_time_in_seconds() << ','
+              << separation.timer().cumulative_time_in_seconds() << ','
+              << master.objective_value() << ','
+              << cb.n_solved_separation() << ','
+              << cb.n_generated_scenarios() << ','
+              << std::endl;
+
+}
+
 int main() {
 
     using namespace flp;
@@ -39,25 +63,8 @@ int main() {
 
                 instance.set_robust_parameters(Gamma, deviation);
 
-                SeparationProblem separation(instance);
-                CuttingPlaneCallback cb(instance, separation);
+                solve<CuttingPlaneCallback>(instance);
 
-                MasterProblem master(instance);
-                master.set_callback(cb);
-                master.solve();
-
-                std::cout << "RESULT," << n_sites << ','
-                          << n_clients << ','
-                          << instance.gamma() << ','
-                          << instance.deviation() << ','
-                          << master.timer().cumulative_time_in_seconds() << ','
-                          << separation.timer().cumulative_time_in_seconds() << ','
-                          << master.objective_value() << ','
-                          << cb.n_solved_separation() << ','
-                          << cb.n_generated_scenarios() << ','
-                          << std::endl;
-
-                //master.export_model(std::string("master_") + std::to_string(Gamma) + ".sol");
             }
 
         }
