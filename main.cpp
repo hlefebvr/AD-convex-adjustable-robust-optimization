@@ -8,6 +8,7 @@ int main() {
 
     RandomInstance instance(10, 5, 1.5);
 
+
     std::cout << instance << std::endl;
 
     // SeparationProblem(const Instance&);
