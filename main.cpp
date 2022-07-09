@@ -12,33 +12,54 @@ int main() {
 
     using namespace flp;
 
-    const double Gamma = 2;
-    const double deviation = .25;
+    const double deviation = .15;
 
     // InstanceFromFile instance("instance.txt");
 
-    for (unsigned int k = 0 ; k < 20;  k += 1) {
+    const std::vector<std::pair<unsigned int, unsigned int>> configs = {
+            { 10, 20 },
+            { 10, 30 },
+            { 15, 30 },
+            { 15, 40 },
+            { 20, 40 },
+            { 20, 50 },
+            { 25, 50 },
+            { 25, 60 },
+            { 30, 60 },
+            { 30, 70 }
+    };
 
-        RandomInstance instance(50, 25, 1.4);
+    for (const auto& [n_sites, n_clients] : configs) {
 
-        for (unsigned int i = 0 ; i <= 10 ; i += 2) {
+        for (unsigned int k = 0 ; k < 5 ; k += 1) {
 
-            instance.set_robust_parameters(i, deviation);
+            RandomInstance instance(15, 30, 1.4);
 
-            SeparationProblem separation(instance);
-            CuttingPlaneCallback cb(instance, separation);
+            for (unsigned int Gamma = 0; Gamma < n_clients; Gamma += 1) {
 
-            MasterProblem master(instance);
-            master.set_callback(cb);
+                instance.set_robust_parameters(Gamma, deviation);
 
-            auto t_start = std::chrono::high_resolution_clock::now();
-            master.solve();
-            auto t_end = std::chrono::high_resolution_clock::now();
-            double elapsed_time_ms = std::chrono::duration<double, std::milli>(t_end-t_start).count();
+                SeparationProblem separation(instance);
+                CuttingPlaneCallback cb(instance, separation);
 
-            std::cout << "RESULT;" << instance.gamma() << ";" << instance.deviation() << ";" << elapsed_time_ms / 1000. << ";" << master.objective_value() << std::endl;
+                MasterProblem master(instance);
+                master.set_callback(cb);
+                master.solve();
 
-            //master.export_model(std::string("master_") + std::to_string(i) + ".sol");
+                std::cout << "RESULT," << n_sites << ','
+                          << n_clients << ','
+                          << instance.gamma() << ','
+                          << instance.deviation() << ','
+                          << master.timer().cumulative_time_in_seconds() << ','
+                          << separation.timer().cumulative_time_in_seconds() << ','
+                          << master.objective_value() << ','
+                          << cb.n_solved_separation() << ','
+                          << cb.n_generated_scenarios() << ','
+                          << std::endl;
+
+                //master.export_model(std::string("master_") + std::to_string(Gamma) + ".sol");
+            }
+
         }
 
     }

@@ -12,7 +12,9 @@ void Model::create_variables(std::vector<GRBVar> &t_dest, unsigned int t_n, doub
 }
 
 void Model::solve() {
+    m_timer.start();
     m_model.optimize();
+    m_timer.stop();
 }
 
 void Model::export_model(const std::string &t_model) {

@@ -12,6 +12,7 @@ namespace flp {
     class Callback;
     class SeparationProblem;
     class Instance;
+    class RobustCertificate;
 }
 
 class flp::Callback : public GRBCallback {
@@ -20,14 +21,23 @@ protected:
     const Instance& m_instance;
     const double m_tolerance = 1e-6;
 
+    unsigned int m_n_solved_separation = 0;
+    unsigned int m_n_generated_scenarios = 0;
+
     std::vector<GRBVar> m_x;
     GRBVar m_tau;
     FirstStageProposition get_proposition();
+
+    void callback() final;
+    virtual void add_cut(const FirstStageProposition& t_proposition, const RobustCertificate& t_certificate) = 0;
 public:
     Callback(Instance& t_instance, SeparationProblem& t_separation);
 
     void set_variables_x(const std::vector<GRBVar>& t_x) { m_x = t_x; }
     void set_variable_tau(const GRBVar& t_tau) { m_tau = t_tau; }
+
+    [[nodiscard]] unsigned int n_generated_scenarios() const { return m_n_generated_scenarios; }
+    [[nodiscard]] unsigned int n_solved_separation() const { return m_n_solved_separation; }
 };
 
 #endif //CONVEX_ARO_FLP_CALLBACK_H
