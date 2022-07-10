@@ -6,12 +6,15 @@
 #include "../instance/flp_Instance.h"
 #include "../callback_cutting_plane/flp_Callback.h"
 #include "../separation/flp_RobustCertificate.h"
+#include <algorithm>
+#include <cmath>
 
 flp::MasterProblem::MasterProblem(const flp::Instance &t_instance)
         : m_instance(t_instance) {
 
     create_variables_x();
     create_variable_tau();
+    create_feasibility_constraint();
     create_objective();
 
 }
@@ -155,4 +158,30 @@ void flp::MasterProblem::create_constraints_objective(std::vector<std::vector<GR
     }
 
     m_model.addQConstr(expr - m_tau <= 0);
+}
+
+void flp::MasterProblem::create_feasibility_constraint() {
+    const unsigned int n_sites = m_instance.n_sites();
+    const unsigned int n_clients = m_instance.n_clients();
+
+    GRBLinExpr expr;
+
+    for (unsigned int i = 0 ; i < n_sites ; i += 1) {
+        expr += m_instance.q(i) * m_x[i];
+    }
+
+    double worst_demand = 0.;
+    std::vector<double> demands; demands.reserve(m_instance.n_clients());
+    for (unsigned int j = 0 ; j < n_clients ; j += 1) {
+        worst_demand += m_instance.d(j);
+        demands.emplace_back(m_instance.d(j));
+    }
+    std::sort(demands.begin(), demands.end());
+    unsigned int K = std::ceil(m_instance.gamma());
+    for (unsigned int k = 0 ; k < K ; k += 1) {
+        worst_demand += demands[k];
+    }
+
+    m_model.addConstr(expr >= worst_demand);
+
 }

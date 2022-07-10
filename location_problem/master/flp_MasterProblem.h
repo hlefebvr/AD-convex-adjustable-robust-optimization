@@ -23,6 +23,7 @@ class flp::MasterProblem : public Model {
 
     void create_variables_x();
     void create_variable_tau();
+    void create_feasibility_constraint();
     void create_objective();
 
     void create_constraints_v_definition(std::vector<std::vector<GRBVar>>& t_y, std::vector<GRBVar>& t_v);

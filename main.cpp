@@ -72,6 +72,8 @@ int main() {
     const double deviation = .15;
 
     const std::vector<std::pair<unsigned int, unsigned int>> configs = {
+            { 4, 8 },
+            { 5, 20 },
             { 10, 20 },
             { 10, 30 },
             { 15, 30 },
@@ -96,9 +98,9 @@ int main() {
                 instance.set_robust_parameters(Gamma, deviation);
 
                 try {
-                    solve_and_report<AddScenarioVariables>(instance);
                     solve_and_report<AddCuts>(instance);
                     solve_and_report<AddCutsInCallback>(instance);
+                    solve_and_report<AddScenarioVariables>(instance);
                 } catch (const GRBException& err) {
                     std::cout << err.getMessage() << std::endl;
                     __throw_exception_again;
