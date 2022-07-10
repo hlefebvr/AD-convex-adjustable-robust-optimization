@@ -15,7 +15,7 @@ class flp::CuttingPlaneCallback : public flp::Callback {
 protected:
     void add_cut(const FirstStageProposition &t_proposition, const RobustCertificate &t_certificate) override;
 public:
-    CuttingPlaneCallback(const Instance& t_instance, SeparationProblem& t_separation);
+    explicit CuttingPlaneCallback(SeparationProblem& t_separation);
 };
 
 

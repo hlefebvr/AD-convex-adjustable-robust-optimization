@@ -32,13 +32,14 @@ class flp::SeparationProblem : public Model {
     void create_constraint_simplex();
     void create_constraints_perspective_conjugate();
     void create_constraints_farkas();
-    void create_objective_without_x();
     void create_constraint_budget();
     void create_linearization_constraints();
+    void create_objective_without_x_and_tau();
 public:
     explicit SeparationProblem(const Instance& t_instance);
     void update(const FirstStageProposition& t_proposition);
-    RobustCertificate get_certificate() const;
+    [[nodiscard]] RobustCertificate get_certificate() const;
+    [[nodiscard]] const Instance& instance() const { return m_instance; }
 };
 
 

@@ -11,6 +11,13 @@ void Model::create_variables(std::vector<GRBVar> &t_dest, unsigned int t_n, doub
     }
 }
 
+void Model::create_variables(std::vector<std::vector<GRBVar>> &t_dest, unsigned int t_n, unsigned int t_m, double t_lb, double t_ub, char t_type) {
+    t_dest.resize(t_n);
+    for (unsigned int i = 0 ; i < t_n ; i += 1) {
+        create_variables(t_dest[i], t_m, t_lb, t_ub, t_type);
+    }
+}
+
 void Model::solve() {
     m_timer.start();
     m_model.optimize();

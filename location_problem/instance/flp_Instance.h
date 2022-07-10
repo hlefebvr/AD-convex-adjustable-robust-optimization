@@ -21,8 +21,8 @@ protected:
 
     std::vector<double> m_f;
     std::vector<double> m_q;
-    double m_a;
-    double m_b;
+    double m_a = .75;
+    double m_b = .75;
     std::vector<double> m_d;
     std::vector<std::vector<double>> m_t;
 

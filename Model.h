@@ -15,6 +15,7 @@ protected:
     Timer m_timer;
 
     void create_variables(std::vector<GRBVar> &t_dest, unsigned int t_n, double t_lb, double t_ub, char t_type);
+    void create_variables(std::vector<std::vector<GRBVar>> &t_dest, unsigned int t_n, unsigned int t_m, double t_lb, double t_ub, char t_type);
 public:
     Model();
     void solve();

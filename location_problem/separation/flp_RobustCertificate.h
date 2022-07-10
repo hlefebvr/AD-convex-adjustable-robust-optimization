@@ -32,17 +32,17 @@ public:
 
     }
 
-    double mu() const { return m_mu; }
+    [[nodiscard]] double mu() const { return m_mu; }
     void set_mu_value(double t_v) { m_mu = t_v; }
-    double pi(unsigned int t_k, unsigned int t_l) const { return m_pi[t_k][t_l]; }
+    [[nodiscard]] double pi(unsigned int t_k, unsigned int t_l) const { return m_pi[t_k][t_l]; }
     void set_pi_value(unsigned int t_k, unsigned int t_l, double t_v) { m_pi[t_k][t_l] = t_v; }
-    double v(unsigned int t_i) const { return m_v[t_i]; }
+    [[nodiscard]] double v(unsigned int t_i) const { return m_v[t_i]; }
     void set_v_value(unsigned int t_i, double t_v) { m_v[t_i] = t_v; }
-    double theta(unsigned int t_i) const { return m_theta[t_i]; }
+    [[nodiscard]] double theta(unsigned int t_i) const { return m_theta[t_i]; }
     void set_theta_value(unsigned int t_i, double t_v) { m_theta[t_i] = t_v; }
-    double xi(unsigned int t_j) const { return m_xi[t_j]; }
+    [[nodiscard]] double xi(unsigned int t_j) const { return m_xi[t_j]; }
     void set_xi_value(unsigned int t_j, double t_v) { m_xi[t_j] = t_v; }
-    double objective_value() const { return m_objective_value; }
+    [[nodiscard]] double objective_value() const { return m_objective_value; }
     void set_objective_value(double t_v) { m_objective_value = t_v; }
 };
 

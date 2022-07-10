@@ -4,7 +4,6 @@
 
 #include <complex>
 #include "flp_SeparationProblem.h"
-#include "../instance/flp_Instance.h"
 #include "../master/flp_FirstStageProposition.h"
 
 flp::SeparationProblem::SeparationProblem(const flp::Instance &t_instance)
@@ -23,7 +22,7 @@ flp::SeparationProblem::SeparationProblem(const flp::Instance &t_instance)
     create_constraint_budget();
     create_linearization_constraints();
 
-    create_objective_without_x();
+    create_objective_without_x_and_tau();
 }
 
 void flp::SeparationProblem::create_variables_pi() {
@@ -68,13 +67,9 @@ void flp::SeparationProblem::create_constraint_simplex() {
 void flp::SeparationProblem::create_constraints_perspective_conjugate() {
     const unsigned int n_sites = m_instance.n_sites();
     for (unsigned int i = 0 ; i < n_sites ; i += 1) {
-        m_model.addQConstr(
-                4 * m_instance.b() * m_mu * m_theta[i]
-                >=
-                ( m_pi[1][i] - m_pi[2][i] + m_instance.a() * m_mu )
-                *
-                ( m_pi[1][i] - m_pi[2][i] + m_instance.a() * m_mu )
-            );
+        auto aux = m_model.addVar(-GRB_INFINITY, GRB_INFINITY, 0.0, GRB_CONTINUOUS);
+        m_model.addConstr(aux == m_pi[1][i] - m_pi[2][i] - m_instance.a() * m_mu);
+        m_model.addQConstr( aux * aux <= 4 * m_instance.b() * m_mu * m_theta[i] );
     }
 }
 
@@ -84,12 +79,12 @@ void flp::SeparationProblem::create_constraints_farkas() {
 
     for (unsigned int i = 0 ; i < n_sites ; i += 1) {
         for (unsigned int j = 0 ; j < n_clients ; j += 1) {
-            m_model.addConstr(m_pi[0][j] - m_pi[1][i] - m_instance.t(i,j) * m_mu == 0);
+            m_model.addConstr(m_pi[0][j] - m_pi[1][i] - m_mu * m_instance.t(i,j) <= 0);
         }
     }
 }
 
-void flp::SeparationProblem::create_objective_without_x() {
+void flp::SeparationProblem::create_objective_without_x_and_tau() {
     const unsigned int n_sites = m_instance.n_sites();
     const unsigned int n_clients = m_instance.n_clients();
 
@@ -153,7 +148,6 @@ flp::RobustCertificate flp::SeparationProblem::get_certificate() const {
         result.set_theta_value(i, m_theta[i].get(GRB_DoubleAttr_X));
     }
     result.set_mu_value(m_mu.get(GRB_DoubleAttr_X));
-
 
     return result;
 }
