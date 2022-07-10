@@ -6,7 +6,7 @@
 #define CONVEX_ARO_FLP_FIRSTSTAGEPROPOSITION_H
 
 #include <vector>
-#include "flp_Instance.h"
+#include "../instance/flp_Instance.h"
 
 namespace flp {
     class FirstStageProposition;

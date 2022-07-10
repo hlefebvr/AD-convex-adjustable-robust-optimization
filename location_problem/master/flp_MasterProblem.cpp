@@ -3,8 +3,8 @@
 //
 
 #include "flp_MasterProblem.h"
-#include "flp_Instance.h"
-#include "flp_Callback.h"
+#include "../instance/flp_Instance.h"
+#include "../cutting_plane/flp_Callback.h"
 
 flp::MasterProblem::MasterProblem(const flp::Instance &t_instance)
         : m_instance(t_instance) {

@@ -3,8 +3,8 @@
 //
 
 #include "flp_CuttingPlaneCallback.h"
-#include "flp_RobustCertificate.h"
-#include "flp_Instance.h"
+#include "../separation/flp_RobustCertificate.h"
+#include "../instance/flp_Instance.h"
 
 flp::CuttingPlaneCallback::CuttingPlaneCallback(const flp::Instance& t_instance, flp::SeparationProblem &t_separation)
     : Callback(t_instance, t_separation) {}

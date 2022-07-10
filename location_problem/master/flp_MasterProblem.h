@@ -6,7 +6,7 @@
 #define CONVEX_ARO_FLP_MASTERPROBLEM_H
 
 #include <memory>
-#include "../Model.h"
+#include "../../Model.h"
 
 namespace flp {
     class MasterProblem;

@@ -2,7 +2,7 @@
 // Created by henri on 09/07/22.
 //
 #include "flp_Callback.h"
-#include "flp_SeparationProblem.h"
+#include "../separation/flp_SeparationProblem.h"
 
 flp::Callback::Callback(const Instance &t_instance, SeparationProblem &t_separation)
     : m_instance(t_instance), m_separation(t_separation) {}

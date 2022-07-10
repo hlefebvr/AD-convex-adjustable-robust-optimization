@@ -5,7 +5,7 @@
 #ifndef CONVEX_ARO_FLP_SEPARATIONPROBLEM_H
 #define CONVEX_ARO_FLP_SEPARATIONPROBLEM_H
 
-#include "../Model.h"
+#include "../../Model.h"
 #include "flp_RobustCertificate.h"
 
 namespace flp {

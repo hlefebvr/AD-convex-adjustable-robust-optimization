@@ -6,7 +6,7 @@
 #define CONVEX_ARO_FLP_CALLBACK_H
 
 #include <gurobi_c++.h>
-#include "flp_FirstStageProposition.h"
+#include "../master/flp_FirstStageProposition.h"
 
 namespace flp {
     class Callback;

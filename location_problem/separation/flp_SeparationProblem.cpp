@@ -4,8 +4,8 @@
 
 #include <complex>
 #include "flp_SeparationProblem.h"
-#include "flp_Instance.h"
-#include "flp_FirstStageProposition.h"
+#include "../instance/flp_Instance.h"
+#include "../master/flp_FirstStageProposition.h"
 
 flp::SeparationProblem::SeparationProblem(const flp::Instance &t_instance)
     : m_instance(t_instance) {

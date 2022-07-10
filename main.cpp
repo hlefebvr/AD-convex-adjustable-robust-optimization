@@ -1,8 +1,8 @@
 #include <iostream>
-#include "location_problem/flp_RandomInstance.h"
-#include "location_problem/flp_SeparationProblem.h"
-#include "location_problem/flp_MasterProblem.h"
-#include "location_problem/flp_CuttingPlaneCallback.h"
+#include "location_problem/instance/flp_RandomInstance.h"
+#include "location_problem/separation/flp_SeparationProblem.h"
+#include "location_problem/master/flp_MasterProblem.h"
+#include "location_problem/cutting_plane/flp_CuttingPlaneCallback.h"
 
 void solve_with_branch_and_cut(const flp::Instance& t_instance) {
 
@@ -51,9 +51,9 @@ int main() {
 
         for (unsigned int k = 0 ; k < 5 ; k += 1) {
 
-            RandomInstance instance(15, 30, 1.4);
+            RandomInstance instance(n_sites, n_clients, 1.4);
 
-            for (unsigned int Gamma = 0; Gamma < n_clients; Gamma += 1) {
+            for (unsigned int Gamma = 0; Gamma <= n_clients; Gamma += 1) {
 
                 instance.set_robust_parameters(Gamma, deviation);
 
