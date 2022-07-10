@@ -179,7 +179,7 @@ void flp::MasterProblem::create_feasibility_constraint() {
     std::sort(demands.begin(), demands.end());
     unsigned int K = std::ceil(m_instance.gamma());
     for (unsigned int k = 0 ; k < K ; k += 1) {
-        worst_demand += demands[k];
+        worst_demand += demands[k] * m_instance.deviation();
     }
 
     m_model.addConstr(expr >= worst_demand);
