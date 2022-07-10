@@ -26,6 +26,7 @@ void solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_to
             } else {
                 t_master.add_benders_cut(certificate);
             }
+            t_master.increment_n_added_scenarios();
         } else {
             has_converged = true;
         }
@@ -37,7 +38,7 @@ void solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_to
 template<>
 void solve<AddCutsInCallback>(MasterProblem& t_master, SeparationProblem& t_separation, double t_tolerance) {
 
-    CuttingPlaneCallback cb(t_separation);
+    CuttingPlaneCallback cb(t_master, t_separation);
     t_master.set_callback(cb);
     t_master.solve();
 
@@ -62,6 +63,7 @@ void solve_and_report(const flp::Instance& t_instance, double t_tolerance = 1e-8
               << master.timer().cumulative_time_in_seconds() << ','
               << separation.timer().cumulative_time_in_seconds() << ','
               << master.objective_value() << ','
+              << master.n_added_scenarios()
     << std::endl;
 }
 

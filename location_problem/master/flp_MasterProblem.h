@@ -21,6 +21,8 @@ class flp::MasterProblem : public Model {
     std::vector<GRBVar> m_x;
     GRBVar m_tau;
 
+    unsigned int m_n_added_scenarios = 0;
+
     void create_variables_x();
     void create_variable_tau();
     void create_feasibility_constraint();
@@ -40,6 +42,8 @@ public:
     FirstStageProposition get_proposition();
 
     [[nodiscard]] const Instance& instance() const { return m_instance; }
+    [[nodiscard]] unsigned int n_added_scenarios() const { return m_n_added_scenarios; }
+    void increment_n_added_scenarios() { m_n_added_scenarios += 1; }
 };
 
 

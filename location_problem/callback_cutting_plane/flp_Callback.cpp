@@ -3,9 +3,10 @@
 //
 #include "flp_Callback.h"
 #include "../separation/flp_SeparationProblem.h"
+#include "../master/flp_MasterProblem.h"
 
-flp::Callback::Callback(SeparationProblem &t_separation)
-    : m_separation(t_separation) {}
+flp::Callback::Callback(MasterProblem& t_master, SeparationProblem &t_separation)
+    : m_master(t_master), m_separation(t_separation) {}
 
 flp::FirstStageProposition flp::Callback::get_proposition() {
     const Instance& instance = m_separation.instance();
@@ -31,4 +32,5 @@ void flp::Callback::callback() {
     if (certificate.objective_value() < -m_tolerance) { return; }
 
     add_cut(proposition, certificate);
+    m_master.increment_n_added_scenarios();
 }

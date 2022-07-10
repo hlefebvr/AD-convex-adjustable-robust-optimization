@@ -6,8 +6,8 @@
 #include "../separation/flp_RobustCertificate.h"
 #include "../separation/flp_SeparationProblem.h"
 
-flp::CuttingPlaneCallback::CuttingPlaneCallback(flp::SeparationProblem &t_separation)
-    : Callback(t_separation) {}
+flp::CuttingPlaneCallback::CuttingPlaneCallback(flp::MasterProblem& t_master, flp::SeparationProblem &t_separation)
+    : Callback(t_master, t_separation) {}
 
 void flp::CuttingPlaneCallback::add_cut(const flp::FirstStageProposition &t_proposition,
                                         const flp::RobustCertificate &t_certificate) {
