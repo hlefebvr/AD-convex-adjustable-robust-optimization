@@ -42,6 +42,9 @@ bool solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_to
     }
 
     timer.stop();
+
+    std::cout << timer.time_in_seconds() << std::endl;
+    std::cout << (t_master.timer().cumulative_time_in_seconds() + t_separation.timer().cumulative_time_in_seconds()) << std::endl;
     return true;
 
 }
