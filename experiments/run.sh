@@ -4,10 +4,11 @@ DATA=../location_problem/data
 
 mkdir output
 
-for DEV in 1.2 1.4
+for DEV in 0.05 0.10
 do
   for FILE in $DATA/*
   do
-    $EXECUTABLE $FILE DEV $ALGORITHM > output/${FILE}_d${DEV}.log
+    BASENAME=$(basename $FILE)
+    $EXECUTABLE $FILE $DEV $ALGORITHM > output/${BASENAME}_d${DEV}.log
   done
 done
