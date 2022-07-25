@@ -4,20 +4,29 @@
 #include "callback_cutting_plane/flp_CuttingPlaneCallback.h"
 #include "instance/flp_InstanceFromFile.h"
 
+#define TIME_LIMIT 2.
+
 using namespace flp;
 
 enum Algorithm { AddScenarioVariables, AddCuts, AddCutsInCallback };
 
 template<enum Algorithm ALG>
-void solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_tolerance) {
+bool solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_tolerance) {
+
+    Timer timer;
+    timer.start();
 
     bool has_converged = false;
     while (!has_converged) {
 
+        t_master.set_time_limit(TIME_LIMIT - timer.time_in_seconds());
         t_master.solve();
+        if (timer.time_in_seconds() >= TIME_LIMIT) { return false; }
         auto proposition = t_master.get_proposition();
         t_separation.update(proposition);
+        t_separation.set_time_limit(TIME_LIMIT - timer.time_in_seconds());
         t_separation.solve();
+        if (timer.time_in_seconds() >= TIME_LIMIT) { return false; }
         auto certificate = t_separation.get_certificate();
         if (certificate.objective_value() > t_tolerance) {
             if constexpr(ALG == AddScenarioVariables) {
@@ -32,15 +41,20 @@ void solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_to
 
     }
 
+    timer.stop();
+    return true;
+
 }
 
 template<>
-void solve<AddCutsInCallback>(MasterProblem& t_master, SeparationProblem& t_separation, double t_tolerance) {
+bool solve<AddCutsInCallback>(MasterProblem& t_master, SeparationProblem& t_separation, double t_tolerance) {
 
     CuttingPlaneCallback cb(t_master, t_separation);
     t_master.set_callback(cb);
+    t_master.set_time_limit(TIME_LIMIT);
     t_master.solve();
 
+    return t_master.timer().time_in_seconds() < TIME_LIMIT;
 }
 
 template<enum Algorithm ALG>
@@ -51,7 +65,7 @@ void solve_and_report(const flp::Instance& t_instance, double t_tolerance = 1e-8
     SeparationProblem separation(t_instance);
     MasterProblem master(t_instance);
 
-    solve<ALG>(master, separation, t_tolerance);
+    bool solved = solve<ALG>(master, separation, t_tolerance);
 
     std::cout << "RESULT,"
               << t_instance.n_sites() << ','
@@ -59,6 +73,7 @@ void solve_and_report(const flp::Instance& t_instance, double t_tolerance = 1e-8
               << t_instance.gamma() << ','
               << t_instance.deviation() << ','
               << ALG << ','
+              << solved << ','
               << master.timer().cumulative_time_in_seconds() << ','
               << separation.timer().cumulative_time_in_seconds() << ','
               << master.objective_value() << ','

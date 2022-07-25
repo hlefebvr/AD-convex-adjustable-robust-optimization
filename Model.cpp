@@ -30,5 +30,9 @@ void Model::export_model(const std::string &t_model) {
 
 Model::Model() : m_model(m_env) {
     m_model.set(GRB_IntParam_OutputFlag, 0);
-    m_model.set(GRB_DoubleParam_TimeLimit, 3600.);
+}
+
+void Model::set_time_limit(double t_time_timit) {
+    const double time_limit = std::max(0., t_time_timit);
+    m_model.set(GRB_DoubleParam_TimeLimit, time_limit);
 }

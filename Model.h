@@ -22,6 +22,7 @@ public:
     void export_model(const std::string& t_model);
     [[nodiscard]] double objective_value() const { return m_model.get(GRB_DoubleAttr_ObjVal); }
     [[nodiscard]] const Timer& timer() const { return m_timer; }
+    void set_time_limit(double t_time_timit);
 };
 
 
