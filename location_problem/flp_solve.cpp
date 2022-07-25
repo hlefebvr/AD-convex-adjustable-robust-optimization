@@ -1,4 +1,6 @@
 #include <iostream>
+#include <algorithm>
+#include <cmath>
 #include "separation/flp_SeparationProblem.h"
 #include "master/flp_MasterProblem.h"
 #include "callback_cutting_plane/flp_CuttingPlaneCallback.h"
@@ -8,13 +10,36 @@
 
 using namespace flp;
 
-enum Algorithm { AddScenarioVariables, AddCuts, AddCutsInCallback };
+enum Algorithm {
+    AddScenarioVariables,
+    AddCuts,
+    AddCutsInCallback
+};
 
 template<enum Algorithm ALG>
 bool solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_tolerance) {
 
     Timer timer;
     timer.start();
+
+    // TEMPORARY BEGIN
+
+    const Instance& instance = t_master.instance();
+    const unsigned int n_clients = instance.n_clients();
+
+    std::vector<std::pair<double, unsigned int>> demands; demands.reserve(instance.n_clients());
+    for (unsigned int j = 0 ; j < n_clients ; j += 1) {
+        demands.emplace_back(instance.d(j), j);
+    }
+    std::sort(demands.begin(), demands.end());
+    unsigned int K = std::ceil(instance.gamma());
+    RobustCertificate initial_certificate(instance);
+    for (unsigned int k = 0 ; k < K ; k += 1) {
+        initial_certificate.set_xi_value(demands[k].second, 1.);
+    }
+    //t_master.add_scenario_variables(initial_certificate);
+
+    // TEMPORARY END
 
     bool has_converged = false;
     while (!has_converged) {
@@ -43,8 +68,6 @@ bool solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_to
 
     timer.stop();
 
-    std::cout << timer.time_in_seconds() << std::endl;
-    std::cout << (t_master.timer().cumulative_time_in_seconds() + t_separation.timer().cumulative_time_in_seconds()) << std::endl;
     return true;
 
 }
@@ -61,7 +84,7 @@ bool solve<AddCutsInCallback>(MasterProblem& t_master, SeparationProblem& t_sepa
 }
 
 template<enum Algorithm ALG>
-void solve_and_report(const flp::Instance& t_instance, double t_tolerance = 1e-8) {
+void solve_and_report(const flp::Instance& t_instance, double t_tolerance = 1e-3) {
 
     std::cout << "\n\n" << std::endl;
 

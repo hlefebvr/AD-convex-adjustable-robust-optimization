@@ -31,6 +31,11 @@ void Model::export_model(const std::string &t_model) {
 Model::Model() : m_model(m_env) {
     m_model.set(GRB_IntParam_OutputFlag, 0);
     m_model.set(GRB_IntParam_Threads, 4);
+    const double tol = 1e-8;
+    m_model.set(GRB_DoubleParam_OptimalityTol, tol);
+    m_model.set(GRB_DoubleParam_FeasibilityTol, tol);
+    //m_model.set(GRB_DoubleParam_BarQCPConvTol, tol);
+    //m_model.set(GRB_DoubleParam_BarConvTol, tol);
 }
 
 void Model::set_time_limit(double t_time_timit) {

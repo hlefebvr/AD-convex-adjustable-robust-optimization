@@ -83,8 +83,17 @@ void flp::MasterProblem::add_benders_cut(const flp::RobustCertificate &t_certifi
 
 void flp::MasterProblem::add_scenario_variables(const flp::RobustCertificate &t_certificate) {
 
+    std::cout << "ADDING " << m_n_added_scenarios << " -> " << t_certificate.objective_value() << std::endl;
+
     const unsigned int n_sites = m_instance.n_sites();
     const unsigned int n_clients = m_instance.n_clients();
+
+    for (unsigned int j = 0 ; j < n_clients ; ++j) {
+        if (t_certificate.xi(j) > 1e-5) {
+            std::cout << "xi_" << j << " = " << t_certificate.xi(j) << " - ";
+        }
+    }
+    std::cout << std::endl;
 
     std::vector<std::vector<GRBVar>> y;
     std::vector<GRBVar> v;
