@@ -4,7 +4,7 @@
 #include "callback_cutting_plane/flp_CuttingPlaneCallback.h"
 #include "instance/flp_InstanceFromFile.h"
 
-#define TIME_LIMIT 2.
+#define TIME_LIMIT 3600.
 
 using namespace flp;
 
