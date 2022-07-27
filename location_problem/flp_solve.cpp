@@ -22,25 +22,6 @@ bool solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_to
     Timer timer;
     timer.start();
 
-    // TEMPORARY BEGIN
-
-    const Instance& instance = t_master.instance();
-    const unsigned int n_clients = instance.n_clients();
-
-    std::vector<std::pair<double, unsigned int>> demands; demands.reserve(instance.n_clients());
-    for (unsigned int j = 0 ; j < n_clients ; j += 1) {
-        demands.emplace_back(instance.d(j), j);
-    }
-    std::sort(demands.begin(), demands.end());
-    unsigned int K = std::ceil(instance.gamma());
-    RobustCertificate initial_certificate(instance);
-    for (unsigned int k = 0 ; k < K ; k += 1) {
-        initial_certificate.set_xi_value(demands[k].second, 1.);
-    }
-    //t_master.add_scenario_variables(initial_certificate);
-
-    // TEMPORARY END
-
     bool has_converged = false;
     while (!has_converged) {
 
@@ -117,7 +98,9 @@ int main(int t_argc, const char** t_argv) {
 
     InstanceFromFile instance(path);
 
-    for (unsigned int g = 0, G = instance.n_clients(); g <= G; g += 1) {
+    for (const double percentage_deviations : { .05, .15, .25, .5, .75 }) {
+
+        const double g = std::floor( instance.n_clients() * percentage_deviations );
 
         instance.set_robust_parameters(g, deviation);
 

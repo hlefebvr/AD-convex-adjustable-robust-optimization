@@ -29,13 +29,15 @@ void Model::export_model(const std::string &t_model) {
 }
 
 Model::Model() : m_model(m_env) {
+    const unsigned int n_threads = 4;
+    const double tolerance = 1e-8;
+
     m_model.set(GRB_IntParam_OutputFlag, 0);
-    m_model.set(GRB_IntParam_Threads, 4);
-    const double tol = 1e-8;
-    m_model.set(GRB_DoubleParam_OptimalityTol, tol);
-    m_model.set(GRB_DoubleParam_FeasibilityTol, tol);
-    //m_model.set(GRB_DoubleParam_BarQCPConvTol, tol);
-    //m_model.set(GRB_DoubleParam_BarConvTol, tol);
+    m_model.set(GRB_IntParam_Threads, n_threads);
+    m_model.set(GRB_DoubleParam_OptimalityTol, tolerance);
+    m_model.set(GRB_DoubleParam_FeasibilityTol, tolerance);
+    //m_model.set(GRB_DoubleParam_BarQCPConvTol, tolerance);
+    //m_model.set(GRB_DoubleParam_BarConvTol, tolerance);
 }
 
 void Model::set_time_limit(double t_time_timit) {
