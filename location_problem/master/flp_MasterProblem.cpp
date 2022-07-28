@@ -4,7 +4,6 @@
 
 #include "flp_MasterProblem.h"
 #include "../instance/flp_Instance.h"
-#include "../callback_cutting_plane/flp_Callback.h"
 #include "../separation/flp_RobustCertificate.h"
 #include <algorithm>
 #include <cmath>
@@ -36,14 +35,6 @@ void flp::MasterProblem::create_objective() {
     }
 
     m_model.setObjective(expr, GRB_MINIMIZE);
-}
-
-void flp::MasterProblem::set_callback(Callback &t_cb) {
-    m_model.set(GRB_IntParam_LazyConstraints, 1);
-    m_model.setCallback(&t_cb);
-    t_cb.set_model(m_model);
-    t_cb.set_variables_x(m_x);
-    t_cb.set_variable_tau(m_tau);
 }
 
 flp::FirstStageProposition flp::MasterProblem::get_proposition() {
@@ -83,17 +74,8 @@ void flp::MasterProblem::add_benders_cut(const flp::RobustCertificate &t_certifi
 
 void flp::MasterProblem::add_scenario_variables(const flp::RobustCertificate &t_certificate) {
 
-    std::cout << "ADDING " << m_n_added_scenarios << " -> " << t_certificate.objective_value() << std::endl;
-
     const unsigned int n_sites = m_instance.n_sites();
     const unsigned int n_clients = m_instance.n_clients();
-
-    for (unsigned int j = 0 ; j < n_clients ; ++j) {
-        if (t_certificate.xi(j) > 1e-5) {
-            std::cout << "xi_" << j << " = " << t_certificate.xi(j) << " - ";
-        }
-    }
-    std::cout << std::endl;
 
     std::vector<std::vector<GRBVar>> y;
     std::vector<GRBVar> v;

@@ -1,6 +1,6 @@
 add_library(flp_instances STATIC instance/flp_Instance.h instance/flp_Instance.cpp instance/flp_InstanceFromFile.cpp instance/flp_InstanceFromFile.h instance/flp_RandomInstance.cpp instance/flp_RandomInstance.h)
 
-add_executable(flp_solve flp_solve.cpp master/flp_FirstStageProposition.h separation/flp_SeparationProblem.cpp separation/flp_SeparationProblem.h master/flp_MasterProblem.cpp master/flp_MasterProblem.h callback_cutting_plane/flp_CuttingPlaneCallback.cpp callback_cutting_plane/flp_CuttingPlaneCallback.h callback_cutting_plane/flp_Callback.h callback_cutting_plane/flp_Callback.cpp separation/flp_RobustCertificate.cpp separation/flp_RobustCertificate.h)
+add_executable(flp_solve flp_solve.cpp master/flp_FirstStageProposition.h separation/flp_SeparationProblem.cpp separation/flp_SeparationProblem.h master/flp_MasterProblem.cpp master/flp_MasterProblem.h separation/flp_RobustCertificate.cpp separation/flp_RobustCertificate.h)
 
 add_executable(flp_generate flp_generate.cpp)
 
