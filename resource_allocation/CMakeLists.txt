@@ -1,0 +1,8 @@
+add_library(rap_instances STATIC instance/rap_Instance.h instance/rap_Instance.cpp instance/rap_RandomInstance.cpp instance/rap_RandomInstance.h instance/rap_InstanceFromFile.cpp instance/rap_InstanceFromFile.h)
+
+#add_executable(flp_solve flp_solve.cpp master/flp_FirstStageProposition.h separation/flp_SeparationProblem.cpp separation/flp_SeparationProblem.h master/flp_MasterProblem.cpp master/flp_MasterProblem.h callback_cutting_plane/flp_CuttingPlaneCallback.cpp callback_cutting_plane/flp_CuttingPlaneCallback.h callback_cutting_plane/flp_Callback.h callback_cutting_plane/flp_Callback.cpp separation/flp_RobustCertificate.cpp separation/flp_RobustCertificate.h)
+
+add_executable(rap_generate rap_generate.cpp rap_generate.cpp)
+
+#target_link_libraries(rap_solve PUBLIC rap_instances convex_aro_base)
+target_link_libraries(rap_generate PUBLIC rap_instances)

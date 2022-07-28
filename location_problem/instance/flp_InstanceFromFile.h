@@ -12,8 +12,6 @@ namespace flp {
 }
 
 class flp::InstanceFromFile : public flp::Instance {
-    static void read(std::ifstream& t_file, std::vector<double>& t_dest, unsigned int t_n);
-    static void read(std::ifstream& t_file, std::vector<std::vector<double>>& t_dest, unsigned int t_n, unsigned int t_m);
 public:
     explicit InstanceFromFile(const std::string& t_path);
 };

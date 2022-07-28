@@ -98,7 +98,7 @@ int main(int t_argc, const char** t_argv) {
 
     InstanceFromFile instance(path);
 
-    for (const double percentage_deviations : { .05, .15, .25, .5, .75 }) {
+    for (const double percentage_deviations : { .05, .10, .15, .20, .25 }) {
 
         const double g = std::floor( instance.n_clients() * percentage_deviations );
 
