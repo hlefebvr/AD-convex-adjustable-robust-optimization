@@ -41,6 +41,8 @@ public:
     [[nodiscard]] double d(unsigned int t_j) const { return m_d[t_j]; }
     [[nodiscard]] double a(unsigned int t_i) const { return m_a[t_i]; }
     [[nodiscard]] double mu(unsigned int t_i, unsigned int t_j) const { return m_mu[t_i][t_j]; }
+    double gamma() const { return m_gamma; }
+    double deviation() const { return m_deviation; }
 
     void set_robust_parameters(double t_gamma, double t_deviation) {
         m_gamma = t_gamma;
