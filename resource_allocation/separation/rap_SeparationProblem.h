@@ -1,34 +1,32 @@
 //
-// Created by henri on 09/07/22.
+// Created by henri on 28/07/22.
 //
 
-#ifndef CONVEX_ARO_FLP_SEPARATIONPROBLEM_H
-#define CONVEX_ARO_FLP_SEPARATIONPROBLEM_H
+#ifndef CONVEX_ARO_RAP_SEPARATIONPROBLEM_H
+#define CONVEX_ARO_RAP_SEPARATIONPROBLEM_H
 
 #include "../../Model.h"
-#include "flp_RobustCertificate.h"
+#include "rap_RobustCertificate.h"
 
-namespace flp {
+namespace rap {
     class SeparationProblem;
     class Instance;
     class FirstStageProposition;
 }
 
-class flp::SeparationProblem : public Model {
+class rap::SeparationProblem : public Model {
     const Instance& m_instance;
     std::vector<std::vector<GRBVar>> m_pi;
     std::vector<GRBVar> m_theta;
-    std::vector<GRBVar> m_v;
+    std::vector<GRBVar> m_lambda;
     std::vector<GRBVar> m_xi;
     std::vector<GRBVar> m_z;
-    GRBVar m_mu;
 
     void create_variables_pi();
     void create_variables_theta();
-    void create_variables_v();
+    void create_variables_lambda();
     void create_variables_z();
     void create_variables_xi();
-    void create_variable_mu();
 
     void create_constraint_simplex();
     void create_constraints_perspective_conjugate();
@@ -36,7 +34,7 @@ class flp::SeparationProblem : public Model {
     void create_constraint_budget();
     void create_linearization_constraints();
 
-    void create_objective_without_x_and_tau();
+    void create_objective_without_x();
 public:
     explicit SeparationProblem(const Instance& t_instance);
     void update(const FirstStageProposition& t_proposition);
@@ -45,4 +43,4 @@ public:
 };
 
 
-#endif //CONVEX_ARO_FLP_SEPARATIONPROBLEM_H
+#endif //CONVEX_ARO_RAP_SEPARATIONPROBLEM_H

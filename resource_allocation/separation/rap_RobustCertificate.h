@@ -24,7 +24,7 @@ public:
     [[nodiscard]] double pi(unsigned int t_k, unsigned int t_l) const { return m_pi[t_k][t_l]; }
     void set_pi_value(unsigned int t_k, unsigned int t_l, double t_v) { m_pi[t_k][t_l] = t_v; }
     [[nodiscard]] double lambda(unsigned int t_i) const { return m_lambda[t_i]; }
-    void set_v_value(unsigned int t_i, double t_v) { m_lambda[t_i] = t_v; }
+    void set_lambda_value(unsigned int t_i, double t_v) { m_lambda[t_i] = t_v; }
     [[nodiscard]] double theta(unsigned int t_i) const { return m_theta[t_i]; }
     void set_theta_value(unsigned int t_i, double t_v) { m_theta[t_i] = t_v; }
     [[nodiscard]] double xi(unsigned int t_j) const { return m_xi[t_j]; }
