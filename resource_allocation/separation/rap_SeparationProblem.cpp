@@ -44,7 +44,6 @@ rap::RobustCertificate rap::SeparationProblem::get_certificate() const {
     }
     for (unsigned int i = 0 ; i < n_resources ; i += 1) {
         result.set_pi_value(1, i, m_pi[1][i].get(GRB_DoubleAttr_X));
-        result.set_pi_value(2, i, m_pi[2][i].get(GRB_DoubleAttr_X));
         result.set_lambda_value(i, m_lambda[i].get(GRB_DoubleAttr_X));
         result.set_theta_value(i, m_theta[i].get(GRB_DoubleAttr_X));
     }
@@ -101,7 +100,7 @@ void rap::SeparationProblem::create_constraints_farkas() {
 
     for (unsigned int i = 0 ; i < n_resources ; i += 1) {
         for (unsigned int j = 0 ; j < n_clients ; j += 1) {
-            m_model.addConstr(m_pi[0][j] - m_pi[1][i] <= 0);
+            m_model.addConstr(m_instance.mu(i,j) * m_pi[0][j] - m_pi[1][i] <= 0);
         }
     }
 }
