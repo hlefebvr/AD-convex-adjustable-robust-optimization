@@ -25,7 +25,7 @@ std::ostream& operator<<(std::ostream& t_os, Algorithm t_alg) {
 template<Algorithm ALG, class MasterProblem, class SeparationProblem>
 bool solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_tolerance) {
 
-    auto total_time = [&]() { return t_master.timer().time_in_seconds() + t_separation.timer().time_in_seconds(); };
+    auto total_time = [&]() { return t_master.timer().cumulative_time_in_seconds() + t_separation.timer().cumulative_time_in_seconds(); };
 
     bool has_converged = false;
     while (!has_converged) {
