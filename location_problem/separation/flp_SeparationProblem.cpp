@@ -9,6 +9,8 @@
 flp::SeparationProblem::SeparationProblem(const flp::Instance &t_instance)
     : m_instance(t_instance) {
 
+    //m_model.set(GRB_DoubleParam_BestBdStop, 1e-2);
+
     create_variables_pi();
     create_variables_theta();
     create_variables_v();

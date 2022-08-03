@@ -40,6 +40,8 @@ void flp::MasterProblem::create_objective() {
 flp::FirstStageProposition flp::MasterProblem::get_proposition() {
     FirstStageProposition result(m_instance);
 
+    result.set_objective_value(m_model.get(GRB_DoubleAttr_ObjVal));
+
     for (unsigned int i = 0, n_sites = m_instance.n_sites() ; i < n_sites ; i += 1) {
         result.set_x_value(i, m_x[i].get(GRB_DoubleAttr_X));
     }

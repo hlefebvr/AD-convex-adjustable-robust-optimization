@@ -26,6 +26,8 @@ class rap::MasterProblem : public Model {
     void create_constraints_v_definition(std::vector<std::vector<GRBVar>>& t_y, std::vector<GRBVar>& t_v);
     void create_constraints_capacity(std::vector<GRBVar>& t_v);
     void create_constraints_demand(std::vector<std::vector<GRBVar>>& t_y, const RobustCertificate& t_certificate);
+
+    void create_feasibility_constraint();
 public:
     explicit MasterProblem(const Instance& t_instance);
 

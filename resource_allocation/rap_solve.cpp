@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
+#include <sstream>
 #include "separation/rap_SeparationProblem.h"
 #include "master/rap_MasterProblem.h"
 #include "../solve.h"
@@ -27,16 +28,17 @@ int main(int t_argc, const char** t_argv) {
         MasterProblem master(instance);
         SeparationProblem separation(instance);
 
-        std::cout
+        std::stringstream output;
+        output
                 << path << ','
                 << instance.n_resources() << ','
                 << instance.n_clients() << ','
                 << g << ','
                 << deviation << ',';
 
-        solve_and_report(master, separation, algorithm);
+        solve_and_report(output, master, separation, algorithm);
 
-        std::cout << std::endl;
+        std::cout << output.str() << std::endl;
 
     }
 

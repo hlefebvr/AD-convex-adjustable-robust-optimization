@@ -13,6 +13,7 @@ namespace flp {
 }
 
 class flp::FirstStageProposition {
+    double m_objective_value = 0;
     std::vector<double> m_x_values;
     double m_tau_value = 0;
 public:
@@ -23,6 +24,9 @@ public:
 
     [[nodiscard]] double tau() const { return m_tau_value; }
     void set_tau_value(double t_v) { m_tau_value = t_v; }
+
+    void set_objective_value(double t_objective_value) { m_objective_value = t_objective_value; }
+    [[nodiscard]] double objective_value() const { return m_objective_value; }
 };
 
 #endif //CONVEX_ARO_FLP_FIRSTSTAGEPROPOSITION_H
