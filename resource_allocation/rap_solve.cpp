@@ -6,6 +6,7 @@
 #include "master/rap_MasterProblem.h"
 #include "../solve.h"
 #include "instance/rap_InstanceFromFile.h"
+#include "instance/rap_RandomInstance.h"
 
 using namespace rap;
 
@@ -18,6 +19,7 @@ int main(int t_argc, const char** t_argv) {
     const auto algorithm = (Algorithm) std::atoi(t_argv[3]);
 
     InstanceFromFile instance(path);
+    //RandomInstance instance(10, 20);
 
     for (const double percentage_deviations : { .05, .10, .15, .20, .25 }) {
 

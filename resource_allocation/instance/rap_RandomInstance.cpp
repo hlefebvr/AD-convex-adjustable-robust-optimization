@@ -30,7 +30,7 @@ void rap::RandomInstance::compute_service_rates() {
 }
 
 void rap::RandomInstance::compute_costs() {
-    std::uniform_real_distribution<double> dist(7., 10.);
+    std::uniform_real_distribution<double> dist(8., 10.);
 
     m_c.reserve(m_n_resources);
     for (unsigned int i = 0 ; i < m_n_resources ; i += 1) {
@@ -49,7 +49,7 @@ void rap::RandomInstance::compute_alphas() {
 }
 
 void rap::RandomInstance::compute_demands() {
-    std::uniform_real_distribution<double> dist(1., 10.);
+    std::uniform_real_distribution<double> dist(1., 50.);
 
     m_d.reserve(m_n_clients);
     for (unsigned int j = 0 ; j < m_n_clients ; j += 1) {
