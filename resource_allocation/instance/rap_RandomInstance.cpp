@@ -2,6 +2,7 @@
 // Created by henri on 28/07/22.
 //
 
+#include <algorithm>
 #include "rap_RandomInstance.h"
 
 rap::RandomInstance::RandomInstance(unsigned int t_n_resources, unsigned int t_n_clients)
@@ -30,12 +31,13 @@ void rap::RandomInstance::compute_service_rates() {
 }
 
 void rap::RandomInstance::compute_costs() {
-    std::uniform_real_distribution<double> dist(8., 10.);
+    std::uniform_real_distribution<double> dist(4., 10.);
 
     m_c.reserve(m_n_resources);
     for (unsigned int i = 0 ; i < m_n_resources ; i += 1) {
-        double avg = std::accumulate(m_mu[i].begin(), m_mu[i].end(), 0.) / m_n_clients;
-        m_c.emplace_back(avg * dist(m_engine));
+        //double avg = std::accumulate(m_mu[i].begin(), m_mu[i].end(), 0.) / m_n_clients;
+        const double max = *std::max_element(m_mu[i].begin(), m_mu[i].end());
+        m_c.emplace_back(max * dist(m_engine));
     }
 }
 
