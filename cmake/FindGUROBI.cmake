@@ -21,7 +21,7 @@ find_library(
         PATH_SUFFIXES lib
 )
 
-file(GLOB GUROBI_CXX_SRC ${GUROBI_DIR}/src/cpp/*.cpp)
+file(GLOB GUROBI_CXX_SRC $ENV{GUROBI_HOME}/src/cpp/*.cpp)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(GUROBI DEFAULT_MSG GUROBI_LIBRARY GUROBI_INCLUDE_DIRS GUROBI_CPP_LIBRARY)
