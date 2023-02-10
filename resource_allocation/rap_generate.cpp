@@ -41,7 +41,7 @@ int main(int t_argc, const char** t_argv) {
     };
 
     for (const auto& [n_site, n_clients] : sizes) {
-        for (unsigned int k = 0 ; k < 5 ; k += 1) {
+        for (unsigned int k = 0 ; k < 10 ; k += 1) {
             generate_instance(path, n_site, n_clients, k);
         }
     }

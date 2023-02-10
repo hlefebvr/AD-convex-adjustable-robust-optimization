@@ -35,7 +35,7 @@ rap::FirstStageProposition rap::MasterProblem::get_proposition() {
     result.set_objective_value(m_model.get(GRB_DoubleAttr_ObjVal));
 
     for (unsigned int i = 0, n_resources = m_instance.n_resources() ; i < n_resources ; i += 1) {
-        result.set_x_value(i, m_x[i].get(GRB_DoubleAttr_X));
+        result.set_x(i, m_x[i].get(GRB_DoubleAttr_X));
     }
 
     return result;
