@@ -11,34 +11,41 @@ using namespace flp;
 
 int main(int t_argc, const char** t_argv) {
 
-    if (t_argc != 4) { throw std::runtime_error("Expected parameters: <INSTANCE_FILE> <DEVIATION> <ALG=0,1>"); }
+    if (t_argc != 2) { throw std::runtime_error("Expected parameters: <INSTANCE_FILE>"); }
 
     const std::string path = t_argv[1];
-    const double deviation = std::atof(t_argv[2]);
-    const auto algorithm = (Algorithm) std::atoi(t_argv[3]);
 
     InstanceFromFile instance(path);
 
-    for (const double percentage_deviations : { .05, .10, .15, .20, .25 }) {
+    for (const double uncertainty_percentage : { .05, .10, .20 }) {
 
-        const double g = std::floor( instance.n_clients() * percentage_deviations );
+        for (const double maximum_deviation : { .10, .05 }) {
 
-        instance.set_robust_parameters(g, deviation);
+            for (const Algorithm algorithm : { CCG, GBD }) {
 
-        MasterProblem master(instance);
-        SeparationProblem separation(instance);
+                const double Gamma = std::floor(instance.n_clients() * uncertainty_percentage);
 
-        std::stringstream output;
-        output
-                    << path << ','
-                    << instance.n_sites() << ','
-                    << instance.n_clients() << ','
-                    << g << ','
-                    << deviation << ',';
+                instance.set_robust_parameters(Gamma, maximum_deviation);
 
-        solve_and_report(output, master, separation, algorithm);
+                MasterProblem master(instance);
+                SeparationProblem separation(instance);
 
-        std::cout << output.str() << std::endl;
+                std::stringstream output;
+                output
+                        << path << ','
+                        << instance.n_sites() << ','
+                        << instance.n_clients() << ','
+                        << Gamma << ','
+                        << uncertainty_percentage << ','
+                        << maximum_deviation << ',';
+
+                solve_and_report(output, master, separation, algorithm, true);
+
+                std::cout << output.str() << std::endl;
+
+            }
+
+        }
 
     }
 

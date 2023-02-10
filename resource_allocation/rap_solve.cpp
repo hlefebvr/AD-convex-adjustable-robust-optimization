@@ -41,7 +41,7 @@ int main(int t_argc, const char** t_argv) {
                         << uncertainty_percentage << ','
                         << maximum_deviation << ',';
 
-                solve_and_report(output, master, separation, algorithm);
+                solve_and_report(output, master, separation, algorithm, false);
 
                 std::cout << output.str() << std::endl;
 

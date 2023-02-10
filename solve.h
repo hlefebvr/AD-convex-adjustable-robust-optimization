@@ -54,8 +54,8 @@ void log(Algorithm t_algorithm, ProblemType t_type, double t_obj, double t_lb, d
 template<Algorithm Algorithm,
         class MasterProblem,
         class SeparationProblem,
-        bool Verbose = false>
-bool solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_tolerance) {
+        bool Verbose = true>
+bool solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_has_complete_recourse, double t_tolerance) {
 
     auto total_time = [&]() { return t_master.timer().cumulative_time_in_seconds() + t_separation.timer().cumulative_time_in_seconds(); };
 
@@ -83,14 +83,14 @@ bool solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_to
 
         if (total_time() >= TIME_LIMIT) { return false; }
 
-        //if (gap(LB, UB) <= t_tolerance) { return true; }
+        //if (t_has_complete_recourse && gap(LB, UB) <= t_tolerance) { return true; }
 
         t_separation.update(proposition);
         t_separation.set_time_limit(TIME_LIMIT - total_time());
         t_separation.solve();
         auto certificate = t_separation.get_certificate();
 
-        //UB = std::min(UB, proposition.objective_value() + certificate.objective_value());
+        UB = std::min(UB, proposition.objective_value() + certificate.objective_value());
 
         if constexpr (Verbose) {
             log(Algorithm, Separation, certificate.objective_value(), LB, UB, gap(LB, UB), t_separation.timer().time_in_seconds(), total_time(), t_master.n_added_scenarios());
@@ -98,7 +98,7 @@ bool solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_to
 
         if (total_time() >= TIME_LIMIT) { return false; }
 
-        //if (gap(LB, UB) <= t_tolerance) { return true; }
+        //if (t_has_complete_recourse && gap(LB, UB) <= t_tolerance) { return true; }
 
         if (certificate.objective_value() <= t_tolerance) {
             return true;
@@ -117,12 +117,12 @@ bool solve(MasterProblem& t_master, SeparationProblem& t_separation, double t_to
 }
 
 template<class MasterProblem, class SeparationProblem>
-void solve_and_report(std::ostream& t_os, MasterProblem& master, SeparationProblem& separation, Algorithm t_algorithm, double t_tolerance = 1e-3) {
+void solve_and_report(std::ostream& t_os, MasterProblem& master, SeparationProblem& separation, Algorithm t_algorithm, bool t_has_complete_recourse, double t_tolerance = 1e-3) {
 
     bool solved;
     switch (t_algorithm) {
-        case CCG: solved = solve<CCG>(master, separation, t_tolerance); break;
-        case GBD: solved = solve<GBD>(master, separation, t_tolerance); break;
+        case CCG: solved = solve<CCG>(master, separation, t_has_complete_recourse, t_tolerance); break;
+        case GBD: solved = solve<GBD>(master, separation, t_has_complete_recourse, t_tolerance); break;
         default: throw std::runtime_error("Unknown algorithm");
     }
 
