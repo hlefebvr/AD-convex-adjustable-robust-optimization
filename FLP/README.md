@@ -64,8 +64,9 @@ $$
 
 Thus, we only have to compute the convex conjugate of $F_{a,b}$ which is given by 
 
+
 $$
-    F^*_{a,b}(\pi) = \sup_{v} \lbrace \pi v - av - bv^2 \rbrace.
+    F^*_{a,b}(\pi) = \sup_{v} \{ \pi v - av - bv^2 \}.
 $$
 
 The maximum is obtained for $v^*$ such that the derivative is zero, i.e.,
