@@ -6,7 +6,7 @@ Tested on Linux Ubuntu 20.04 with Gurobi 10.0.1, cmake 3.22.1 and gcc 11.4.0.
 
 ## How to use
 
-## Compiling
+### Compiling
 
 You can compile using CMake and gcc by running the following commands at the root directory of this repository.
 
@@ -20,7 +20,7 @@ make
 Be sure to have your environment variable `GUROBI_HOME` properly defined; e.g., 
 `GUROBI_HOME=/home/username/gurobi1001/linux64`.
 
-## Running 
+### Running 
 
 You may run our code with the following commands from the root directory of this repository, after the project is compiled.
 ```shell
