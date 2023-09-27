@@ -2,7 +2,7 @@
 
 ## Deriving the separation problem
 
-For a given $\textbf x\in X$ and a given $\textbf\xi\in\Xi$, the second-stage problem reads
+For a given $\mathbf x\in X$ and a given $\mathbf\xi\in\Xi$, the second-stage problem reads
 
 $$\begin{align}
     \min_{y,v} \  & \sum_{i\in V_1} \left( f_ix_i + F_{a,b}(v_i) + \sum_{j\in V_2} t_{ij}y_{ij}  \right) \\
@@ -13,7 +13,7 @@ $$\begin{align}
     & v_i\ge 0 & \forall i\in V_1
 \end{align}$$
 
-Using Lemma 2, for a given $(x_0,\textbf x)\in\mathbb R\times X$, we have that there exists $\textbf y\in Y(\textbf x, \textbf\xi)$ such that $x_0 \ge \sum_{i\in V_1} \left( f_ix_i + F_{a,b}(v_i) + \sum_{j\in V_2} t_{ij}y_{ij}  \right)$ if and only if the following holds: for all $\alpha\in\mathbb R^{|V_1|}$, for all $\beta\in\mathbb R^{|V_2|}$ and for all $\gamma\in\mathbb R^{|V_1|}_+$,
+Using Lemma 2, for a given $(x_0,\mathbf x)\in\mathbb R\times X$, we have that there exists $\mathbf y\in Y(\mathbf x, \mathbf\xi)$ such that $x_0 \ge \sum_{i\in V_1} \left( f_ix_i + F_{a,b}(v_i) + \sum_{j\in V_2} t_{ij}y_{ij}  \right)$ if and only if the following holds: for all $\alpha\in\mathbb R^{|V_1|}$, for all $\beta\in\mathbb R^{|V_2|}$ and for all $\gamma\in\mathbb R^{|V_1|}_+$,
 
 $$
     \inf_{y,v\ge 0} \left\lbrace
@@ -101,8 +101,8 @@ $$
         - \lambda_0x_0.
         \\
         \text{s.t.} \; & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
-        & (\lambda_0,\textbf\alpha,\textbf\beta,\textbf\gamma) \in \Lambda \\
-        & \textbf\xi\in\Xi
+        & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
+        & \mathbf\xi\in\Xi
     \end{align}
 $$
 
@@ -115,7 +115,7 @@ $$
         - \lambda_0 \left( x_0 + |V_1|a^2 + \sum_{i\in V_1} f_ix_i \right) \\
         \text{s.t.} \; & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
         & (\alpha_i - \gamma_i)^2 \le z_i\lambda_0 \quad \forall i\in V_1 \\
-        & (\lambda_0,\textbf\alpha,\textbf\beta,\textbf\gamma) \in \Lambda \\
-        & \textbf\xi\in\Xi.
+        & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
+        & \mathbf\xi\in\Xi.
     \end{align}
 $$
