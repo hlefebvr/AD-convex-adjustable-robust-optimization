@@ -62,7 +62,7 @@ $$
     \end{align}
 $$
 
-Thus, we only have to compute the convex conjugate of $F_{a,b}$ which is given by $ F^*_{a,b}(\pi) = \sup_{v} \{ \pi v - av - bv^2 \}$.
+Thus, we only have to compute the convex conjugate of $F_{a,b}$ which is given by $ F^\star_{a,b}(\pi) = \sup_{v} \{ \pi v - av - b v^2 \}$.
 
 The maximum is obtained for $v^*$ such that the derivative is zero, i.e.,
 
