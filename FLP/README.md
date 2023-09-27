@@ -69,7 +69,7 @@ $$
     \Leftrightarrow 
     \pi - a - 2bv = 0 
     \Leftrightarrow 
-    x = \frac{\pi - a}{2b}.
+    v^* = \frac{\pi - a}{2b}.
 $$
 
 Plugin it into the original function, we obtain 
@@ -111,6 +111,8 @@ $$
         \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
         & (\alpha_i - \gamma_i)^2 \le z_i\lambda_0 \quad \forall i\in V_1 \\
         & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
-        & \mathbf\xi\in\Xi.
+        & \mathbf\xi\in\Xi,
     \end{align}
 $$
+
+with $\Lambda = \lbrace (\lambda_0, \alpha, \beta, \gamma) \in \mathbb R_+ \times \mathbb R^{|V_1|}\times \mathbb R^{|V_2|}\times \mathbb R^{|V_1|}_+ : \lVert (\lambda_0, \alpha, \beta, \gamma) \rVert \le 1 \rbrace$.
