@@ -3,16 +3,14 @@
 ## Deriving the separation problem
 
 For a given $\bm x\in X$ and a given $\bm\xi\in\Xi$, the second-stage problem reads
-$$
-\begin{align}
+$$\begin{align}
     \min_{y,v} \  & \sum_{i\in V_1} \left( f_ix_i + F_{a,b}(v_i) + \sum_{j\in V_2} t_{ij}y_{ij}  \right) \\
     \text{s.t.} \ & \sum_{j\in V_2} y_{ij} = v_i & \forall i\in V_1 \\
     & \sum_{i\in V_1} y_{ij} = d_j(\xi_j) & \forall j\in V_2 \\
     & v_i \le q_ix_i & \forall i\in V_1 \\
     & y_{ij} \ge 0 & \forall (i,j)\in V_1\times V_2 \\
     & v_i\ge 0 & \forall i\in V_1
-\end{align}
-$$
+\end{align}$$
 
 Using Lemma 2, for a given $(x_0,\bm x)\in\mathbb R\times X$, we have that there exists $\bm y\in Y(\bm x, \bm\xi)$ such that $x_0 \ge \sum_{i\in V_1} \left( f_ix_i + F_{a,b}(v_i) + \sum_{j\in V_2} t_{ij}y_{ij}  \right)$ if and only if the following holds: for all $\alpha\in\mathbb R^{|V_1|}$, for all $\beta\in\mathbb R^{|V_2|}$ and for all $\gamma\in\mathbb R^{|V_1|}_+$,
 $$
