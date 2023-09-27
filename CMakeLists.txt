@@ -9,5 +9,5 @@ find_package(GUROBI REQUIRED)
 add_library(convex_aro_base STATIC Model.h Model.cpp Timer.h Timer.cpp cout_utils.h cin_utils.h solve.h)
 target_link_libraries(convex_aro_base PUBLIC gurobi)
 
-add_subdirectory(location_problem)
-add_subdirectory(resource_allocation)
+add_subdirectory(FLP)
+add_subdirectory(RAP)

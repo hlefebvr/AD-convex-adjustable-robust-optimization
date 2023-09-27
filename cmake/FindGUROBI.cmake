@@ -1,7 +1,3 @@
-if (NOT GUROBI_DIR)
-    set(GUROBI_DIR "/opt/gurobi951/linux64")
-endif()
-
 find_path(
         GUROBI_INCLUDE_DIRS
         NAMES gurobi_c.h
@@ -10,26 +6,52 @@ find_path(
 
 find_library(
         GUROBI_LIBRARY
-        NAMES gurobi gurobi81 gurobi90 gurobi95
+        NAMES gurobi gurobi81 gurobi90 gurobi95 gurobi1000 gurobi100
         HINTS ${GUROBI_DIR} $ENV{GUROBI_HOME}
         PATH_SUFFIXES lib)
 
-find_library(
-        GUROBI_CPP_LIBRARY
-        NAMES gurobi_c++
-        HINTS ${GUROBI_DIR} $ENV{GUROBI_HOME}
-        PATH_SUFFIXES lib
-)
+if(MSVC)
+    # determine Visual Studio year
+    if(MSVC_TOOLSET_VERSION EQUAL 142)
+        set(MSVC_YEAR "2019")
+    elseif(MSVC_TOOLSET_VERSION EQUAL 141)
+        set(MSVC_YEAR "2017")
+    elseif(MSVC_TOOLSET_VERSION EQUAL 140)
+        set(MSVC_YEAR "2015")
+    endif()
 
-file(GLOB GUROBI_CXX_SRC $ENV{GUROBI_HOME}/src/cpp/*.cpp)
+    if(MT)
+        set(M_FLAG "mt")
+    else()
+        set(M_FLAG "md")
+    endif()
+
+    find_library(
+            GUROBI_CXX_LIBRARY
+            NAMES gurobi_c++${M_FLAG}${MSVC_YEAR}
+            HINTS ${GUROBI_DIR} $ENV{GUROBI_HOME}
+            PATH_SUFFIXES lib)
+    find_library(
+            GUROBI_CXX_DEBUG_LIBRARY
+            NAMES gurobi_c++${M_FLAG}d${MSVC_YEAR}
+            HINTS ${GUROBI_DIR} $ENV{GUROBI_HOME}
+            PATH_SUFFIXES lib)
+else()
+    find_library(
+            GUROBI_CXX_LIBRARY
+            NAMES gurobi_c++
+            HINTS ${GUROBI_DIR} $ENV{GUROBI_HOME}
+            PATH_SUFFIXES lib)
+    set(GUROBI_CXX_DEBUG_LIBRARY ${GUROBI_CXX_LIBRARY})
+    message("CXX library: ${GUROBI_CXX_LIBRARY}")
+endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(GUROBI DEFAULT_MSG GUROBI_LIBRARY GUROBI_INCLUDE_DIRS GUROBI_CPP_LIBRARY)
+find_package_handle_standard_args(GUROBI DEFAULT_MSG GUROBI_LIBRARY GUROBI_CXX_LIBRARY GUROBI_INCLUDE_DIRS)
 
 if (GUROBI_FOUND)
-    add_library(gurobi STATIC EXCLUDE_FROM_ALL ${GUROBI_CXX_SRC})
-    target_include_directories(gurobi PUBLIC ${GUROBI_INCLUDE_DIRS})
-    target_link_libraries(gurobi PUBLIC ${GUROBI_LIBRARY})
-else()
-    message(FATAL_ERROR "Could not find GUROBI")
+    add_library(gurobi STATIC IMPORTED)
+    set_target_properties(gurobi PROPERTIES IMPORTED_LOCATION ${GUROBI_CXX_LIBRARY})
+    target_link_libraries(gurobi INTERFACE ${GUROBI_LIBRARY})
+    target_include_directories(gurobi INTERFACE ${GUROBI_INCLUDE_DIRS})
 endif()
