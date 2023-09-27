@@ -9,14 +9,14 @@ $$\begin{align}
     \text{s.t.} \ & \sum_{j\in V_2} y_{ij} = v_i & \forall i\in V_1 \\
     & \sum_{i\in V_1} y_{ij} = d_j(\xi_j) & \forall j\in V_2 \\
     & v_i \le q_ix_i & \forall i\in V_1 \\
-    & y_{ij} \ge 0 & \forall (i,j)\in V_1\times V_2 \\
-    & v_i\ge 0 & \forall i\in V_1
+    & y_{ij} \in \mathbb R & \forall (i,j)\in V_1\times V_2 \\
+    & v_i\in \mathbb R & \forall i\in V_1
 \end{align}$$
 
 Using Lemma 2, for a given $(x_0,\mathbf x)\in\mathbb R\times X$, we have that there exists $\mathbf y\in Y(\mathbf x, \mathbf\xi)$ such that $x_0 \ge \sum_{i\in V_1} \left( f_ix_i + F_{a,b}(v_i) + \sum_{j\in V_2} t_{ij}y_{ij}  \right)$ if, and only if, the following holds: for all $\alpha\in\mathbb R^{|V_1|}$, for all $\beta\in\mathbb R^{|V_2|}$ and for all $\gamma\in\mathbb R^{|V_1|}_+$,
 
 $$
-    \inf_{y,v\ge 0} \left\lbrace
+    \inf_{y,v} \left\lbrace
         \sum_{i\in V_1} \alpha_i \left( \sum_{j\in V_2} y_{ij} - v_i \right)
         + \sum_{j\in V_2} \beta_j \left( \sum_{j\in V_2} y_{ij} - d_j(\xi_j) \right)
         + \sum_{i\in V_1} \gamma_i \left( v_i - q_ix_i \right)
@@ -30,12 +30,12 @@ Re-arranging the terms, this formula is recast as
 $$
     \sum_{i\in V_1}
     \sum_{j\in V_2}
-    \inf_{y_{ij}\ge 0} \left\lbrace
+    \inf_{y_{ij}\in\mathbb R} \left\lbrace
         y_{ij}( \alpha_i + \beta_j + t_{ij}\lambda_0 )
     \right\rbrace
     +
     \sum_{i\in V_1}
-    \inf_{v_i\ge 0} \left\lbrace
+    \inf_{v_i\in\mathbb R} \left\lbrace
         \lambda_0 F_{a,b}(v_i) + v_i ( -\alpha_i + \gamma_i )
     \right\rbrace
     - \sum_{j\in V_2} \beta_j d_j(\xi_j) 
@@ -46,10 +46,16 @@ $$
 The first terms (over $y_{ij}$) are bounded below if and only if it holds
 
 $$
-\alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2.
+\alpha_i + \beta_j + t_{ij}\lambda_0 = 0 \quad \forall (i,j) \in V_1\times V_2.
 $$
 
-The second terms (over $v_i$) can be solved analytically. We first assume that $\lambda_0 \neq 0$. To simplify our work, we first observe that 
+The second terms (over $v_i$) can be solved analytically. We first assume that $\lambda_0 = 0$. Then, the infimum is bounded from below if and only if it holds 
+
+$$
+    \gamma_i - \alpha_i = 0 \quad \forall i\in V_1.
+$$
+
+If $\lambda_0 \neq 0$. To simplify our work, we first observe that 
 
 $$
     \begin{align}
@@ -86,7 +92,7 @@ $$
     - \frac{ (\alpha_i - \gamma_i )^2 }{ \lambda_0 } + 2a ( \alpha_i - \gamma_i ) - \lambda_0 a^2
 $$
 
-All in all, the separation problem is then 
+All in all, the separation problem if $\lambda_0 \neq 0$ is then given by
 
 $$
     \begin{align}
@@ -95,7 +101,7 @@ $$
         - \sum_{i\in V_1} (\gamma_i q_i + \lambda_0f_i ) x_i
         - \lambda_0x_0.
         \\
-        \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
+        \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 = 0 \quad \forall (i,j) \in V_1\times V_2, \\
         & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
         & \mathbf\xi\in\Xi
     \end{align}
@@ -105,7 +111,7 @@ Re-arranging the terms, one obtains the following model in which we introduced $
 
 $$
     \begin{align}
-        \max \  & \sum_{i\in V_1} \left( -z_i + 2a(\alpha - \gamma_i) - \gamma_iq_i \right)
+        \max \  & \sum_{i\in V_1} \left( -z_i + 2a(\alpha_i - \gamma_i) - \gamma_iq_i \right)
         - \sum_{j\in V_2} \beta_j d_j(\xi_j)
         - \lambda_0 \left( x_0 + |V_1|a^2 + \sum_{i\in V_1} f_ix_i \right) \\
         \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
@@ -116,3 +122,4 @@ $$
 $$
 
 with $\Lambda = \lbrace (\lambda_0, \alpha, \beta, \gamma) \in \mathbb R_+ \times \mathbb R^{|V_1|}\times \mathbb R^{|V_2|}\times \mathbb R^{|V_1|}_+ : \lVert (\lambda_0, \alpha, \beta, \gamma) \rVert \le 1 \rbrace$.
+Observe how this model, derived for $\lambda_0 \neq 0$, implies $\alpha_i - \gamma_i = 0$ when $\lambda_0 = 0$.
