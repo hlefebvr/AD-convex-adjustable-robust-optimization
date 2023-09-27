@@ -92,12 +92,12 @@ All in all, the separation problem is then
 
 $$
     \begin{align}
-        \max \; & \sum_{i\in V_1} \left( - \frac{ (\alpha_i - \gamma_i )^2 }{ \lambda_0 } + 2a ( \alpha_i - \gamma_i ) - \lambda_0 a^2 \right) 
+        \max \  & \sum_{i\in V_1} \left( - \frac{ (\alpha_i - \gamma_i )^2 }{ \lambda_0 } + 2a ( \alpha_i - \gamma_i ) - \lambda_0 a^2 \right) 
         - \sum_{j\in V_2} \beta_j d_j(\xi_j) 
         - \sum_{i\in V_1} (\gamma_i q_i + \lambda_0f_i ) x_i
         - \lambda_0x_0.
         \\
-        \text{s.t.} \; & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
+        \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
         & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
         & \mathbf\xi\in\Xi
     \end{align}
@@ -107,10 +107,10 @@ Re-arranging the terms, one obtains the following model in which we introduced $
 
 $$
     \begin{align}
-        \max \; & \sum_{i\in V_1} \left( -z_i + 2a(\alpha - \gamma_i) - \gamma_iq_i \right)
+        \max \  & \sum_{i\in V_1} \left( -z_i + 2a(\alpha - \gamma_i) - \gamma_iq_i \right)
         - \sum_{j\in V_2} \beta_j d_j(\xi_j)
         - \lambda_0 \left( x_0 + |V_1|a^2 + \sum_{i\in V_1} f_ix_i \right) \\
-        \text{s.t.} \; & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
+        \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
         & (\alpha_i - \gamma_i)^2 \le z_i\lambda_0 \quad \forall i\in V_1 \\
         & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
         & \mathbf\xi\in\Xi.
