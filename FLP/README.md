@@ -25,6 +25,7 @@ $$
 $$
 
 Re-arranging the terms, this formula is recast as
+
 $$
     \sum_{i\in V_1}
     \sum_{j\in V_2}
@@ -42,11 +43,13 @@ $$
 $$
 
 The first terms (over $y_{ij}$) are bounded below if and only if it holds
+
 $$
 \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2.
 $$
 
 The second terms (over $v_i$) can be solved analytically. We first assume that $\lambda_0 \neq 0$. To simplify our work, we first observe that 
+
 $$
     \begin{align}
         \inf_{v_i\ge 0} \left\{
@@ -59,11 +62,13 @@ $$
 $$
 
 Thus, we only have to compute the convex conjugate of $F_{a,b}$ which is given by 
+
 $$
     F^*_{a,b}(\pi) = \sup_{v} \{ \pi v - av - bv^2 \}.
 $$
 
 The maximum is obtained for $v^*$ such that the derivative is zero, i.e.,
+
 $$
     \frac{d}{dv} ( \pi v - a v - bv^2 ) = 0
     \Leftrightarrow 
@@ -71,12 +76,15 @@ $$
     \Leftrightarrow 
     x = \frac{\pi - a}{2b}.
 $$
+
 Plugin it into the original function, we obtain 
+
 $$
     F_{a,b}^*(\pi) = \frac{1}{4b} \left( \pi - a  \right)^2.
 $$
 
 In turn, we obtain
+
 $$
     -\lambda_0 F_{a,b}^*\left( \frac{ \alpha_i - \gamma_i }{ \lambda_0 } \right)
     =
@@ -84,6 +92,7 @@ $$
 $$
 
 All in all, the separation problem is then 
+
 $$
     \begin{align}
         \max \; & \sum_{i\in V_1} \left( - \frac{ (\alpha_i - \gamma_i )^2 }{ \lambda_0 } + 2a ( \alpha_i - \gamma_i ) - \lambda_0 a^2 \right) 
@@ -98,6 +107,7 @@ $$
 $$
 
 Re-arranging the terms, one obtains the following model in which we introduced $z_i$ representing the ratio in the objective function:
+
 $$
     \begin{align}
         \max \; & \sum_{i\in V_1} \left( -z_i + 2a(\alpha - \gamma_i) - \gamma_iq_i \right)
