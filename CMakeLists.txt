@@ -1,13 +1,22 @@
 cmake_minimum_required(VERSION 3.22)
-project(convex_aro)
+project(ConvexAdjustalbeRobustOptimization)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
-find_package(GUROBI REQUIRED)
+include(FetchContent)
 
-add_library(convex_aro_base STATIC Model.h Model.cpp Timer.h Timer.cpp cout_utils.h cin_utils.h solve.h)
-target_link_libraries(convex_aro_base PUBLIC gurobi)
+set(USE_GUROBI ON)
+
+FetchContent_Declare(
+        idol
+        GIT_REPOSITORY https://github.com/hlefebvr/idol.git
+        GIT_TAG        origin/main
+)
+
+FetchContent_MakeAvailable(idol)
+
+add_library(convex_aro ConvexAROSolver.h ConvexAROSolver.cpp)
+target_link_libraries(convex_aro PUBLIC idol)
 
 add_subdirectory(FLP)
-add_subdirectory(RAP)
+#add_subdirectory(RAP)

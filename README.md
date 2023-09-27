@@ -24,7 +24,7 @@ Be sure to have your environment variable `GUROBI_HOME` properly defined; e.g.,
 
 You may run our code with the following commands from the root directory of this repository, after the project is compiled.
 ```shell
-./build/FLP/FLP_solve <path_to_instance> <Gamma> # For the Facility Location Problem (FLP)
+./build/FLP-old/FLP_solve <path_to_instance> <Gamma> # For the Facility Location Problem (FLP-old)
 ./build/RAP/RAP_solve <path_to_instance> <Gamma> # For the Resource Allocation Problem (RAP)
 ```
 
