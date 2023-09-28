@@ -1,0 +1,1 @@
+add_executable(RAP_generate main.cpp)
