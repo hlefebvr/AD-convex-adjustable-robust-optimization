@@ -53,10 +53,10 @@ If $\gamma_i \neq 0$. To simplify our work, we first observe that
 
 $$
     \begin{align}
-        \inf_{ v_{i} \in \mathbb R } \left\lbrace 
-            \gamma_i F_{1,b_i}(v_i) -\alpha_i v_{i} 
+        \inf_{ v_i\in \mathbb R } \left\lbrace 
+            \gamma_i F_{1,b_i}(v_i) -\alpha_i v_i
         \right\rbrace
-        &= - \sup_{ v_{i} \in \mathbb R } \left\lbrace \alpha_i v_{i} - \gamma_i F_{1,b_i}(v_i) \right\rbrace \\
+        &= - \sup_{ v_i \in \mathbb R } \left\lbrace \alpha_i v_i - \gamma_i F_{1,b_i}(v_i) \right\rbrace \\
         &= -(\gamma_i F_{1,b_i}(v_i))^*(\alpha_i) \\
         &= -\gamma_i F_{1,b_i}^*\left( \frac{\alpha_i}{\gamma_i} \right).
     \end{align}
