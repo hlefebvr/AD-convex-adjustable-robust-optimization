@@ -30,7 +30,7 @@ Re-arranging the terms, this formula is recast as
 $$
     \sum_{i\in V_1}
     \sum_{j\in V_2}
-    \inf_{y_{ij}\in\mathbb R} \left\lbrace
+    \inf_{y_{ij}\ge 0} \left\lbrace
         y_{ij}( \alpha_i + \beta_j + t_{ij}\lambda_0 )
     \right\rbrace
     +
@@ -59,7 +59,7 @@ If $\lambda_0 \neq 0$. To simplify our work, we first observe that
 
 $$
     \begin{align}
-        \inf_{v_i\ge 0} \left\lbrace
+        \inf_{v_i\in \mathbb R} \left\lbrace
             \lambda_0 F_{a,b}(v_i) + v_i ( -\alpha_i + \gamma_i )
         \right\rbrace
         &= - \sup_{v_i} \left\lbrace v_i(\alpha_i - \gamma_i) - \lambda_0 F_{a,b}(v_i) \right\rbrace \\
