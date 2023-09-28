@@ -9,7 +9,7 @@ $$\begin{align}
     \text{s.t.} \ & \sum_{j\in V_2} y_{ij} = v_i & \forall i\in V_1 \\
     & \sum_{i\in V_1} y_{ij} = d_j(\xi_j) & \forall j\in V_2 \\
     & v_i \le q_ix_i & \forall i\in V_1 \\
-    & y_{ij} \in \mathbb R & \forall (i,j)\in V_1\times V_2 \\
+    & y_{ij} \ge 0 & \forall (i,j)\in V_1\times V_2 \\
     & v_i\in \mathbb R & \forall i\in V_1
 \end{align}$$
 
@@ -46,7 +46,7 @@ $$
 The first terms (over $y_{ij}$) are bounded below if and only if it holds
 
 $$
-\alpha_i + \beta_j + t_{ij}\lambda_0 = 0 \quad \forall (i,j) \in V_1\times V_2.
+\alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2.
 $$
 
 The second terms (over $v_i$) can be solved analytically. We first assume that $\lambda_0 = 0$. Then, the infimum is bounded from below if and only if it holds 

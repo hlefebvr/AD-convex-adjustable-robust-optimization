@@ -83,6 +83,8 @@ void FLP::Solver::update_separation_objective_function(const Solution::Primal &t
 
     m_separation_problem.set_obj_expr(objective);
 
+    m_separation_problem.write("model.ptf");
+
 }
 
 void FLP::Solver::create_master_problem() {
@@ -113,7 +115,7 @@ void FLP::Solver::create_separation_problem() {
     // LP dual constraints
     for (auto i : Range(n_facilities)) {
         for (auto j : Range(n_customers)) {
-            m_separation_problem.add_ctr(m_alpha[i] + m_beta[j] + m_instance.per_unit_transportation_cost(i, j) * m_lambda_0 == 0);
+            m_separation_problem.add_ctr(m_alpha[i] + m_beta[j] + m_instance.per_unit_transportation_cost(i, j) * m_lambda_0 >= 0);
         }
     }
 
@@ -125,11 +127,11 @@ void FLP::Solver::create_separation_problem() {
     }
 
     // Norm constraints
-    Expr sum_absolute_values = m_lambda_0 * m_lambda_0
-            + idol_Sum(i, Range(n_facilities), m_gamma[i] * m_gamma[i] + m_alpha[i] * m_alpha[i])
-            + idol_Sum(j, Range(n_customers), m_beta[j] * m_beta[j])
+    Expr sum_square = m_lambda_0 * m_lambda_0
+                      + idol_Sum(i, Range(n_facilities), m_gamma[i] * m_gamma[i] + m_alpha[i] * m_alpha[i])
+                      + idol_Sum(j, Range(n_customers), m_beta[j] * m_beta[j])
     ;
-    m_separation_problem.add_ctr(sum_absolute_values <= 1);
+    m_separation_problem.add_ctr(sum_square <= 1);
 
     // Xi constraints
     m_separation_problem.add_ctr(idol_Sum(j, Range(n_customers), m_xi[j]) <= m_Gamma);
