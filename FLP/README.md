@@ -116,7 +116,7 @@ $$
         + \sum_{i\in V_1} (\lambda_0f_i - \gamma_i q_i ) x_i
         - \lambda_0x_0 \\
         \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 = 0 \quad \forall (i,j) \in V_1\times V_2, \\
-        & (\alpha_i - \gamma_i)^2 \le z_i\lambda_0 \quad \forall i\in V_1 \\
+        & (\alpha_i - \gamma_i)^2 \le 4bz_i\lambda_0 \quad \forall i\in V_1 \\
         & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
         & \mathbf\xi\in\Xi, \\
         & z \ge 0,

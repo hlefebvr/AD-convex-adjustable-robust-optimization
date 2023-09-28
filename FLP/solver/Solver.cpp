@@ -65,9 +65,10 @@ void FLP::Solver::update_separation_objective_function(const Solution::Primal &t
 
         idol_Sum(i,
                  Range(n_facilities),
-                 -m_z[i]
-                 + 2 * m_a * (m_alpha[i] - m_gamma[i])
-                 - m_gamma[i] * m_instance.capacity(i) * t_separation_solution.get(m_x[i])
+                 - m_z[i]
+                 + (m_a / (2 * m_b)) * ( m_alpha[i] - m_gamma[i] )
+                 - ( m_a * m_a / ( 4 * m_b ) ) * m_lambda_0
+                 + ( m_lambda_0 * m_instance.fixed_cost(i) - m_gamma[i] * m_instance.capacity(i) ) * t_separation_solution.get(m_x[i])
         )
         -
         idol_Sum(j,
@@ -75,7 +76,7 @@ void FLP::Solver::update_separation_objective_function(const Solution::Primal &t
                  m_beta[j] * m_instance.demand(j)
                  + m_omega[j] * m_instance.demand(j) * m_deviation
         )
-        - m_lambda_0 * (t_separation_solution.get(m_x_0) + n_facilities * m_a * m_a - fixed_costs )
+        - m_lambda_0 * t_separation_solution.get(m_x_0)
 
         ;
 
@@ -121,7 +122,7 @@ void FLP::Solver::create_separation_problem() {
     for (auto i : Range(n_facilities)) {
         auto auxiliary_variable = m_separation_problem.add_var(-Inf, Inf, Continuous);
         m_separation_problem.add_ctr(auxiliary_variable == m_alpha[i] - m_gamma[i] );
-        m_separation_problem.add_ctr(auxiliary_variable * auxiliary_variable <= m_z[i] * m_lambda_0 );
+        m_separation_problem.add_ctr(auxiliary_variable * auxiliary_variable <= 4 * b * m_z[i] * m_lambda_0 );
     }
 
     // Norm constraints
