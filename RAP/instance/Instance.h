@@ -1,0 +1,17 @@
+//
+// Created by henri on 28.09.23.
+//
+
+#ifndef CONVEXADJUSTALBEROBUSTOPTIMIZATION_INSTANCE_H
+#define CONVEXADJUSTALBEROBUSTOPTIMIZATION_INSTANCE_H
+
+namespace RAP {
+    class Instance;
+}
+
+class RAP::Instance {
+
+};
+
+
+#endif //CONVEXADJUSTALBEROBUSTOPTIMIZATION_INSTANCE_H

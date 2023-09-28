@@ -5,8 +5,13 @@
 #ifndef CONVEXADJUSTALBEROBUSTOPTIMIZATION_CCG_H
 #define CONVEXADJUSTALBEROBUSTOPTIMIZATION_CCG_H
 
+#include "Solver.h"
 
-class CCG {
+namespace RAP {
+    class CCG;
+}
+
+class RAP::CCG : public RAP::Solver {
 
 };
 

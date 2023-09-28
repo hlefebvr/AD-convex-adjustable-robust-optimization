@@ -7,4 +7,4 @@ add_executable(RAP_solve
         GBD.h
         Solver.cpp
         Solver.h)
-target_link_libraries(RAP_solve PUBLIC convex_aro)
+target_link_libraries(RAP_solve PUBLIC convex_aro RAP_instance)

@@ -1,2 +1,3 @@
+add_subdirectory(instance)
 add_subdirectory(solver)
 add_subdirectory(generator)

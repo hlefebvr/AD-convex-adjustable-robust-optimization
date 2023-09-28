@@ -1,1 +1,2 @@
 add_executable(RAP_generate main.cpp)
+target_link_libraries(RAP_generate PUBLIC RAP_instance)
