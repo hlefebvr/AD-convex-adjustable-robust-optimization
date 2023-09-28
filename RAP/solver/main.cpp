@@ -24,8 +24,7 @@ int main(int t_argc, const char** t_argv) {
         throw std::invalid_argument("Argument <p> must be between 0 and 1.");
     }
 
-    //const auto instance = RAP::read_instance(path_to_instance);
-    const auto instance = RAP::generate_instance(2, 2);
+    const auto instance = RAP::read_instance(path_to_instance);
 
     const double Gamma = std::floor( percentage_for_Gamma * instance.n_clients() );
 
