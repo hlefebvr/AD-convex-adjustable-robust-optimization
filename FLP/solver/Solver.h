@@ -18,6 +18,9 @@ protected:
     const double m_Gamma;
     const double m_deviation;
 
+    const double m_a = .75;
+    const double m_b = .75;
+
     idol::Env m_env;
 
     // Master problem
@@ -28,9 +31,17 @@ protected:
     // Separation
     idol::Model m_separation_problem;
     idol::Vector<idol::Var, 1> m_xi;
-
+    idol::Vector<idol::Var, 1> m_alpha;
+    idol::Vector<idol::Var, 1> m_beta;
+    idol::Vector<idol::Var, 1> m_gamma;
+    idol::Vector<idol::Var, 1> m_z;
+    idol::Vector<idol::Var, 1> m_omega;
+    idol::Var m_lambda_0;
 
     void initialize() override;
+    void create_master_problem();
+    void create_separation_problem();
+
     idol::Solution::Primal solve_master_problem(double t_time_limit) override;
     idol::Solution::Primal solve_separation_problem(double t_time_limit) override;
     void update_separation_objective_function(const idol::Solution::Primal &t_separation_solution) override;

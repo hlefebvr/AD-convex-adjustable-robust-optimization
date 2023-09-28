@@ -24,6 +24,8 @@ void ConvexAROSolver::solve(double t_time_limit, double t_tolerance_for_separati
 
         master_solution = solve_master_problem( remaining_time() );
 
+        std::cout << master_solution << std::endl;
+
         if (master_solution.status() != Optimal) {
             break;
         }
@@ -36,11 +38,13 @@ void ConvexAROSolver::solve(double t_time_limit, double t_tolerance_for_separati
             break;
         }
 
+        std::cout << separation_solution << std::endl;
+
         augment_master_problem( separation_solution );
 
         ++iteration_count;
 
-    } while ( separation_solution.objective_value() <= t_tolerance_for_separation );
+    } while ( separation_solution.objective_value() > t_tolerance_for_separation );
 
     timer.stop();
 
