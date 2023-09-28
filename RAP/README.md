@@ -96,11 +96,11 @@ $$
         - \sum_{i\in V_1} \gamma_i x_i
         + \lambda_0 \left( \sum_{i\in V_1} c_ix_i - x_0 \right) \\
         \text{s.t.} \ & \alpha_i - \mu_{ij}\beta_j \ge 0 \quad \forall (i,j) \in V_1\times V_2 \\
-        & (\lambda_0,\mathbf \alpha,\mathbf \beta,\mathbf \gamma) \in \Lambda \\
+        & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
         & \alpha_i^2 \le 4b_iz_i\gamma_i \quad \forall i\in V_1 \\
         & \mathbf \xi \in \Xi \\
         & z \ge 0,
     \end{align}
 $$
 
-with $\Lambda = \left\lbrace (\lambda_0,\mathbf \alpha,\mathbf \beta,\mathbf \gamma) \in \mathbb R_+ \times \mathbb R^{|V_1|} \times \mathbb R^{|V_2|}_+ \times \mathbb R^{|V_1|}_+ : \lVert (\lambda_0,\mathbf \alpha,\mathbf \beta,\mathbf \gamma) \rVert \le 1 \right\rbrace$. Observe how this model, derived for $\lambda_0 \neq 0$, implies $\alpha_i = 0$ if $\gamma_i = 0$.
+with $\Lambda = \left\lbrace (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \mathbb R_+ \times \mathbb R^{|V_1|} \times \mathbb R^{|V_2|}_+ \times \mathbb R^{|V_1|}_+ : \lVert (\lambda_0,\mathbf \alpha,\mathbf \beta,\mathbf \gamma) \rVert \le 1 \right\rbrace$. Observe how this model, derived for $\lambda_0 \neq 0$, implies $\alpha_i = 0$ if $\gamma_i = 0$.

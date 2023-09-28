@@ -124,4 +124,4 @@ $$
 $$
 
 with $\Lambda = \lbrace (\lambda_0, \alpha, \beta, \gamma) \in \mathbb R_+ \times \mathbb R^{|V_1|}\times \mathbb R^{|V_2|}\times \mathbb R^{|V_1|}_+ : \lVert (\lambda_0, \alpha, \beta, \gamma) \rVert \le 1 \rbrace$.
-Observe how this model, derived for $\lambda_0 \neq 0$, implies $\alpha_i - \gamma_i = 0$ when $\lambda_0 = 0$.
+Observe how this model, derived for $\lambda_0 \neq 0$, implies $\alpha_i - \gamma_i = 0$ if $\lambda_0 = 0$.
