@@ -3,6 +3,8 @@
 //
 
 #include "GBD.h"
+#include "optimizers/solvers/Mosek.h"
+#include "optimizers/solvers/gurobi/Gurobi.h"
 
 using namespace idol;
 
@@ -23,7 +25,7 @@ void RAP::GBD::augment_master_problem(const idol::Solution::Primal &t_separation
             idol_Sum(i,
                      Range(n_servers),
                      - t_separation_solution.get(m_z[i])
-                     - 1 / (2 * m_instance.congestion_factor(i)) * t_separation_solution.get(m_alpha[i])
+                     + 1 / (2 * m_instance.congestion_factor(i)) * t_separation_solution.get(m_alpha[i])
                      - 1 / (4 * m_instance.congestion_factor(i)) * t_separation_solution.get(m_gamma[i])
                      - t_separation_solution.get(m_gamma[i]) * m_x[i]
             )

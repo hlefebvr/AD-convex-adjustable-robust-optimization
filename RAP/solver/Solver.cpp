@@ -54,21 +54,21 @@ idol::Solution::Primal RAP::Solver::solve_separation_problem(double t_time_limit
     return save_primal(m_separation_problem);
 }
 
-void RAP::Solver::update_separation_objective_function(const Solution::Primal &t_separation_solution) {
+void RAP::Solver::update_separation_objective_function(const Solution::Primal &t_master_solution) {
 
     const unsigned int n_servers = m_instance.n_servers();
     const unsigned int n_clients = m_instance.n_clients();
 
-    const double sum_unitary_costs = idol_Sum(i, Range(n_servers), m_instance.unitary_cost(i) * t_separation_solution.get(m_x[i]) ).constant().numerical();
+    const double sum_unitary_costs = idol_Sum(i, Range(n_servers), m_instance.unitary_cost(i) * t_master_solution.get(m_x[i]) ).constant().numerical();
 
     const Expr objective =
 
             idol_Sum(i,
                      Range(n_servers),
                      - m_z[i]
-                     - 1 / (2 * m_instance.congestion_factor(i)) * m_alpha[i]
+                     + 1 / (2 * m_instance.congestion_factor(i)) * m_alpha[i]
                      - 1 / (4 * m_instance.congestion_factor(i)) * m_gamma[i]
-                     - m_gamma[i] * t_separation_solution.get(m_x[i])
+                     - m_gamma[i] * t_master_solution.get(m_x[i])
             )
             +
             idol_Sum(j,
@@ -76,7 +76,7 @@ void RAP::Solver::update_separation_objective_function(const Solution::Primal &t
                      m_beta[j] * m_instance.demand(j)
                      + m_omega[j] * m_instance.demand(j) * m_deviation
             )
-            + m_lambda_0 * ( sum_unitary_costs - t_separation_solution.get(m_x_0) )
+            + m_lambda_0 * (sum_unitary_costs - t_master_solution.get(m_x_0) )
     ;
 
     m_separation_problem.set_obj_expr(objective);

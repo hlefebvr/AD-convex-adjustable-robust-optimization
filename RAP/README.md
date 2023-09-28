@@ -72,14 +72,14 @@ In turn, we obtain
 
 $$
     -\gamma_i F_{1,b_i}^*\left( \frac{\alpha_i}{\gamma_i} \right)
-    = - \frac{ \alpha_i^2 }{ 4b_i\gamma_i } - \frac{ \alpha_i }{ 2b_i } - \frac{ \gamma_i }{ 4 b_i }
+    = - \frac{ \alpha_i^2 }{ 4b_i\gamma_i } + \frac{ \alpha_i }{ 2b_i } - \frac{ \gamma_i }{ 4 b_i }
 $$
 
 All in all, the separation problem if $\gamma_i \neq 0$ is then given by
 
 $$
     \begin{align}
-        \max \ & \sum_{i\in V_1} \left( - \frac{ \alpha_i^2 }{ 4b_i\gamma_i } - \frac{ \alpha_i }{ 2b_i } - \frac{ \gamma_i }{ 4 b_i } \right) 
+        \max \ & \sum_{i\in V_1} \left( - \frac{ \alpha_i^2 }{ 4b_i\gamma_i } + \frac{ \alpha_i }{ 2b_i } - \frac{ \gamma_i }{ 4 b_i } \right) 
         + \sum_{j\in V_2} \beta_j d_j(\xi_j)
         - \sum_{i\in V_1} \gamma_i x_i
         + \lambda_0 \left( \sum_{i\in V_1} c_ix_i - x_0 \right) \\
@@ -93,7 +93,7 @@ Introducing variables $z_i$ representing the ratio in the objective function, we
 
 $$
     \begin{align}
-        \max \ & \sum_{i\in V_1} \left( - z_i - \frac{ \alpha_i }{ 2b_i } - \frac{ \gamma_i }{ 4 b_i } \right) 
+        \max \ & \sum_{i\in V_1} \left( - z_i + \frac{ \alpha_i }{ 2b_i } - \frac{ \gamma_i }{ 4 b_i } \right) 
         + \sum_{j\in V_2} \beta_j d_j(\xi_j)
         - \sum_{i\in V_1} \gamma_i x_i
         + \lambda_0 \left( \sum_{i\in V_1} c_ix_i - x_0 \right) \\

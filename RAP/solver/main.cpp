@@ -25,7 +25,7 @@ int main(int t_argc, const char** t_argv) {
     }
 
     //const auto instance = RAP::read_instance(path_to_instance);
-    const auto instance = RAP::generate_instance(10, 20);
+    const auto instance = RAP::generate_instance(2, 2);
 
     const double Gamma = std::floor( percentage_for_Gamma * instance.n_clients() );
 

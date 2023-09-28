@@ -41,7 +41,7 @@ protected:
 
     idol::Solution::Primal solve_master_problem(double t_time_limit) override;
     idol::Solution::Primal solve_separation_problem(double t_time_limit) override;
-    void update_separation_objective_function(const idol::Solution::Primal &t_separation_solution) override;
+    void update_separation_objective_function(const idol::Solution::Primal &t_master_solution) override;
 public:
     Solver(const Instance& t_instance, double t_Gamma, double t_deviation);
 };

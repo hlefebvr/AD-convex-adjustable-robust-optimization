@@ -30,7 +30,7 @@ protected:
     virtual void initialize() = 0;
     virtual idol::Solution::Primal solve_master_problem(double t_time_limit) = 0;
     virtual idol::Solution::Primal solve_separation_problem(double t_time_limit) = 0;
-    virtual void update_separation_objective_function(const idol::Solution::Primal& t_separation_solution) = 0;
+    virtual void update_separation_objective_function(const idol::Solution::Primal& t_master_solution) = 0;
     virtual void augment_master_problem(const idol::Solution::Primal& t_separation_solution) = 0;
 public:
     Report solve(double t_time_limit, double t_tolerance_for_separation) override;
