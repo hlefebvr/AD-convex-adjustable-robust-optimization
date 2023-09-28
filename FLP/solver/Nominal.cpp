@@ -1,0 +1,63 @@
+//
+// Created by henri on 28.09.23.
+//
+
+#include "Nominal.h"
+#include "optimizers/solvers/Mosek.h"
+
+using namespace idol;
+
+FLP::Nominal::Nominal(const idol::Problems::FLP::Instance &t_instance)
+    : m_instance(t_instance),
+      m_model(m_env) {
+
+    const unsigned int n_facilities = m_instance.n_facilities();
+    const unsigned int n_customers = m_instance.n_customers();
+
+    auto objective = m_model.add_var(-Inf, Inf, Continuous, "objective");
+    auto x = m_model.add_vars(Dim<1>(n_facilities), 0, 1, Binary, "x");
+    auto y = m_model.add_vars(Dim<2>(n_facilities, n_customers), 0, Inf, Continuous, "y");
+    auto v = m_model.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous, "v");
+
+    m_model.set_obj_expr(objective);
+
+    // Objective
+    m_model.add_ctr(objective >=
+                    idol_Sum(
+                            i,
+                            Range(n_facilities),
+                            m_instance.fixed_cost(i) * x[i]
+                            + m_a * v[i]
+                            + m_b * v[i] * v[i]
+                            + idol_Sum(
+                                j,
+                                Range(n_customers),
+                                m_instance.per_unit_transportation_cost(i, j) * y[i][j]
+                            )
+                          )
+            );
+
+    for (auto i : Range(n_facilities)) {
+        m_model.add_ctr(idol_Sum(j, Range(n_customers), y[i][j]) == v[i]);
+    }
+
+    for (auto j : Range(n_customers)) {
+        m_model.add_ctr(idol_Sum(i, Range(n_facilities), y[i][j]) == m_instance.demand(j));
+    }
+
+    for (auto i : Range(n_facilities)) {
+        m_model.add_ctr(v[i] <= m_instance.capacity(i) * x[i]);
+    }
+
+    m_model.use(Mosek());
+
+}
+
+void FLP::Nominal::solve(double t_time_limit, double t_tolerance_for_separation) {
+
+    m_model.optimizer().set_param_time_limit(t_time_limit);
+    m_model.optimize();
+
+    std::cout << save_primal(m_model) << std::endl;
+
+}

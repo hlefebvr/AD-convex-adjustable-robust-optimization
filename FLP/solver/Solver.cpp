@@ -38,7 +38,7 @@ void FLP::Solver::initialize() {
 
 idol::Solution::Primal FLP::Solver::solve_master_problem(double t_time_limit) {
 
-    // std::cout << m_master_problem << std::endl;
+    // std::cout << m_model << std::endl;
 
     m_master_problem.optimizer().set_param_time_limit(t_time_limit);
     m_master_problem.optimize();

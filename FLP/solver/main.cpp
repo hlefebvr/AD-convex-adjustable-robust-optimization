@@ -6,6 +6,7 @@
 #include "problems/facility-location-problem/FLP_Instance.h"
 #include "CCG.h"
 #include "GBD.h"
+#include "Nominal.h"
 
 int main(int t_argc, const char** t_argv) {
 
@@ -28,9 +29,9 @@ int main(int t_argc, const char** t_argv) {
     } else if (method == "CCG") {
         solver = std::make_unique<FLP::CCG>(instance, Gamma, deviation);
     } else if (method == "Nominal") {
-        solver == std::make_unique<FLP::Nominal>(instance);
+        solver = std::make_unique<FLP::Nominal>(instance);
     } else {
-        throw std::invalid_argument("Allowed values for parameter method are: GBD, CCG. Received \" " + method + " \".");
+        throw std::invalid_argument("Allowed values for parameter method are: GBD, CCG, Nominal. Received \" " + method + " \".");
     }
 
     solver->solve(time_limit, 1e-4);
