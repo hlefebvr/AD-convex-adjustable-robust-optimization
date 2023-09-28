@@ -11,16 +11,22 @@
 int main(int t_argc, const char** t_argv) {
 
     if (t_argc != 6) {
-        throw std::invalid_argument("Arguments: <path_to_instance> <Gamma> <deviation> <method=GBD|CCG> <time_limit>");
+        throw std::invalid_argument("Arguments: <path_to_instance> <p> <deviation> <method=GBD|CCG> <time_limit>");
     }
 
     const std::string path_to_instance = t_argv[1];
-    const double Gamma = std::stof(t_argv[2]);
+    const double percentage_for_Gamma = std::stof(t_argv[2]);
     const double deviation = std::stof(t_argv[3]);
     const std::string method = t_argv[4];
     const double time_limit = std::stof(t_argv[5]);
 
+    if (percentage_for_Gamma < 0. || percentage_for_Gamma > 1.) {
+        throw std::invalid_argument("Argument <p> must be between 0 and 1.");
+    }
+
     const auto instance = idol::Problems::FLP::read_instance_1991_Cornuejols_et_al(path_to_instance);
+
+    const double Gamma = std::floor( percentage_for_Gamma * instance.n_customers() );
 
     std::unique_ptr<AbstractSolver> solver;
 
@@ -31,7 +37,7 @@ int main(int t_argc, const char** t_argv) {
     } else if (method == "Nominal") {
         solver = std::make_unique<FLP::Nominal>(instance);
     } else {
-        throw std::invalid_argument("Allowed values for parameter method are: GBD, CCG, Nominal. Received \" " + method + " \".");
+        throw std::invalid_argument("Argument <method> must be among GBD, CCG and Nominal. Received \" " + method + " \".");
     }
 
     const auto report = solver->solve(time_limit, 1e-4);
