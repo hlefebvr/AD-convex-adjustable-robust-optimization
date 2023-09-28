@@ -7,7 +7,13 @@
 
 #include "modeling.h"
 
-class ConvexAROSolver {
+class AbstractSolver {
+public:
+    virtual ~AbstractSolver() = default;
+    virtual void solve(double t_time_limit, double t_tolerance_for_separation) = 0;
+};
+
+class ConvexAROSolver : public AbstractSolver {
 protected:
     virtual void initialize() = 0;
     virtual idol::Solution::Primal solve_master_problem(double t_time_limit) = 0;
@@ -15,9 +21,7 @@ protected:
     virtual void update_separation_objective_function(const idol::Solution::Primal& t_separation_solution) = 0;
     virtual void augment_master_problem(const idol::Solution::Primal& t_separation_solution) = 0;
 public:
-    virtual ~ConvexAROSolver() = default;
-
-    void solve(double t_time_limit, double t_tolerance_for_separation);
+    void solve(double t_time_limit, double t_tolerance_for_separation) override;
 };
 
 

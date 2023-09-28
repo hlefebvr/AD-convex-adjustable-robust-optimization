@@ -15,7 +15,7 @@ FLP::Solver::Solver(const idol::Problems::FLP::Instance &t_instance,
           m_Gamma(t_Gamma),
           m_deviation(t_deviation),
           m_master_problem(m_env),
-          m_x_0(m_env, 0, Inf, Continuous, "x_0"),
+          m_x_0(m_env, 0, Inf, Continuous, "x__0"),
           m_x(idol::Var::make_vector(m_env, Dim<1>(t_instance.n_facilities()), 0, 1, Binary, "x")),
           m_separation_problem(m_env),
           m_xi(idol::Var::make_vector(m_env, Dim<1>(t_instance.n_customers()), 0, 1, Binary, "xi")),
@@ -24,7 +24,7 @@ FLP::Solver::Solver(const idol::Problems::FLP::Instance &t_instance,
           m_gamma(idol::Var::make_vector(m_env, Dim<1>(t_instance.n_facilities()), 0, 1, Continuous, "gamma")),
           m_z(idol::Var::make_vector(m_env, Dim<1>(t_instance.n_facilities()), 0, Inf, Continuous, "z")),
           m_omega(idol::Var::make_vector(m_env, Dim<1>(t_instance.n_customers()), -1, 1, Continuous, "omega")),
-          m_lambda_0(m_env, 0, Inf, Continuous, "lambda_0")
+          m_lambda_0(m_env, 0, 1, Continuous, "lambda_0")
 {
 
 }
@@ -38,6 +38,8 @@ void FLP::Solver::initialize() {
 
 idol::Solution::Primal FLP::Solver::solve_master_problem(double t_time_limit) {
 
+    // std::cout << m_master_problem << std::endl;
+
     m_master_problem.optimizer().set_param_time_limit(t_time_limit);
     m_master_problem.optimize();
 
@@ -47,8 +49,9 @@ idol::Solution::Primal FLP::Solver::solve_master_problem(double t_time_limit) {
 idol::Solution::Primal
 FLP::Solver::solve_separation_problem(double t_time_limit) {
 
-    m_separation_problem.optimizer().set_param_time_limit(t_time_limit);
+    // std::cout << m_separation_problem << std::endl;
 
+    m_separation_problem.optimizer().set_param_time_limit(t_time_limit);
     m_separation_problem.optimize();
 
     return save_primal(m_separation_problem);
@@ -58,8 +61,6 @@ void FLP::Solver::update_separation_objective_function(const Solution::Primal &t
 
     const unsigned int n_facilities = m_instance.n_facilities();
     const unsigned int n_customers = m_instance.n_customers();
-
-    const double fixed_costs = idol_Sum(i, Range(n_facilities), m_instance.fixed_cost(i) * t_separation_solution.get(m_x[i])).constant().numerical();
 
     Expr objective =
 
@@ -81,8 +82,6 @@ void FLP::Solver::update_separation_objective_function(const Solution::Primal &t
         ;
 
     m_separation_problem.set_obj_expr(objective);
-
-    // std::cout << m_separation_problem << std::endl;
 
 }
 
@@ -122,7 +121,7 @@ void FLP::Solver::create_separation_problem() {
     for (auto i : Range(n_facilities)) {
         auto auxiliary_variable = m_separation_problem.add_var(-Inf, Inf, Continuous);
         m_separation_problem.add_ctr(auxiliary_variable == m_alpha[i] - m_gamma[i] );
-        m_separation_problem.add_ctr(auxiliary_variable * auxiliary_variable <= 4 * b * m_z[i] * m_lambda_0 );
+        m_separation_problem.add_ctr(auxiliary_variable * auxiliary_variable <= 4 * m_b * m_z[i] * m_lambda_0 );
     }
 
     // Norm constraints
@@ -137,14 +136,10 @@ void FLP::Solver::create_separation_problem() {
 
     // Linearization constraints omega_j = xi_j beta_j
     for (auto j : Range(n_customers)) {
-        m_separation_problem.add_ctr(m_omega[j] == 0);
-        m_separation_problem.add_ctr(m_xi[j] == 0);
-        /*
         m_separation_problem.add_ctr( -m_xi[j] <= m_omega[j] );
         m_separation_problem.add_ctr( m_omega[j] <= m_xi[j] );
         m_separation_problem.add_ctr( m_beta[j] - (1 - m_xi[j]) <= m_omega[j] );
         m_separation_problem.add_ctr( m_omega[j] <= m_beta[j] + (1 - m_xi[j]) );
-         */
     }
 
     m_separation_problem.use(

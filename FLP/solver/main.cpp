@@ -21,12 +21,14 @@ int main(int t_argc, const char** t_argv) {
 
     const auto instance = idol::Problems::FLP::read_instance_1991_Cornuejols_et_al(path_to_instance);
 
-    std::unique_ptr<ConvexAROSolver> solver;
+    std::unique_ptr<AbstractSolver> solver;
 
     if (method == "GBD") {
         solver = std::make_unique<FLP::GBD>(instance, Gamma, deviation);
     } else if (method == "CCG") {
         solver = std::make_unique<FLP::CCG>(instance, Gamma, deviation);
+    } else if (method == "Nominal") {
+        solver == std::make_unique<FLP::Nominal>(instance);
     } else {
         throw std::invalid_argument("Allowed values for parameter method are: GBD, CCG. Received \" " + method + " \".");
     }
