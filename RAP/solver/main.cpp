@@ -6,6 +6,7 @@
 #include "../instance/Instance.h"
 #include "CCG.h"
 #include "GBD.h"
+#include "Nominal.h"
 
 int main(int t_argc, const char** t_argv) {
 
@@ -34,6 +35,8 @@ int main(int t_argc, const char** t_argv) {
         solver = std::make_unique<RAP::GBD>(instance, Gamma, deviation);
     } else if (method == "CCG") {
         solver = std::make_unique<RAP::CCG>(instance, Gamma, deviation);
+    } else if (method == "Nominal") {
+        solver = std::make_unique<RAP::Nominal>(instance);
     } else {
         throw std::invalid_argument("Argument <method> must be among GBD, CCG and Nominal. Received \" " + method + " \".");
     }
