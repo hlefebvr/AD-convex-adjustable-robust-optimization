@@ -25,7 +25,7 @@ Be sure to have your environment variable `MOSEK_HOME` and `EIGEN_HOME` properly
 You may run our code with the following commands from the root directory of this repository, after the project is compiled.
 ```shell
 ./build/FLP/solver/FLP_solve <path_to_instance> <p> <deviation> <method=GBD|CCG|Nominal> <time_limit> # For the Facility Location Problem (FLP-old)
-./build/RAP/solver/RAP_solve <path_to_instance> <p> <deviation> <method=GBD|CCG> <time_limit> # For the Resource Allocation Problem (RAP)
+./build/RAP/solver/RAP_solve <path_to_instance> <p> <deviation> <method=GBD|CCG> <time_limit> # For the Resource Allocation Problem (RAP-old)
 ```
 
 ## Citing

@@ -21,4 +21,4 @@ add_library(convex_aro ConvexAROSolver.h ConvexAROSolver.cpp
 target_link_libraries(convex_aro PUBLIC idol)
 
 add_subdirectory(FLP)
-#add_subdirectory(RAP)
+#add_subdirectory(RAP-old)

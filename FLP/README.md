@@ -1,4 +1,4 @@
-# Facility Location Problem
+# Facility Location Problem (FLP)
 
 ## Deriving the separation problem
 
