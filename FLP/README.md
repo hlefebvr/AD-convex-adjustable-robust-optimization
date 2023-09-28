@@ -13,7 +13,7 @@ $$\begin{align}
     & v_i\in \mathbb R & \forall i\in V_1
 \end{align}$$
 
-Using Lemma 2, for a given $(x_0,\mathbf x)\in\mathbb R\times X$, we have that there exists $\mathbf y\in Y(\mathbf x, \mathbf\xi)$ such that $x_0 \ge \sum_{i\in V_1} \left( f_ix_i + F_{a,b}(v_i) + \sum_{j\in V_2} t_{ij}y_{ij}  \right)$ if, and only if, the following holds: for all $\alpha\in\mathbb R^{|V_1|}$, for all $\beta\in\mathbb R^{|V_2|}$, for all $\gamma\in\mathbb R^{|V_1|}_+$ and for all $\lambda_0 \ge 0$,
+Using Lemma 2, for a given $(x_0,\mathbf x)\in\mathbb R\times X$, we have that there exists $(\mathbf y, \mathbf v)\in Y(\mathbf x, \mathbf\xi)$ such that $x_0 \ge \sum_{i\in V_1} \left( f_ix_i + F_{a,b}(v_i) + \sum_{j\in V_2} t_{ij}y_{ij}  \right)$ if, and only if, the following holds: for all $\alpha\in\mathbb R^{|V_1|}$, for all $\beta\in\mathbb R^{|V_2|}$, for all $\gamma\in\mathbb R^{|V_1|}_+$ and for all $\lambda_0 \ge 0$,
 
 $$
     \inf_{y,v} \left\lbrace
