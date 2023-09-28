@@ -34,15 +34,23 @@ int main(int t_argc, const char** t_argv) {
         throw std::invalid_argument("Allowed values for parameter method are: GBD, CCG, Nominal. Received \" " + method + " \".");
     }
 
-    solver->solve(time_limit, 1e-4);
+    const auto report = solver->solve(time_limit, 1e-4);
 
     // Report
     std::cout << "result,"
-              << method << ","
               << path_to_instance << ","
+              << instance.n_facilities() << ","
+              << instance.n_customers() << ","
               << Gamma << ","
               << deviation << ","
               << time_limit << ","
+              << method << ","
+              << report.total_time << ","
+              << report.master_time << ","
+              << report.separation_time << ","
+              << report.best_bound << ","
+              << report.iteration_count << ","
+              << report.fail_flag
               << std::endl;
 
     return 0;

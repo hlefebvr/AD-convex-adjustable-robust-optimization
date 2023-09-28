@@ -7,7 +7,7 @@
 
 using namespace idol;
 
-void ConvexAROSolver::solve(double t_time_limit, double t_tolerance_for_separation) {
+AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit, double t_tolerance_for_separation) {
 
     idol::Timer timer, master_timer, separation_timer;
     idol::Solution::Primal master_solution;
@@ -61,5 +61,30 @@ void ConvexAROSolver::solve(double t_time_limit, double t_tolerance_for_separati
     } while ( separation_solution.objective_value() > t_tolerance_for_separation );
 
     timer.stop();
+
+    return {
+        master_solution.has_objective_value() ? master_solution.objective_value() : Inf,
+        timer.count(),
+        master_timer.cumulative_count(),
+        separation_timer.cumulative_count(),
+        iteration_count,
+        (master_solution.status() != Optimal && master_solution.reason() != TimeLimit)
+        || (separation_solution.status() != Optimal && separation_solution.reason() != TimeLimit)
+    };
+
+}
+
+AbstractSolver::Report::Report(double t_best_bound,
+                                   double t_total_time,
+                                   double t_master_time,
+                                   double t_separation_time,
+                                   unsigned int t_iteration_count,
+                                   bool t_fail_flag)
+                                   : best_bound(t_best_bound),
+                                     total_time(t_total_time),
+                                     master_time(t_master_time),
+                                     separation_time(t_separation_time),
+                                     iteration_count(t_iteration_count),
+                                     fail_flag(t_fail_flag) {
 
 }

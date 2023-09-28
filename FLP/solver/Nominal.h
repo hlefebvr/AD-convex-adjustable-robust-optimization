@@ -21,6 +21,6 @@ class FLP::Nominal : public AbstractSolver {
 public:
     explicit Nominal(const idol::Problems::FLP::Instance& t_instance);
 
-    void solve(double t_time_limit, double t_tolerance_for_separation) override;
+    Report solve(double t_time_limit, double t_tolerance_for_separation) override;
 };
 #endif //CONVEXADJUSTALBEROBUSTOPTIMIZATION_NOMINAL_H

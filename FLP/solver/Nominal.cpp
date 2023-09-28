@@ -53,11 +53,20 @@ FLP::Nominal::Nominal(const idol::Problems::FLP::Instance &t_instance)
 
 }
 
-void FLP::Nominal::solve(double t_time_limit, double t_tolerance_for_separation) {
+AbstractSolver::Report FLP::Nominal::solve(double t_time_limit, double t_tolerance_for_separation) {
 
     m_model.optimizer().set_param_time_limit(t_time_limit);
     m_model.optimize();
 
-    std::cout << save_primal(m_model) << std::endl;
+    const auto solution = save_primal(m_model);
+
+    return {
+            solution.has_objective_value() ? solution.objective_value() : Inf,
+            m_model.optimizer().time().count(),
+            0,
+            0,
+            0,
+            solution.status() != Optimal && solution.reason() != TimeLimit
+    };
 
 }
