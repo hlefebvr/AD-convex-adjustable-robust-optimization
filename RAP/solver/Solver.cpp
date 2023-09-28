@@ -4,6 +4,7 @@
 
 #include "Solver.h"
 #include "optimizers/solvers/Mosek.h"
+#include "optimizers/solvers/gurobi/Gurobi.h"
 
 using namespace idol;
 
@@ -58,9 +59,9 @@ void RAP::Solver::update_separation_objective_function(const Solution::Primal &t
     const unsigned int n_servers = m_instance.n_servers();
     const unsigned int n_clients = m_instance.n_clients();
 
-    const double sum_unitary_costs = idol_Sum(i, Range(n_servers), m_instance.unitary_cost() * t_separation_solution.get(m_x[i]) ).constant().numerical();
+    const double sum_unitary_costs = idol_Sum(i, Range(n_servers), m_instance.unitary_cost(i) * t_separation_solution.get(m_x[i]) ).constant().numerical();
 
-    Expr objective =
+    const Expr objective =
 
             idol_Sum(i,
                      Range(n_servers),
@@ -116,7 +117,6 @@ void RAP::Solver::create_separation_problem() {
 
     // Conic F dual constraints
     for (auto i : Range(n_servers)) {
-        auto auxiliary_variable = m_separation_problem.add_var(-Inf, Inf, Continuous);
         m_separation_problem.add_ctr(m_alpha[i] * m_alpha[i] <= 4 * m_instance.congestion_factor(i) * m_z[i] * m_gamma[i] );
     }
 
@@ -134,7 +134,7 @@ void RAP::Solver::create_separation_problem() {
     for (auto j : Range(n_clients)) {
         m_separation_problem.add_ctr( m_omega[j] <= m_xi[j] );
         m_separation_problem.add_ctr( m_omega[j] <= m_beta[j] );
-        m_separation_problem.add_ctr( m_omega[j] >= m_beta[j] + (1 - m_xi[j]) );
+        m_separation_problem.add_ctr( m_omega[j] >= m_beta[j] - (1 - m_xi[j]) );
     }
 
     m_separation_problem.use(

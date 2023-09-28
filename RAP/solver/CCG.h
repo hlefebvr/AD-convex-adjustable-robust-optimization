@@ -12,7 +12,10 @@ namespace RAP {
 }
 
 class RAP::CCG : public RAP::Solver {
-
+protected:
+    void augment_master_problem(const idol::Solution::Primal &t_separation_solution) override;
+public:
+    CCG(const Instance& t_instance, double t_Gamma, double t_deviation);
 };
 
 
