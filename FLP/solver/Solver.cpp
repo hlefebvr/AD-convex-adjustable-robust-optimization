@@ -83,8 +83,6 @@ void FLP::Solver::update_separation_objective_function(const Solution::Primal &t
 
     m_separation_problem.set_obj_expr(objective);
 
-    m_separation_problem.write("model.ptf");
-
 }
 
 void FLP::Solver::create_master_problem() {

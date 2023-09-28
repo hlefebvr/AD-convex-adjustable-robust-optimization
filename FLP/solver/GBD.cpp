@@ -13,7 +13,6 @@ FLP::GBD::GBD(const idol::Problems::FLP::Instance &t_instance, double t_Gamma, d
 
 void FLP::GBD::augment_master_problem(const idol::Solution::Primal &t_separation_solution) {
 
-
     const unsigned int n_facilities = m_instance.n_facilities();
     const unsigned int n_customers = m_instance.n_customers();
 
