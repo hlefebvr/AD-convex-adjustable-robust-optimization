@@ -40,7 +40,7 @@ void FLP::CCG::augment_master_problem(const idol::Solution::Primal &t_separation
     }
 
     for (auto j : Range(n_customers)) {
-        m_master_problem.add_ctr(idol_Sum(i, Range(n_facilities), y[i][j]) == m_instance.demand(j));
+        m_master_problem.add_ctr(idol_Sum(i, Range(n_facilities), y[i][j]) == m_instance.demand(j) * (1 + m_deviation * t_separation_solution.get(m_xi[j]) ) );
     }
 
     for (auto i : Range(n_facilities)) {
