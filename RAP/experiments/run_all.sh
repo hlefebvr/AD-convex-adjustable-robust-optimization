@@ -9,7 +9,7 @@ fi
 
 INSTANCE_DIRECTORY=RAP/data
 BUILD_DIRECTORY=cmake-build-debug
-EXECUTABLE=RAP/RAP_solve
+EXECUTABLE=RAP/solver/RAP_solve
 EXPERIMENTS_DIRECTORY=RAP/experiments
 
 COUNTER=0
@@ -22,11 +22,11 @@ do
     for METHOD in CCG GBD
     do
 
-      ARGS="$PROJECT_DIRECTORY/$EXPERIMENTS_DIRECTORY/run_one.sh $PROJECT_DIRECTORY/$BUILD_DIRECTORY/$EXECUTABLE $FILE $P .25 $METHOD 3600"
+      ARGS="$PROJECT_DIRECTORY/$EXPERIMENTS_DIRECTORY/run_one.sh $PROJECT_DIRECTORY/$BUILD_DIRECTORY/$EXECUTABLE $FILE $P .25 $METHOD 7200"
 
       echo "Submitting $ARGS"
 
-      if [ "$(whoami)" = "utr_lefebvre" ]
+      if [ "$(whoami)" = "utr_lefebvre--" ]
       then
         sbatch $ARGS
       else
