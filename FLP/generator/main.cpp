@@ -25,7 +25,7 @@ int main(int t_argc, const char** t_argv) {
         const std::string path_to_file = destination_folder
                 + "/instance_F" + std::to_string(n_facilities)
                 + "_C" + std::to_string(n_customers)
-                + "_R" + std::to_string(std::floor(1000 * capacity_over_demand_ratio))
+                + "_R" + std::to_string((unsigned int) std::floor(1000 * capacity_over_demand_ratio))
                 + "__" + std::to_string(index)
                 + ".txt";
 
