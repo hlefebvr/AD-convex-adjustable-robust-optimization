@@ -1,7 +1,7 @@
 # Exact approaches for convex adjustable robust optimization
 
-![GitHub](https://img.shields.io/github/license/hlefebvr/AD-convex-adjusatble-robust-optimization)
-![GitHub issues](https://img.shields.io/github/issues-raw/hlefebvr/idol)
+![GitHub](https://img.shields.io/github/license/hlefebvr/AD-convex-adjustable-robust-optimization)
+![GitHub issues](https://img.shields.io/github/issues-raw/hlefebvr/AD-convex-adjustable-robust-optimization)
 ![Repo status](https://www.repostatus.org/badges/latest/active.svg)
 
 This code depends on [idol](https://hlefebvr.github.io/idol/), [Mosek](https://www.mosek.com/) and [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page). 
