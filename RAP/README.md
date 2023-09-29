@@ -51,7 +51,7 @@ $$
 
 If $\gamma_i \neq 0$. To simplify our work, we first observe that 
 
-$$
+ ```math
     \begin{align}
         \inf_{ v_i\in \mathbb{R} } \left\lbrace 
             \gamma_i F_{1,b_i}(v_i) -\alpha_i v_i
@@ -60,7 +60,7 @@ $$
         &= -(\gamma_i F_{1,b_i}(v_i))^*(\alpha_i) \\
         &= -\gamma_i F^*_{1,b_i}\left( \frac{\alpha_i}{\gamma_i} \right).
     \end{align}
-$$
+```
 
 Thus, we only have to compute the convex conjugate of $F_{1,b_i}$, which has already been computed for the FLP application (go there for more details). We have,
 
