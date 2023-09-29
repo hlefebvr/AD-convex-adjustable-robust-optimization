@@ -15,7 +15,7 @@ $$
     \end{align}
 $$
 
-Using Lemma 2, for a given $(x_0,\mathbf x)\in\mathbb R\times X$, we have that there exists $(\mathbf y, \mathbf v) \in Y(\mathbf x, \mathbf \xi)$ such that $x_0 \ge \sum_{i\in V_1} c_ix_i$ if, and only if, the following holds: for all $\alpha\in\mathbb R^{|V_1|}$, for all $\beta\in\mathbb R^{|V_2|}_+$, for all $\gamma\in\mathbb R^{|V_1|}_+$ and for all $x_0 \ge 0$,
+Using Lemma 2, for a given $(x_0,\mathbf x)\in\mathbb R\times X$, we have that there exists $(\mathbf y, \mathbf v) \in Y(\mathbf x, \mathbf \xi)$ such that $x_0 \ge \sum_{i\in V_1} c_ix_i$ if, and only if, the following holds: for all $\alpha\in\mathbb R^{|V_1|}$, for all $\beta\in\mathbb R_+^{|V_2|}$, for all $\gamma\in\mathbb{R}^{|V_1|}_+$ and for all $x_0 \ge 0$,
 
 $$
     \inf_{y,v} \left\lbrace
