@@ -105,4 +105,4 @@ $$
     \end{align}
 $$
 
-with $\Lambda = \lbrace (\lambda_0,\alpha,\beta,\gamma) \in \mathbb R_+ \times \mathbb R^{|V_1|} \times \mathbb R^{|V_2|}_+ \times \mathbb R^{|V_1|}_+ : \lVert (\lambda_0,\alpha,\beta,\gamma) \rVert \le 1 \rbrace$. Observe how this model, derived for $\lambda_0 \neq 0$, implies $\alpha_i = 0$ if $\gamma_i = 0$.
+with $\Lambda = \lbrace (\lambda_0,\alpha,\beta,\gamma) \in \mathbb{R}_+ \times \mathbb{R}^{|V_1|} \times \mathbb{R}^{|V_2|}_+ \times \mathbb{R}^{|V_1|}_+ : \lVert (\lambda_0,\alpha,\beta,\gamma) \rVert \le 1 \rbrace$. Observe how this model, derived for $\lambda_0 \neq 0$, implies $\alpha_i = 0$ if $\gamma_i = 0$.
