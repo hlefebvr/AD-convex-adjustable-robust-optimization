@@ -59,7 +59,7 @@ RAP::Instance RAP::generate_instance(unsigned int t_n_servers, unsigned int t_n_
     RAP::Instance result(t_n_servers, t_n_clients);
 
     std::random_device rd;
-    std::mt19937 generator(100);
+    std::mt19937 generator(rd());
 
     std::uniform_real_distribution<double> service_rate_dist(0, 1);
     std::uniform_real_distribution<double> unitary_cost_dist(8, 10);
