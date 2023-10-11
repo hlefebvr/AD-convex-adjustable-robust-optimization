@@ -36,20 +36,32 @@ void RAP::Solver::initialize() {
 
 idol::Solution::Primal RAP::Solver::solve_master_problem(double t_time_limit) {
 
-    // std::cout << m_model << std::endl;
-
     m_master_problem.optimizer().set_param_time_limit(t_time_limit);
     m_master_problem.optimize();
+
+    Solution::Primal result;
+
+    if (const auto status = m_master_problem.get_status() ; status != Optimal && status != Feasible ) {
+        result.set_status(status);
+        result.set_reason(m_master_problem.get_reason());
+        return result;
+    }
 
     return save_primal(m_master_problem);
 }
 
 idol::Solution::Primal RAP::Solver::solve_separation_problem(double t_time_limit) {
 
-    // std::cout << m_separation_problem << std::endl;
-
     m_separation_problem.optimizer().set_param_time_limit(t_time_limit);
     m_separation_problem.optimize();
+
+    Solution::Primal result;
+
+    if (const auto status = m_separation_problem.get_status() ; status != Optimal && status != Feasible ) {
+        result.set_status(status);
+        result.set_reason(m_separation_problem.get_reason());
+        return result;
+    }
 
     return save_primal(m_separation_problem);
 }
