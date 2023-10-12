@@ -26,7 +26,7 @@ do
 
       echo "Submitting $ARGS"
 
-      if [ "$(whoami)" = "utr_lefebvre--" ]
+      if [ "$(whoami)" = "utr_lefebvre" ]
       then
         sbatch $ARGS
       else
