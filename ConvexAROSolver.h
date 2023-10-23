@@ -5,7 +5,7 @@
 #ifndef CONVEXADJUSTALBEROBUSTOPTIMIZATION_CONVEXAROSOLVER_H
 #define CONVEXADJUSTALBEROBUSTOPTIMIZATION_CONVEXAROSOLVER_H
 
-#include "modeling.h"
+#include "idol/modeling.h"
 
 class AbstractSolver {
 public:

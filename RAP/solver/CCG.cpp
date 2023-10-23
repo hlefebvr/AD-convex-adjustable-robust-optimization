@@ -3,7 +3,7 @@
 //
 
 #include "CCG.h"
-#include "optimizers/solvers/Mosek.h"
+#include "idol/optimizers/solvers/Mosek.h"
 
 using namespace idol;
 

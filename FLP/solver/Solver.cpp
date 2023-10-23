@@ -3,8 +3,8 @@
 //
 
 #include "Solver.h"
-#include "optimizers/solvers/gurobi/Gurobi.h"
-#include "optimizers/solvers/Mosek.h"
+#include "idol/optimizers/solvers/gurobi/Gurobi.h"
+#include "idol/optimizers/solvers/Mosek.h"
 
 using namespace idol;
 

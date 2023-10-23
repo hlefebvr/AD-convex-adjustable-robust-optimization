@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include <fstream>
-#include "problems/facility-location-problem/FLP_Instance.h"
+#include "idol/problems/facility-location-problem/FLP_Instance.h"
 
 using namespace idol;
 

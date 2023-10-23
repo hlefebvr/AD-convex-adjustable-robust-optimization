@@ -6,7 +6,7 @@
 #define CONVEXADJUSTALBEROBUSTOPTIMIZATION_NOMINAL_H
 
 #include "../../ConvexAROSolver.h"
-#include "problems/facility-location-problem/FLP_Instance.h"
+#include "idol/problems/facility-location-problem/FLP_Instance.h"
 
 namespace FLP {
     class Nominal;

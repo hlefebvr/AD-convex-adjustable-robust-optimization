@@ -16,24 +16,29 @@ COUNTER=0
 
 for FILE in $PROJECT_DIRECTORY/$INSTANCE_DIRECTORY/*
 do
-  for P in .10 .25 .50
+  for P in .10 .20 .30
   do
 
-    for METHOD in CCG GBD
+    for DEV in .25 .50
     do
 
-      ARGS="$PROJECT_DIRECTORY/$EXPERIMENTS_DIRECTORY/run_one.sh $PROJECT_DIRECTORY/$BUILD_DIRECTORY/$EXECUTABLE $FILE $P .50 $METHOD 7200"
+      for METHOD in CCG GBD
+      do
 
-      echo "Submitting $ARGS"
+        ARGS="$PROJECT_DIRECTORY/$EXPERIMENTS_DIRECTORY/run_one.sh $PROJECT_DIRECTORY/$BUILD_DIRECTORY/$EXECUTABLE $FILE $P $DEV $METHOD 7200"
 
-      if [ "$(whoami)" = "utr_lefebvre" ]
-      then
-        sbatch $ARGS
-      else
-        $ARGS
-      fi
+        echo "Submitting $ARGS"
 
-      COUNTER=$(($COUNTER+1))
+        if [ "$(whoami)" = "utr_lefebvre" ]
+        then
+          sbatch $ARGS
+        else
+          $ARGS
+        fi
+
+        COUNTER=$(($COUNTER+1))
+
+      done
 
     done
 

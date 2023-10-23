@@ -2,8 +2,8 @@
 // Created by henri on 27.09.23.
 //
 #include <iostream>
-#include "modeling.h"
-#include "problems/facility-location-problem/FLP_Instance.h"
+#include "idol/modeling.h"
+#include "idol/problems/facility-location-problem/FLP_Instance.h"
 #include "CCG.h"
 #include "GBD.h"
 #include "Nominal.h"
