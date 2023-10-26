@@ -3,7 +3,7 @@
 //
 
 #include "Nominal.h"
-#include "idol/optimizers/solvers/Mosek.h"
+#include "idol/optimizers/wrappers/Mosek/Mosek.h"
 
 using namespace idol;
 
