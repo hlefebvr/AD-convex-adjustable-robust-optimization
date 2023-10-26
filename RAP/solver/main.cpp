@@ -40,7 +40,7 @@ int main(int t_argc, const char** t_argv) {
         throw std::invalid_argument("Argument <method> must be among GBD, CCG and Nominal. Received \" " + method + " \".");
     }
 
-    const auto report = solver->solve(time_limit, 1e-4);
+    const auto report = solver->solve(time_limit, 1e-2);
 
     // Report
     std::cout << "result,"
