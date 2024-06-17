@@ -140,6 +140,7 @@ $$
 with $\Lambda = \lbrace (\lambda_0,\alpha,\beta,\gamma) \in \mathbb R_+ \times \mathbb R^{|V_1|}\times \mathbb R^{|V_2|}\times \mathbb R^{|V_1|}_+ : \lVert (\lambda_0,\alpha,\beta,\gamma) \rVert \le 1 \rbrace$.
 
 To model the square rootin Mosek, we can use the power cone with coefficient $\frac 12$:
+
 $$
     \theta_i \le \sqrt{\lambda_0(\alpha_i - \gamma_i)}
     \iff 
