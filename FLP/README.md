@@ -5,7 +5,7 @@
 For a given $\mathbf x\in X$ and a given $\mathbf\xi\in\Xi$, the second-stage problem reads
 
 $$\begin{align}
-    \min_{y,v} \  & \sum_{i\in V_1} \left( f_ix_i + F_{a,b}(v_i) + \sum_{j\in V_2} t_{ij}y_{ij}  \right) \\
+    \min_{y,v} \  & \sum_{i\in V_1} \left( f_ix_i + F_{i}(v_i) + \sum_{j\in V_2} t_{ij}y_{ij}  \right) \\
     \text{s.t.} \ & \sum_{j\in V_2} y_{ij} = v_i & \forall i\in V_1 \\
     & \sum_{i\in V_1} y_{ij} = d_j(\xi_j) & \forall j\in V_2 \\
     & v_i \le q_ix_i & \forall i\in V_1 \\
@@ -20,7 +20,7 @@ $$
         \sum_{i\in V_1} \alpha_i \left( \sum_{j\in V_2} y_{ij} - v_i \right)
         + \sum_{j\in V_2} \beta_j \left( \sum_{j\in V_2} y_{ij} - d_j(\xi_j) \right)
         + \sum_{i\in V_1} \gamma_i \left( v_i - q_ix_i \right)
-        + \lambda_0 \left( \sum_{i\in V_1} \left( f_ix_i + F_{a,b}(v_i) + \sum_{j\in V_2} t_{ij}y_{ij}  \right) - x_0 \right)
+        + \lambda_0 \left( \sum_{i\in V_1} \left( f_ix_i + F_{i}(v_i) + \sum_{j\in V_2} t_{ij}y_{ij}  \right) - x_0 \right)
     \right\rbrace
     \le 0.
 $$
@@ -58,45 +58,59 @@ $$
 If $\lambda_0 \neq 0$. To simplify our work, we first observe that 
 
 $$
-    \begin{align}
+    \begin{align*}
         \inf_{v_i\in \mathbb R} \left\lbrace
-            \lambda_0 F_{a,b}(v_i) + v_i ( -\alpha_i + \gamma_i )
+            \lambda_0 F_{i}(v_i) + v_i ( -\alpha_i + \gamma_i )
         \right\rbrace
-        &= - \sup_{v_i} \left\lbrace v_i(\alpha_i - \gamma_i) - \lambda_0 F_{a,b}(v_i) \right\rbrace \\
-        &= - (\lambda_0F_{a,b})^* \left( \alpha_i - \gamma_i \right) \\
-        &= -\lambda_0 F_{a,b}^*\left( \frac{ \alpha_i - \gamma_i }{ \lambda_0 } \right).
-    \end{align}
+        &= - \sup_{v_i} \left\lbrace v_i(\alpha_i - \gamma_i) - \lambda_0 F_{i}(v_i) \right\rbrace \\
+        &= - (\lambda_0F_{i})^* \left( \alpha_i - \gamma_i \right) \\
+        &= -\lambda_0 F_{i}^*\left( \frac{ \alpha_i - \gamma_i }{ \lambda_0 } \right).
+    \end{align*}
 $$
 
-Thus, we only have to compute the convex conjugate of $F_{a,b}$ which is given by $F^\star_{a,b}(\pi) = \sup_{v} \lbrace \pi v - av - b v^2 \rbrace$. The maximum is obtained for $v^*$ such that the derivative is zero, i.e.,
+Thus, we only have to compute the convex conjugate of $F_{i}$. We note that 
+
+$$ -F^\star_{i}(\pi) = \min_{v} \left\{ -\pi v - a_i + \frac{a_i(q_i + \varepsilon)}{ q_i - v + \varepsilon } \right\}.$$
+
+The minimum is obtained for $v^*$ such that the derivative is zero, i.e.,
 
 $$
-    \frac{d}{dv} ( \pi v - a v - bv^2 ) = 0
-    \Leftrightarrow 
-    \pi - a - 2bv = 0 
-    \Leftrightarrow 
-    v^* = \frac{\pi - a}{2b}.
+    \begin{align*}
+        \frac{d}{dv} \left( -\pi v - a_i + \frac{a_i(q_i + \varepsilon)}{ q_i - v + \varepsilon } \right) = 0
+        & \iff
+        \frac{a_i(q_i + \varepsilon)}{ (q_i - v + \varepsilon)^2 } - \pi = 0 \\
+        & \iff a_i(q_i+\varepsilon) = \pi(q_i - v + \varepsilon)^2 \\
+        & \iff \sqrt{a_i(q_i+\varepsilon)} = \sqrt{\pi} (q_i - v + \varepsilon) \\
+        & \iff v = -\frac{\sqrt{a_i(q_i+\varepsilon)}}{\sqrt{\pi}} + q_i + \varepsilon
+    \end{align*}
 $$
 
 Plugin it into the original function, we obtain 
 
 $$
-    F_{a,b}^*(\pi) = \frac{1}{4b} \left( \pi - a  \right)^2.
+    \begin{align*}
+        -F_{i}^*(\pi) 
+        & = -\pi\left( -\frac{\sqrt{a_i(q_i+\varepsilon)}}{\sqrt{\pi}} + q_i + \varepsilon \right) -a_i + \frac{a_i(q_i + \varepsilon)}{ q_i - \left( -\frac{\sqrt{a_i(q_i+\varepsilon)}}{\sqrt{\pi}} + q_i + \varepsilon \right) + \varepsilon } \\
+        & = \sqrt{\pi} \underbrace{\sqrt{ a_i(q_i + \varepsilon) }}_{:= c_i} -\pi(q_i + \varepsilon) - a_i + \frac{ \sqrt{\pi} a_i(q_i+\varepsilon) }{ \sqrt{a_i(q_i+\varepsilon)} } \\
+        & = \sqrt{\pi} c_i -\pi(q_i + \varepsilon)  - a_i + \sqrt{\pi} \sqrt{ a_i(q_i+\varepsilon) } \\
+        & = 2c_i\sqrt{\pi} -\pi(q_i + \varepsilon)  - a_i
+    \end{align*}
 $$
 
 In turn, we obtain
 
 $$
-    -\lambda_0 F_{a,b}^*\left( \frac{ \alpha_i - \gamma_i }{ \lambda_0 } \right)
-    =
-    - \frac{ (\alpha_i - \gamma_i )^2 }{ 4b\lambda_0 } + \frac { a ( \alpha_i - \gamma_i ) }{ 2b } - \frac{\lambda_0 a^2}{ 4b }
+    \begin{align}
+    -\lambda_0 F_{i}^*\left( \frac{ \alpha_i - \gamma_i }{ \lambda_0 } \right)
+    & = 2c_i\sqrt{\lambda_0(\alpha_i - \gamma_i) } + (\gamma_i - \alpha_i)(q_i + \varepsilon) -a\lambda_0
+    \end{align}
 $$
 
 All in all, the separation problem if $\lambda_0 \neq 0$ is then given by
 
 $$
     \begin{align}
-        \max \  & \sum_{i\in V_1} \left( - \frac{ (\alpha_i - \gamma_i )^2 }{ 4b\lambda_0 } + \frac { a }{2b} ( \alpha_i - \gamma_i ) - \frac{\lambda_0 a^2}{ 4b } \right) 
+        \max \  & \sum_{i\in V_1} \left( 2c_i\sqrt{\lambda_0(\alpha_i - \gamma_i) } + (\gamma_i - \alpha_i)(q_i + \varepsilon) -a\lambda_0 \right) 
         - \sum_{j\in V_2} \beta_j d_j(\xi_j) 
         + \sum_{i\in V_1} (\lambda_0f_i - \gamma_i q_i ) x_i
         - \lambda_0x_0.
@@ -111,12 +125,12 @@ Re-arranging the terms, one obtains the following model in which we introduced $
 
 $$
     \begin{align}
-        \max \  & \sum_{i\in V_1} \left( - z_i + \frac { a }{2b} ( \alpha_i - \gamma_i ) - \frac{\lambda_0 a^2}{ 4b } \right) 
+        \max \  & \sum_{i\in V_1} \left( 2c_iz_i + (\gamma_i - \alpha_i)(q_i + \varepsilon) -a\lambda_0 \right) 
         - \sum_{j\in V_2} \beta_j d_j(\xi_j) 
         + \sum_{i\in V_1} (\lambda_0f_i - \gamma_i q_i ) x_i
         - \lambda_0x_0 \\
         \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 = 0 \quad \forall (i,j) \in V_1\times V_2, \\
-        & (\alpha_i - \gamma_i)^2 \le 4bz_i\lambda_0 \quad \forall i\in V_1 \\
+        & \theta_i \le \sqrt{\lambda_0(\alpha_i - \gamma_i)} \quad \forall i\in V_1 \\
         & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
         & \mathbf\xi\in\Xi, \\
         & z \ge 0,
@@ -124,4 +138,33 @@ $$
 $$
 
 with $\Lambda = \lbrace (\lambda_0,\alpha,\beta,\gamma) \in \mathbb R_+ \times \mathbb R^{|V_1|}\times \mathbb R^{|V_2|}\times \mathbb R^{|V_1|}_+ : \lVert (\lambda_0,\alpha,\beta,\gamma) \rVert \le 1 \rbrace$.
-Observe how this model, derived for $\lambda_0 \neq 0$, implies $\alpha_i - \gamma_i = 0$ if $\lambda_0 = 0$.
+
+To model the square rootin Mosek, we can use the power cone with coefficient $\frac 12$:
+$$
+    \theta_i \le \sqrt{\lambda_0(\alpha_i - \gamma_i)}
+    \iff 
+    (\lambda_0,\alpha_i - \gamma_i,\theta_i) \in \mathcal P^{\frac{1}{2}, \frac{1}{2}}_3.
+$$
+
+To account for the case $\lambda_0 = 0$, we need to ensure that $\lambda_0$ implies $\alpha_i - \gamma_i = 0$. To this end, we introduce new variables $s_i$ and add the following constraint:
+
+$$
+    (\alpha_i - \gamma_i)^2 \le \lambda_0 s_i \qquad \forall i\in V_1.
+$$
+
+All in all, the separation problem reads 
+
+$$
+    \begin{align}
+        \max \  & \sum_{i\in V_1} \left( 2c_iz_i + (\gamma_i - \alpha_i)(q_i + \varepsilon) -a\lambda_0 \right) 
+        - \sum_{j\in V_2} \beta_j d_j(\xi_j) 
+        + \sum_{i\in V_1} (\lambda_0f_i - \gamma_i q_i ) x_i
+        - \lambda_0x_0 \\
+        \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 = 0 \quad \forall (i,j) \in V_1\times V_2, \\
+        & (\lambda_0,\alpha_i - \gamma_i,\theta_i) \in \mathcal P^{\frac{1}{2}, \frac{1}{2}}_3 \quad \forall i\in V_1 \\
+        & \left(\frac 12  \lambda_0,s_i,\alpha_i - \gamma_i\right)\in\mathcal Q_r^3 \quad \forall i\in V_1 \\
+        & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
+        & \mathbf\xi\in\Xi, \\
+        & z \ge 0,
+    \end{align}
+$$
