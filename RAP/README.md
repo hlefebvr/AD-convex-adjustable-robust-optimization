@@ -64,7 +64,7 @@ If $\gamma_i \neq 0$. To simplify our work, we first observe that
 
 Thus, we only have to compute the convex conjugate of $F_{1,b_i}$.
 
-which is given by $F^\star_{a,b}(\pi) = \sup_{v} \lbrace \pi v - av - b v^2 \rbrace$. The maximum is obtained for $v^*$ such that the derivative is zero, i.e.,
+Recall that $F^\star_{a,b}(\pi) = \sup_{v} \lbrace \pi v - av - b v^2 \rbrace$. The maximum is obtained for $v^*$ such that the derivative is zero, i.e.,
 
 $$
     \frac{d}{dv} ( \pi v - a v - bv^2 ) = 0
