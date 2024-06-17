@@ -62,7 +62,25 @@ If $\gamma_i \neq 0$. To simplify our work, we first observe that
     \end{align}
 ```
 
-Thus, we only have to compute the convex conjugate of $F_{1,b_i}$, which has already been computed for the FLP application (go there for more details). We have,
+Thus, we only have to compute the convex conjugate of $F_{1,b_i}$.
+
+which is given by $F^\star_{a,b}(\pi) = \sup_{v} \lbrace \pi v - av - b v^2 \rbrace$. The maximum is obtained for $v^*$ such that the derivative is zero, i.e.,
+
+$$
+    \frac{d}{dv} ( \pi v - a v - bv^2 ) = 0
+    \Leftrightarrow
+    \pi - a - 2bv = 0
+    \Leftrightarrow
+    v^* = \frac{\pi - a}{2b}.
+$$
+
+Plugin it into the original function, we obtain
+
+$$
+    F_{a,b}^*(\pi) = \frac{1}{4b} \left( \pi - a  \right)^2.
+$$
+
+Thus,
 
 $$
     F_{1,b_i}^*(\pi) = \frac{1}{4b_i}(\pi - 1)^2.
