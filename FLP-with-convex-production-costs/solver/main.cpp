@@ -25,6 +25,17 @@ int main(int t_argc, const char** t_argv) {
 
     const auto instance = FLP::Instance::read_from_file(path_to_instance);
 
+    double total_demand = 0;
+    double total_capacity = 0;
+    for (unsigned int i = 0; i < instance.n_facilities(); ++i) {
+        total_capacity += instance.capacity(i);
+    }
+    for (unsigned int j = 0; j < instance.n_customers(); ++j) {
+        total_demand += instance.demand(j);
+    }
+    std::cout << "Total demand: " << total_demand << std::endl;
+    std::cout << "Total capacity: " << total_capacity << std::endl;
+
     const double Gamma = std::floor( percentage_for_Gamma * instance.n_customers() );
 
     std::unique_ptr<AbstractSolver> solver;

@@ -4,6 +4,7 @@
 
 #include "Nominal.h"
 #include "idol/optimizers/mixed-integer-programming/wrappers/Mosek/Mosek.h"
+#include "idol/optimizers/mixed-integer-programming/wrappers/Gurobi/Gurobi.h"
 
 using namespace idol;
 
@@ -19,6 +20,7 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
     auto y = m_model.add_vars(Dim<2>(n_facilities, n_customers), 0, Inf, Continuous, "y");
     auto v = m_model.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous, "v");
     auto theta = m_model.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous, "theta");
+    auto r = m_model.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous, "r");
 
     m_model.set_obj_expr(objective);
 
@@ -35,11 +37,13 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
                                     Range(n_customers),
                                     m_instance.per_unit_transportation_cost(i, j) * y[i][j]
                             )
-                    )
+                    ),
+                    "objective"
     );
 
     for (auto i : Range(n_facilities)) {
-        m_model.add_ctr(theta[i] * (m_instance.capacity(i) + 1e-3) - theta[i] * v[i] >= m_instance.diseconomy_of_scale_factor(i) * (m_instance.capacity(i) + 1e-3));
+        m_model.add_ctr(theta[i] * r[i] >= m_instance.diseconomy_of_scale_factor(i) * (m_instance.capacity(i) + 1e-3));
+        m_model.add_ctr(r[i] == m_instance.capacity(i) + 1e-3 - v[i]);
     }
 
     for (auto i : Range(n_facilities)) {
@@ -54,14 +58,19 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
         m_model.add_ctr(v[i] <= m_instance.capacity(i) * x[i]);
     }
 
-    m_model.use(Mosek());
+    m_model.use(Gurobi());
 
 }
 
 AbstractSolver::Report FLP::Nominal::solve(double t_time_limit, double t_tolerance_for_separation) {
 
+    std::cout << m_model << std::endl;
+
     m_model.optimizer().set_param_time_limit(t_time_limit);
     m_model.optimize();
+
+    std::cout << m_model.get_status() << std::endl;
+    std::cout << m_model.get_reason() << std::endl;
 
     const auto solution = save_primal(m_model);
 
