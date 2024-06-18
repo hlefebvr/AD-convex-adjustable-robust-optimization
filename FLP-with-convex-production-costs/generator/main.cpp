@@ -38,7 +38,7 @@ double compute_total_demand(const Problems::FLP::Instance& t_instance) {
 
 double compute_average_demand_per_facility(const Problems::FLP::Instance& t_instance) {
     const double total_demand = compute_total_demand(t_instance);
-    return total_demand / std::ceil(.2 * total_demand / compute_average_capacity(t_instance));
+    return total_demand / std::ceil(1.2 * total_demand / compute_average_capacity(t_instance));
 }
 
 double compute_max_opening_cost(const Problems::FLP::Instance& t_instance) {
@@ -87,6 +87,8 @@ int main(int t_argc, const char** t_argv) {
 
         const auto instance = Problems::FLP::generate_instance_1991_Cornuejols_et_al(n_facilities, n_customers, capacity_over_demand_ratio);
 
+        file << instance;
+
         const double max_opening_cost = compute_max_opening_cost(instance);
         const double base_diseconomy_of_scale_factor = compute_disecconomy_of_scale_factor(instance);
 
@@ -95,8 +97,6 @@ int main(int t_argc, const char** t_argv) {
             disecconomy_of_scale_factor *= std::uniform_real_distribution<double>(1.8, 2.2)(engine);
             file << disecconomy_of_scale_factor << '\n';
         }
-
-        file << instance;
 
         file.close();
 
