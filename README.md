@@ -41,7 +41,7 @@ Be sure to have your environment variable `MOSEK_HOME` and `EIGEN_HOME` properly
 
 You may run our code with the following commands from the root directory of this repository, after the project is compiled.
 ```shell
-./build/FLP/solver/FLP_solve <path_to_instance> <p> <deviation> <method=GBD|CCG|Nominal> <time_limit> # For the Facility Location Problem (FLP)
+./build/FLP-with-congestion/solver/FLP_solve <path_to_instance> <p> <deviation> <method=GBD|CCG|Nominal> <time_limit> # For the Facility Location Problem (FLP-with-congestion)
 ./build/RAP/solver/RAP_solve <path_to_instance> <p> <deviation> <method=GBD|CCG|Nominal> <time_limit> # For the Resource Allocation Problem (RAP)
 ```
 
@@ -49,6 +49,6 @@ You may run our code with the following commands from the root directory of this
 
 You may generate new instances with the following commands from the root directory of this repository, after the project is compiled.
 ```shell
-./build/FLP/generator/FLP_generate <destination_folder> <n_facilities> <n_customers> <capacity_over_demand_ratio> <n_instances> # For the Facility Location Problem (FLP)
+./build/FLP-with-congestion/generator/FLP_generate <destination_folder> <n_facilities> <n_customers> <capacity_over_demand_ratio> <n_instances> # For the Facility Location Problem (FLP-with-congestion)
 ./build/RAP/generator/RAP_generate <destination_folder> <n_servers> <n_clients> <n_instances> # For the Resource Allocation Problem (RAP)
 ```
