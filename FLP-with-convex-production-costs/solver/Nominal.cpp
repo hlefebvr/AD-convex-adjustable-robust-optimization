@@ -20,7 +20,7 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
     auto y = m_model.add_vars(Dim<2>(n_facilities, n_customers), 0, Inf, Continuous, "y");
     auto v = m_model.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous, "v");
     auto theta = m_model.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous, "theta");
-    auto r = m_model.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous, "r");
+    auto s = m_model.add_vars(Dim<1>(n_facilities), 1e-3, Inf, Continuous, "s");
 
     m_model.set_obj_expr(objective);
 
@@ -42,8 +42,7 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
     );
 
     for (auto i : Range(n_facilities)) {
-        m_model.add_ctr(theta[i] * r[i] >= m_instance.diseconomy_of_scale_factor(i) * (m_instance.capacity(i) + 1e-3));
-        m_model.add_ctr(r[i] == m_instance.capacity(i) + 1e-3 - v[i]);
+        m_model.add_ctr(theta[i] * s[i]>= m_instance.diseconomy_of_scale_factor(i) * (m_instance.capacity(i) + 1e-3));
     }
 
     for (auto i : Range(n_facilities)) {
@@ -55,10 +54,10 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
     }
 
     for (auto i : Range(n_facilities)) {
-        m_model.add_ctr(v[i] <= m_instance.capacity(i) * x[i]);
+        m_model.add_ctr(v[i] + s[i] == m_instance.capacity(i) * x[i]);
     }
 
-    m_model.use(Gurobi());
+    m_model.use(Mosek());
 
 }
 
