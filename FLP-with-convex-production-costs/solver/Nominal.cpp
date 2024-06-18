@@ -7,7 +7,7 @@
 
 using namespace idol;
 
-FLP::Nominal::Nominal(const idol::Problems::FLP::Instance &t_instance)
+FLP::Nominal::Nominal(const FLP::Instance &t_instance)
         : m_instance(t_instance),
           m_model(m_env) {
 

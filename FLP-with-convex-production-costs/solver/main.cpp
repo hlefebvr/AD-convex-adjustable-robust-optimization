@@ -3,16 +3,14 @@
 //
 #include <iostream>
 #include "idol/modeling.h"
-#include "idol/problems/facility-location-problem/FLP_Instance.h"
 #include "CCG.h"
 #include "GBD.h"
 #include "Nominal.h"
-#include "../../ConvexAROSolver.h"
 
 int main(int t_argc, const char** t_argv) {
 
     if (t_argc != 6) {
-        throw std::invalid_argument("Arguments: <path_to_instance> <p> <deviation> <method=GBD|CCG> <time_limit>");
+        throw std::invalid_argument("Arguments: <path_to_instance> <p> <deviation> <method=GBD|CCG|Nominal> <time_limit>");
     }
 
     const std::string path_to_instance = t_argv[1];
@@ -25,7 +23,7 @@ int main(int t_argc, const char** t_argv) {
         throw std::invalid_argument("Argument <p> must be between 0 and 1.");
     }
 
-    const auto instance = idol::Problems::FLP::read_instance_1991_Cornuejols_et_al(path_to_instance);
+    const auto instance = FLP::Instance::read_from_file(path_to_instance);
 
     const double Gamma = std::floor( percentage_for_Gamma * instance.n_customers() );
 
