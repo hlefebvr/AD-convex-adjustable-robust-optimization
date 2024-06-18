@@ -1,0 +1,2 @@
+add_executable(FLP_conv_generate main.cpp)
+target_link_libraries(FLP_conv_generate PUBLIC idol)

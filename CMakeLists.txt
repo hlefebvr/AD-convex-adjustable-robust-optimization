@@ -21,4 +21,5 @@ add_library(convex_aro ConvexAROSolver.h ConvexAROSolver.cpp)
 target_link_libraries(convex_aro PUBLIC idol)
 
 add_subdirectory(FLP-with-congestion)
+add_subdirectory(FLP-with-convex-production-costs)
 add_subdirectory(RAP)
