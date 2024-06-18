@@ -37,7 +37,7 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
                                     m_instance.per_unit_transportation_cost(i, j) * y[i][j]
                             )
                     ),
-                    "objective"
+                    "epigraph"
     );
 
     for (auto i : Range(n_facilities)) {
