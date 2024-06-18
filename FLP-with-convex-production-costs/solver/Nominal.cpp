@@ -4,7 +4,6 @@
 
 #include "Nominal.h"
 #include "idol/optimizers/mixed-integer-programming/wrappers/Mosek/Mosek.h"
-#include "idol/optimizers/mixed-integer-programming/wrappers/Gurobi/Gurobi.h"
 
 using namespace idol;
 
