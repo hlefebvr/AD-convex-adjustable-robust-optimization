@@ -88,13 +88,13 @@ $$
 Plugin it into the original function, we obtain 
 
 $$
-    \begin{align*}
+    \begin{align}
         -F_{i}^*(\pi) 
         & = -\pi\left( -\frac{\sqrt{a_i(q_i+\varepsilon)}}{\sqrt{\pi}} + q_i + \varepsilon \right) -a_i + \frac{a_i(q_i + \varepsilon)}{ q_i - \left( -\frac{\sqrt{a_i(q_i+\varepsilon)}}{\sqrt{\pi}} + q_i + \varepsilon \right) + \varepsilon } \\
         & = \sqrt{\pi} \underbrace{\sqrt{ a_i(q_i + \varepsilon) }}_{:= c_i} -\pi(q_i + \varepsilon) - a_i + \frac{ \sqrt{\pi} a_i(q_i+\varepsilon) }{ \sqrt{a_i(q_i+\varepsilon)} } \\
         & = \sqrt{\pi} c_i -\pi(q_i + \varepsilon)  - a_i + \sqrt{\pi} \sqrt{ a_i(q_i+\varepsilon) } \\
         & = 2c_i\sqrt{\pi} -\pi(q_i + \varepsilon)  - a_i
-    \end{align*}
+    \end{align}
 $$
 
 In turn, we obtain
