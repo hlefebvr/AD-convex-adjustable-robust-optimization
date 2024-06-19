@@ -7,10 +7,10 @@ else
   PROJECT_DIRECTORY=/home/henri/Research/AD-convex-adjustable-robust-optimization
 fi
 
-INSTANCE_DIRECTORY=RAP/data
+INSTANCE_DIRECTORY=FLP-with-convex-production-costs/data/basic
 BUILD_DIRECTORY=cmake-build-debug
-EXECUTABLE=RAP/solver/RAP_solve
-EXPERIMENTS_DIRECTORY=RAP/experiments
+EXECUTABLE=FLP-with-convex-production-costs/solver/FLP_conv_solve
+EXPERIMENTS_DIRECTORY=FLP-with-convex-production-costs/experiments
 
 COUNTER=0
 

@@ -1,2 +1,2 @@
-add_executable(FLP_generate main.cpp)
-target_link_libraries(FLP_generate PUBLIC idol)
+add_executable(FLP_cong_generate main.cpp)
+target_link_libraries(FLP_cong_generate PUBLIC idol)

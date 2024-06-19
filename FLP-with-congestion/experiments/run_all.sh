@@ -7,10 +7,10 @@ else
   PROJECT_DIRECTORY=/home/henri/CLionProjects/AD-convex-adjustable-robust-optimization
 fi
 
-INSTANCE_DIRECTORY=FLP/data
+INSTANCE_DIRECTORY=FLP-with-congestion/data/basic
 BUILD_DIRECTORY=cmake-build-debug
-EXECUTABLE=FLP/solver/FLP_solve
-EXPERIMENTS_DIRECTORY=FLP/experiments
+EXECUTABLE=FLP-with-congestion/solver/FLP_cong_solve
+EXPERIMENTS_DIRECTORY=FLP-with-congestion/experiments
 
 COUNTER=0
 
@@ -25,18 +25,23 @@ do
       for METHOD in CCG GBD
       do
 
-        ARGS="$PROJECT_DIRECTORY/$EXPERIMENTS_DIRECTORY/run_one.sh $PROJECT_DIRECTORY/$BUILD_DIRECTORY/$EXECUTABLE $FILE $P $DEV $METHOD 7200"
+        for USE_HEURISTIC in 0 1
+        do
 
-        echo "Submitting $ARGS"
+          ARGS="$PROJECT_DIRECTORY/$EXPERIMENTS_DIRECTORY/run_one.sh $PROJECT_DIRECTORY/$BUILD_DIRECTORY/$EXECUTABLE $FILE $P $DEV $METHOD 7200 $USE_HEURISTIC"
 
-        if [ "$(whoami)" = "utr_lefebvre" ]
-        then
-          sbatch $ARGS
-        else
-          $ARGS
-        fi
+          echo "Submitting $ARGS"
 
-        COUNTER=$(($COUNTER+1))
+          if [ "$(whoami)" = "utr_lefebvre" ]
+          then
+            sbatch $ARGS
+          else
+            $ARGS
+          fi
+
+          COUNTER=$(($COUNTER+1))
+
+        done
 
       done
 
