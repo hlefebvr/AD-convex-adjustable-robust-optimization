@@ -44,8 +44,7 @@ int main(int t_argc, const char** t_argv) {
         throw idol::Exception("GBD not implemented.");
         // solver = std::make_unique<FLP::GBD>(instance, Gamma, deviation);
     } else if (method == "CCG") {
-        throw idol::Exception("GBD not implemented.");
-        // solver = std::make_unique<FLP::CCG>(instance, Gamma, deviation);
+        solver = std::make_unique<FLP::CCG>(instance, Gamma, deviation);
     } else if (method == "Nominal") {
         solver = std::make_unique<FLP::Nominal>(instance);
     } else {
