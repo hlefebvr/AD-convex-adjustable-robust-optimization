@@ -14,12 +14,14 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
     const unsigned int n_facilities = m_instance.n_facilities();
     const unsigned int n_customers = m_instance.n_customers();
 
+    const double epsilon = 1e-3;
+
     auto objective = m_model.add_var(-Inf, Inf, Continuous, "objective");
     auto x = m_model.add_vars(Dim<1>(n_facilities), 0, 1, Binary, "x");
     auto y = m_model.add_vars(Dim<2>(n_facilities, n_customers), 0, Inf, Continuous, "y");
     auto v = m_model.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous, "v");
     auto theta = m_model.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous, "theta");
-    auto s = m_model.add_vars(Dim<1>(n_facilities), 1e-3, Inf, Continuous, "s");
+    auto s = m_model.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous, "s");
 
     m_model.set_obj_expr(objective);
 
@@ -41,7 +43,8 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
     );
 
     for (auto i : Range(n_facilities)) {
-        m_model.add_ctr(theta[i] * s[i]>= m_instance.diseconomy_of_scale_factor(i) * (m_instance.capacity(i) + 1e-3));
+        m_model.add_ctr(s[i] == m_instance.capacity(i) - v[i] + epsilon);
+        m_model.add_ctr(theta[i] * s[i]>= m_instance.diseconomy_of_scale_factor(i) * (m_instance.capacity(i) + epsilon));
     }
 
     for (auto i : Range(n_facilities)) {
@@ -53,7 +56,7 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
     }
 
     for (auto i : Range(n_facilities)) {
-        m_model.add_ctr(v[i] + s[i] == m_instance.capacity(i) * x[i]);
+        m_model.add_ctr(v[i] <= m_instance.capacity(i) * x[i]);
     }
 
     m_model.use(Mosek());
@@ -62,13 +65,8 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
 
 AbstractSolver::Report FLP::Nominal::solve(double t_time_limit, double t_tolerance_for_separation) {
 
-    std::cout << m_model << std::endl;
-
     m_model.optimizer().set_param_time_limit(t_time_limit);
     m_model.optimize();
-
-    std::cout << m_model.get_status() << std::endl;
-    std::cout << m_model.get_reason() << std::endl;
 
     const auto solution = save_primal(m_model);
 

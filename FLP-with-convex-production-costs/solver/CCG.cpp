@@ -19,7 +19,7 @@ void FLP::CCG::augment_master_problem(const idol::Solution::Primal &t_separation
     auto y = m_master_problem.add_vars(Dim<2>(n_facilities, n_customers), 0, Inf, Continuous);
     auto v = m_master_problem.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous);
     auto theta = m_master_problem.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous);
-    auto s = m_master_problem.add_vars(Dim<1>(n_facilities), 1e-3, Inf, Continuous);
+    auto s = m_master_problem.add_vars(Dim<1>(n_facilities), 0, Inf, Continuous);
 
     // Objective
     m_master_problem.add_ctr(m_x_0 >=
@@ -39,7 +39,8 @@ void FLP::CCG::augment_master_problem(const idol::Solution::Primal &t_separation
     );
 
     for (auto i : Range(n_facilities)) {
-        m_master_problem.add_ctr(theta[i] * s[i]>= m_instance.diseconomy_of_scale_factor(i) * (m_instance.capacity(i) + 1e-3));
+        m_master_problem.add_ctr(s[i] == m_instance.capacity(i) - v[i] + m_epsilon);
+        m_master_problem.add_ctr(theta[i] * s[i]>= m_instance.diseconomy_of_scale_factor(i) * (m_instance.capacity(i) + m_epsilon));
     }
 
     for (auto i : Range(n_facilities)) {
@@ -51,7 +52,7 @@ void FLP::CCG::augment_master_problem(const idol::Solution::Primal &t_separation
     }
 
     for (auto i : Range(n_facilities)) {
-        m_master_problem.add_ctr(v[i] + s[i] == m_instance.capacity(i) * m_x[i]);
+        m_master_problem.add_ctr(v[i] <= m_instance.capacity(i) * m_x[i]);
     }
 
 }
