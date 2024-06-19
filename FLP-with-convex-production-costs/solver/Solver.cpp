@@ -156,7 +156,7 @@ void FLP::Solver::create_separation_problem() {
     }
 
     m_separation_problem.use(
-            Mosek()
+            Mosek().add_callback(EarlyStopCallback(*this))
     );
 
 }

@@ -9,8 +9,8 @@
 
 int main(int t_argc, const char** t_argv) {
 
-    if (t_argc != 6) {
-        throw std::invalid_argument("Arguments: <path_to_instance> <p> <deviation> <method=GBD|CCG|Nominal> <time_limit>");
+    if (t_argc != 7) {
+        throw std::invalid_argument("Arguments: <path_to_instance> <p> <deviation> <method=GBD|CCG|Nominal> <time_limit> <use_heuristic=0|1>");
     }
 
     const std::string path_to_instance = t_argv[1];
@@ -18,6 +18,7 @@ int main(int t_argc, const char** t_argv) {
     const double deviation = std::stof(t_argv[3]);
     const std::string method = t_argv[4];
     const double time_limit = std::stof(t_argv[5]);
+    const bool use_heuristic = std::stoi(t_argv[6]);
 
     if (percentage_for_Gamma < 0. || percentage_for_Gamma > 1.) {
         throw std::invalid_argument("Argument <p> must be between 0 and 1.");
@@ -39,7 +40,7 @@ int main(int t_argc, const char** t_argv) {
         throw std::invalid_argument("Argument <method> must be among GBD, CCG and Nominal. Received \" " + method + " \".");
     }
 
-    const auto report = solver->solve(time_limit, 1e-4);
+    const auto report = solver->solve(time_limit, 1e-4, use_heuristic);
 
     // Report
     std::cout << "result,"
@@ -50,6 +51,7 @@ int main(int t_argc, const char** t_argv) {
               << deviation << ","
               << time_limit << ","
               << method << ","
+              << use_heuristic << ","
               << report.total_time << ","
               << report.master_time << ","
               << report.separation_time << ","

@@ -63,7 +63,7 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
 
 }
 
-AbstractSolver::Report FLP::Nominal::solve(double t_time_limit, double t_tolerance_for_separation) {
+AbstractSolver::Report FLP::Nominal::solve(double t_time_limit, double t_tolerance_for_separation, bool t_use_heuristc) {
 
     m_model.optimizer().set_param_time_limit(t_time_limit);
     m_model.optimize();

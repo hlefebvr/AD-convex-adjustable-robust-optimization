@@ -7,12 +7,15 @@
 
 using namespace idol;
 
-AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit, double t_tolerance_for_separation) {
+AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
+                                              double t_tolerance_for_separation,
+                                              bool t_heuristic_mode) {
 
     idol::Timer timer, master_timer, separation_timer;
     idol::Solution::Primal master_solution;
     idol::Solution::Primal separation_solution;
     unsigned int iteration_count = 0;
+    m_heuristic_mode = t_heuristic_mode;
 
     const auto remaining_time = [&]() { return std::max(0., t_time_limit - timer.count()); };
 
@@ -48,7 +51,7 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit, double t_tole
         separation_solution = solve_separation_problem( remaining_time() );
         separation_timer.stop();
 
-        if (separation_solution.status() != Optimal) {
+        if (separation_solution.status() != Optimal && !(m_heuristic_mode && separation_solution.status() == Feasible)) {
             break;
         }
 
@@ -58,7 +61,15 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit, double t_tole
 
         log_iteration();
 
-    } while ( separation_solution.objective_value() > t_tolerance_for_separation );
+        if (separation_solution.objective_value() <= t_tolerance_for_separation) {
+            if (m_heuristic_mode) {
+                m_heuristic_mode = false;
+                continue;
+            }
+            break;
+        }
+
+    } while ( true );
 
     timer.stop();
 
@@ -86,5 +97,31 @@ AbstractSolver::Report::Report(double t_best_bound,
                                      separation_time(t_separation_time),
                                      iteration_count(t_iteration_count),
                                      fail_flag(t_fail_flag) {
+
+}
+
+void EarlyStopCallback::Strategy::operator()(idol::CallbackEvent t_event) {
+
+    if (t_event != IncumbentSolution) {
+        return;
+    }
+
+    if (!m_parent->heuristic_mode()) {
+        return;
+    }
+
+    if (time().count() < 10 || is_inf(best_obj())) {
+        return;
+    }
+
+    if (best_obj() < 1e-4) {
+        return;
+    }
+
+    terminate();
+
+}
+
+EarlyStopCallback::Strategy::Strategy(const ConvexAROSolver &t_parent) : m_parent(&t_parent) {
 
 }
