@@ -121,7 +121,7 @@ $$
     \end{align}
 $$
 
-Re-arranging the terms, one obtains the following model in which we introduced $z_i$ representing the ratio in the objective function:
+Re-arranging the terms, one obtains the following model in which we introduced $z_i$ representing the square root in the objective function:
 
 $$
     \begin{align}
@@ -130,7 +130,7 @@ $$
         + \sum_{i\in V_1} (\lambda_0f_i - \gamma_i q_i ) x_i
         - \lambda_0x_0 \\
         \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
-        & z_i \le \sqrt{\lambda_0(\alpha_i - \gamma_i)} \quad \forall i\in V_1 \\
+        & z_i^2 \le \lambda_0(\alpha_i - \gamma_i) \quad \forall i\in V_1 \\
         & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
         & \mathbf\xi\in\Xi, \\
         & z \ge 0,
@@ -154,7 +154,7 @@ $$
         + \sum_{i\in V_1} (\lambda_0f_i - \gamma_i q_i ) x_i
         - \lambda_0x_0 \\
         \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
-        & z_i \le \sqrt{\lambda_0(\alpha_i - \gamma_i)} \quad \forall i\in V_1 \\
+        & z_i^2 \le \lambda_0(\alpha_i - \gamma_i) \quad \forall i\in V_1 \\
         & (\alpha_i - \gamma_i)^2 \le \lambda_0 s_i \quad \forall i\in V_1 \\
         & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
         & \mathbf\xi\in\Xi, \\
