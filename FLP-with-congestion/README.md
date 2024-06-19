@@ -129,7 +129,7 @@ $$
         - \sum_{j\in V_2} \beta_j d_j(\xi_j) 
         + \sum_{i\in V_1} (\lambda_0f_i - \gamma_i q_i ) x_i
         - \lambda_0x_0 \\
-        \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 = 0 \quad \forall (i,j) \in V_1\times V_2, \\
+        \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
         & \theta_i \le \sqrt{\lambda_0(\alpha_i - \gamma_i)} \quad \forall i\in V_1 \\
         & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
         & \mathbf\xi\in\Xi, \\
@@ -138,14 +138,6 @@ $$
 $$
 
 with $\Lambda = \lbrace (\lambda_0,\alpha,\beta,\gamma) \in \mathbb R_+ \times \mathbb R^{|V_1|}\times \mathbb R^{|V_2|}\times \mathbb R^{|V_1|}_+ : \lVert (\lambda_0,\alpha,\beta,\gamma) \rVert \le 1 \rbrace$.
-
-To model the square rootin Mosek, we can use the power cone with coefficient $\frac 12$:
-
-$$
-    \theta_i \le \sqrt{\lambda_0(\alpha_i - \gamma_i)}
-    \iff 
-    (\lambda_0,\alpha_i - \gamma_i,\theta_i) \in \mathcal P^{\frac{1}{2}, \frac{1}{2}}_3.
-$$
 
 To account for the case $\lambda_0 = 0$, we need to ensure that $\lambda_0$ implies $\alpha_i - \gamma_i = 0$. To this end, we introduce new variables $s_i$ and add the following constraint:
 
@@ -161,9 +153,9 @@ $$
         - \sum_{j\in V_2} \beta_j d_j(\xi_j) 
         + \sum_{i\in V_1} (\lambda_0f_i - \gamma_i q_i ) x_i
         - \lambda_0x_0 \\
-        \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 = 0 \quad \forall (i,j) \in V_1\times V_2, \\
-        & (\lambda_0,\alpha_i - \gamma_i,\theta_i) \in \mathcal P^{\frac{1}{2}, \frac{1}{2}}_3 \quad \forall i\in V_1 \\
-        & \left(\frac 12  \lambda_0,s_i,\alpha_i - \gamma_i\right)\in\mathcal Q_r^3 \quad \forall i\in V_1 \\
+        \text{s.t.} \  & \alpha_i + \beta_j + t_{ij}\lambda_0 \ge 0 \quad \forall (i,j) \in V_1\times V_2, \\
+        & \theta_i \le \sqrt{\lambda_0(\alpha_i - \gamma_i)} \quad \forall i\in V_1 \\
+        & (\alpha_i - \gamma_i)^2 \le \lambda_0 s_i \quad \forall i\in V_1 \\
         & (\lambda_0,\mathbf\alpha,\mathbf\beta,\mathbf\gamma) \in \Lambda \\
         & \mathbf\xi\in\Xi, \\
         & z \ge 0,
