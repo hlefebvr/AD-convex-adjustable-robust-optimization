@@ -30,8 +30,7 @@ int main(int t_argc, const char** t_argv) {
     std::unique_ptr<AbstractSolver> solver;
 
     if (method == "GBD") {
-        throw idol::Exception("GBD not implemented.");
-        // solver = std::make_unique<FLP::GBD>(instance, Gamma, deviation);
+        solver = std::make_unique<FLP::GBD>(instance, Gamma, deviation);
     } else if (method == "CCG") {
         solver = std::make_unique<FLP::CCG>(instance, Gamma, deviation);
     } else if (method == "Nominal") {
