@@ -102,7 +102,7 @@ void FLP::Solver::create_master_problem() {
     m_master_problem.add_vector<Var, 1>(m_x);
     m_master_problem.set_obj_expr(m_x_0);
 
-    m_master_problem.use(Mosek() );
+    m_master_problem.use(Mosek());
 
 }
 
@@ -156,7 +156,7 @@ void FLP::Solver::create_separation_problem() {
     }
 
     m_separation_problem.use(
-            Mosek() //.with_log_level(Info, Black)
+            Mosek()
     );
 
 }

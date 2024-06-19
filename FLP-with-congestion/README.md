@@ -58,19 +58,19 @@ $$
 If $\lambda_0 \neq 0$. To simplify our work, we first observe that 
 
 $$
-    \begin{align*}
+    \begin{align}
         \inf_{v_i\in \mathbb R} \left\lbrace
             \lambda_0 F_{i}(v_i) + v_i ( -\alpha_i + \gamma_i )
         \right\rbrace
         &= - \sup_{v_i} \left\lbrace v_i(\alpha_i - \gamma_i) - \lambda_0 F_{i}(v_i) \right\rbrace \\
         &= - (\lambda_0F_{i})^* \left( \alpha_i - \gamma_i \right) \\
         &= -\lambda_0 F_{i}^*\left( \frac{ \alpha_i - \gamma_i }{ \lambda_0 } \right).
-    \end{align*}
+    \end{align}
 $$
 
 Thus, we only have to compute the convex conjugate of $F_{i}$. We note that 
 
-$$ -F^\star_{i}(\pi) = \min_{v} \left\{ -\pi v - a_i + \frac{a_i(q_i + \varepsilon)}{ q_i - v + \varepsilon } \right\}.$$
+$$ -F^\star_{i}(\pi) = \min_{v} \left\lbrace -\pi v - a_i + \frac{a_i(q_i + \varepsilon)}{ q_i - v + \varepsilon } \right\rbrace .$$
 
 The minimum is obtained for $v^*$ such that the derivative is zero, i.e.,
 
