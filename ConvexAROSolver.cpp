@@ -64,6 +64,7 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
         if (separation_solution.objective_value() <= t_tolerance_for_separation) {
             if (m_heuristic_mode) {
                 m_heuristic_mode = false;
+                std::cout << "Turning off heuristic mode." << std::endl;
                 continue;
             }
             break;
@@ -110,11 +111,11 @@ void EarlyStopCallback::Strategy::operator()(idol::CallbackEvent t_event) {
         return;
     }
 
-    if (time().count() < 10 || is_inf(best_obj())) {
+    if (time().count() < 0 || is_inf(best_obj())) {
         return;
     }
 
-    if (best_obj() < 1e-4) {
+    if (best_obj() < 1e-7) {
         return;
     }
 

@@ -149,7 +149,9 @@ void RAP::Solver::create_separation_problem() {
     }
 
     m_separation_problem.use(
-            Mosek() //.with_log_level(Info, Black)
+            Mosek()
+                .add_callback(EarlyStopCallback(*this))
+                //.with_log_level(Info, Black)
     );
 
 }

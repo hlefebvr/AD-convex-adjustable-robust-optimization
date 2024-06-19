@@ -19,7 +19,7 @@ class RAP::Nominal : public AbstractSolver {
 public:
     explicit Nominal(const Instance& t_instance);
 
-    Report solve(double t_time_limit, double t_tolerance_for_separation) override;
+    Report solve(double t_time_limit, double t_tolerance_for_separation, bool t_use_heuristic) override;
 };
 
 
