@@ -18,6 +18,9 @@ protected:
     const double m_Gamma;
     const double m_deviation;
 
+    bool m_use_bilevel_separation;
+    bool m_use_budgeted_uncertainty_set;
+
     idol::Env m_env;
 
     // Master problem
@@ -35,6 +38,11 @@ protected:
     idol::Vector<idol::Var, 1> m_omega;
     idol::Var m_lambda_0;
 
+    // Separation (KP only)
+    idol::Var m_dual_kp_lambda;
+    idol::Vector<idol::Var, 1> m_dual_kp_mu;
+    idol::Vector<idol::Var, 1> m_dual_kp_nu;
+
     void initialize() override;
     void create_master_problem();
     void create_separation_problem();
@@ -42,8 +50,11 @@ protected:
     idol::Solution::Primal solve_master_problem(double t_time_limit) override;
     idol::Solution::Primal solve_separation_problem(double t_time_limit) override;
     void update_separation_objective_function(const idol::Solution::Primal &t_master_solution) override;
+
+    double Gamma_tilde() const;
+    double compute_max_demand() const;
 public:
-    Solver(const Instance& t_instance, double t_Gamma, double t_deviation);
+    Solver(const Instance& t_instance, double t_Gamma, double t_deviation, bool t_use_bilevel_separation, bool t_use_budgeted_uncertainty_set);
 };
 
 

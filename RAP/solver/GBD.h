@@ -16,7 +16,7 @@ protected:
     void augment_master_problem(const idol::Solution::Primal &t_separation_solution) override;
 
 public:
-    GBD(const Instance& t_instance, double t_Gamma, double t_deviation);
+    GBD(const Instance& t_instance, double t_Gamma, double t_deviation, bool t_use_bilevel_separation, bool t_use_budgeted_uncertainty_set);
 };
 
 

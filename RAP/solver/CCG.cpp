@@ -7,8 +7,8 @@
 
 using namespace idol;
 
-RAP::CCG::CCG(const RAP::Instance &t_instance, double t_Gamma, double t_deviation)
-    : Solver(t_instance, t_Gamma, t_deviation) {
+RAP::CCG::CCG(const RAP::Instance &t_instance, double t_Gamma, double t_deviation, bool t_use_bilevel_separation, bool t_use_budgeted_uncertainty_set)
+    : Solver(t_instance, t_Gamma, t_deviation, t_use_bilevel_separation, t_use_budgeted_uncertainty_set) {
 
 }
 

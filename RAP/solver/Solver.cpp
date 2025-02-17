@@ -2,14 +2,17 @@
 // Created by henri on 28.09.23.
 //
 
+#include <cassert>
 #include "Solver.h"
 #include "idol/optimizers/mixed-integer-optimization/wrappers/Mosek/Mosek.h"
 
 using namespace idol;
 
-RAP::Solver::Solver(const RAP::Instance &t_instance, double t_Gamma, double t_deviation)
+RAP::Solver::Solver(const RAP::Instance &t_instance, double t_Gamma, double t_deviation, bool t_use_bilevel_separation, bool t_use_budgeted_uncertainty_set)
     : m_instance(t_instance),
       m_Gamma(t_Gamma),
+      m_use_budgeted_uncertainty_set(t_use_budgeted_uncertainty_set),
+      m_use_bilevel_separation(t_use_bilevel_separation),
       m_deviation(t_deviation),
       m_master_problem(m_env),
       m_x_0(m_env, 0, Inf, Continuous, "x__0"),
@@ -21,10 +24,12 @@ RAP::Solver::Solver(const RAP::Instance &t_instance, double t_Gamma, double t_de
       m_gamma(idol::Var::make_vector(m_env, Dim<1>(t_instance.n_servers()), 0, 1, Continuous, "gamma")),
       m_z(idol::Var::make_vector(m_env, Dim<1>(t_instance.n_servers()), 0, Inf, Continuous, "z")),
       m_omega(idol::Var::make_vector(m_env, Dim<1>(t_instance.n_clients()), 0, 1, Continuous, "omega")),
-      m_lambda_0(m_env, 0, 1, Continuous, "lambda_0")
-      {
+      m_lambda_0(m_env, 0, 1, Continuous, "lambda_0"),
 
-}
+      m_dual_kp_lambda(m_env, 0, Inf, Continuous, "dual_kp_lambda"),
+      m_dual_kp_mu(idol::Var::make_vector(m_env, Dim<1>(t_instance.n_clients()), 0, Inf, Continuous, "dual_kp_mu")),
+      m_dual_kp_nu(idol::Var::make_vector(m_env, Dim<1>(t_instance.n_clients()), 0, Inf, Continuous, "dual_kp_nu"))
+      {}
 
 void RAP::Solver::initialize() {
 
@@ -65,35 +70,6 @@ idol::Solution::Primal RAP::Solver::solve_separation_problem(double t_time_limit
     return save_primal(m_separation_problem);
 }
 
-void RAP::Solver::update_separation_objective_function(const Solution::Primal &t_master_solution) {
-
-    const unsigned int n_servers = m_instance.n_servers();
-    const unsigned int n_clients = m_instance.n_clients();
-
-    const double sum_unitary_costs = idol_Sum(i, Range(n_servers), m_instance.unitary_cost(i) * t_master_solution.get(m_x[i]) ).constant().numerical();
-
-    const Expr objective =
-
-            idol_Sum(i,
-                     Range(n_servers),
-                     - m_z[i]
-                     + 1 / (2 * m_instance.congestion_factor(i)) * m_alpha[i]
-                     - 1 / (4 * m_instance.congestion_factor(i)) * m_gamma[i]
-                     - m_gamma[i] * t_master_solution.get(m_x[i])
-            )
-            +
-            idol_Sum(j,
-                     Range(n_clients),
-                     m_beta[j] * m_instance.demand(j)
-                     + m_omega[j] * m_instance.demand(j) * m_deviation
-            )
-            + m_lambda_0 * (sum_unitary_costs - t_master_solution.get(m_x_0) )
-    ;
-
-    m_separation_problem.set_obj_expr(objective);
-
-}
-
 void RAP::Solver::create_master_problem() {
 
     m_master_problem.add(m_x_0);
@@ -115,37 +91,107 @@ void RAP::Solver::create_separation_problem() {
     m_separation_problem.add_vector<Var, 1>(m_alpha);
     m_separation_problem.add_vector<Var, 1>(m_beta);
     m_separation_problem.add_vector<Var, 1>(m_gamma);
-    m_separation_problem.add_vector<Var, 1>(m_omega);
     m_separation_problem.add_vector<Var, 1>(m_z);
     m_separation_problem.add(m_lambda_0);
 
     // LP dual constraints
-    for (auto i : Range(n_servers)) {
-        for (auto j : Range(n_clients)) {
+    for (auto i: Range(n_servers)) {
+        for (auto j: Range(n_clients)) {
             m_separation_problem.add_ctr(m_alpha[i] - m_instance.service_rate(i, j) * m_beta[j] >= 0);
         }
     }
 
     // Conic F dual constraints
-    for (auto i : Range(n_servers)) {
-        m_separation_problem.add_ctr(m_alpha[i] * m_alpha[i] <= 4 * m_instance.congestion_factor(i) * m_z[i] * m_gamma[i] );
+    for (auto i: Range(n_servers)) {
+        m_separation_problem.add_ctr(
+                m_alpha[i] * m_alpha[i] <= 4 * m_instance.congestion_factor(i) * m_z[i] * m_gamma[i]);
     }
 
     // Norm constraints
     Expr sum_square = m_lambda_0 * m_lambda_0
                       + idol_Sum(i, Range(n_servers), m_gamma[i] * m_gamma[i] + m_alpha[i] * m_alpha[i])
-                      + idol_Sum(j, Range(n_clients), m_beta[j] * m_beta[j])
-    ;
+                      + idol_Sum(j, Range(n_clients), m_beta[j] * m_beta[j]);
     m_separation_problem.add_ctr(sum_square <= 1);
 
     // Xi constraints
-    m_separation_problem.add_ctr(idol_Sum(j, Range(n_clients), m_xi[j]) <= m_Gamma);
+    if (m_use_budgeted_uncertainty_set) {
+        m_separation_problem.add_ctr(idol_Sum(j, Range(n_clients), m_xi[j]) <= m_Gamma);
+    } else {
+        m_separation_problem.add_ctr(idol_Sum(j, Range(n_clients), m_deviation * m_instance.demand(j) * m_xi[j]) <= Gamma_tilde());
+    }
 
-    // Linearization constraints omega_j = xi_j beta_j
-    for (auto j : Range(n_clients)) {
-        m_separation_problem.add_ctr( m_omega[j] <= m_xi[j] );
-        m_separation_problem.add_ctr( m_omega[j] <= m_beta[j] );
-        m_separation_problem.add_ctr( m_omega[j] >= m_beta[j] - (1 - m_xi[j]) );
+    if (m_use_bilevel_separation) {
+
+        for (unsigned int j = 0 ; j < n_clients ; ++j) {
+            m_separation_problem.set_var_type(m_xi[j], Continuous);
+            m_separation_problem.set_var_ub(m_xi[j], 1);
+            m_separation_problem.set_var_lb(m_xi[j], 0);
+        }
+
+        m_separation_problem.add(m_dual_kp_lambda);
+        m_separation_problem.add_vector<Var, 1>(m_dual_kp_mu);
+        m_separation_problem.add_vector<Var, 1>(m_dual_kp_nu);
+
+        // Dual constraints
+        if (m_use_budgeted_uncertainty_set) {
+            for (unsigned int j = 0 ; j < n_clients ; ++j) {
+                m_separation_problem.add_ctr(m_deviation * m_instance.demand(j) * m_beta[j] - m_dual_kp_lambda - m_dual_kp_mu[j] + m_dual_kp_nu[j] == 0);
+            }
+        } else {
+            for (unsigned int j = 0 ; j < n_clients ; ++j) {
+                m_separation_problem.add_ctr(std::ceil(m_deviation * m_instance.demand(j)) * (m_beta[j] - m_dual_kp_lambda) - m_dual_kp_mu[j] + m_dual_kp_nu[j] == 0);
+            }
+        }
+
+        const auto add_linearization = [&](const Expr<>& t_a, const Expr<>& t_b, const Var& t_bin_var, double t_big_M) {
+            m_separation_problem.add_ctr(t_a <= t_big_M * t_bin_var);
+            m_separation_problem.add_ctr(t_b <= t_big_M * (1 - t_bin_var));
+        };
+
+        // Complementarity constraints
+        if (m_use_budgeted_uncertainty_set) {
+            /// Knapsack
+            const auto z_1 = m_separation_problem.add_var(0, 1, Binary, "z_1");
+            add_linearization(m_dual_kp_lambda, m_Gamma - idol_Sum(j, Range(n_clients), m_xi[j]), z_1, compute_max_demand());
+            /// Bounds
+            for (unsigned int j = 0 ; j < n_clients ; ++j) {
+                const auto z_2 = m_separation_problem.add_var(0, 1, Binary, "z_2_" + std::to_string(j));
+                add_linearization(m_dual_kp_mu[j], 1 - m_xi[j], z_2, m_instance.demand(j)); // UB
+
+                const auto z_3 = m_separation_problem.add_var(0, 1, Binary, "z_3_" + std::to_string(j));
+                add_linearization(m_dual_kp_nu[j], m_xi[j], z_3, compute_max_demand() + m_instance.demand(j)); // LB
+            }
+        } else {
+            /// Knapsack
+            const auto z_1 = m_separation_problem.add_var(0, 1, Binary, "z_1");
+            const double max_deviation_per_Gamma_tilde = m_deviation * compute_max_demand() / Gamma_tilde();
+            add_linearization(m_dual_kp_lambda, Gamma_tilde() - idol_Sum(j, Range(n_clients), std::ceil(m_deviation * m_instance.demand(j)) * m_xi[j]), z_1, max_deviation_per_Gamma_tilde);
+            /// Bounds
+            for (unsigned int j = 0 ; j < n_clients ; ++j) {
+                const auto z_2 = m_separation_problem.add_var(0, 1, Binary, "z_2_" + std::to_string(j));
+                add_linearization(m_dual_kp_mu[j], 1 - m_xi[j], z_2, m_instance.demand(j)); // UB
+
+                const auto z_3 = m_separation_problem.add_var(0, 1, Binary, "z_3_" + std::to_string(j));
+                add_linearization(m_dual_kp_nu[j], m_xi[j], z_3, 2 * m_instance.demand(j) + max_deviation_per_Gamma_tilde); // LB
+            }
+        }
+
+    } else {
+
+        assert(m_use_budgeted_uncertainty_set);
+
+        m_separation_problem.add_vector<Var, 1>(m_omega);
+
+        // Xi constraints
+        m_separation_problem.add_ctr(idol_Sum(j, Range(n_clients), m_xi[j]) <= m_Gamma);
+
+        // Linearization constraints omega_j = xi_j beta_j
+        for (auto j: Range(n_clients)) {
+            m_separation_problem.add_ctr(m_omega[j] <= m_xi[j]);
+            m_separation_problem.add_ctr(m_omega[j] <= m_beta[j]);
+            m_separation_problem.add_ctr(m_omega[j] >= m_beta[j] - (1 - m_xi[j]));
+        }
+
     }
 
     m_separation_problem.use(
@@ -154,4 +200,76 @@ void RAP::Solver::create_separation_problem() {
                 //.with_log_level(Info, Black)
     );
 
+}
+
+void RAP::Solver::update_separation_objective_function(const Solution::Primal &t_master_solution) {
+
+    const unsigned int n_servers = m_instance.n_servers();
+    const unsigned int n_clients = m_instance.n_clients();
+
+    const double sum_unitary_costs = idol_Sum(i, Range(n_servers), m_instance.unitary_cost(i) * t_master_solution.get(m_x[i]) ).constant().numerical();
+
+    if (m_use_bilevel_separation) {
+
+        const Expr objective =
+
+                idol_Sum(i,
+                         Range(n_servers),
+                         - m_z[i]
+                         + 1 / (2 * m_instance.congestion_factor(i)) * m_alpha[i]
+                         - 1 / (4 * m_instance.congestion_factor(i)) * m_gamma[i]
+                         - m_gamma[i] * t_master_solution.get(m_x[i])
+                )
+                +
+                (m_use_budgeted_uncertainty_set ? m_Gamma : Gamma_tilde()) * m_dual_kp_lambda
+                +
+                idol_Sum(j,
+                         Range(n_clients),
+                         m_beta[j] * m_instance.demand(j)
+                         + m_dual_kp_mu[j]
+                )
+                + m_lambda_0 * (sum_unitary_costs - t_master_solution.get(m_x_0) )
+        ;
+
+        m_separation_problem.set_obj_expr(objective);
+
+    } else {
+
+        const Expr objective =
+
+                idol_Sum(i,
+                         Range(n_servers),
+                         - m_z[i]
+                         + 1 / (2 * m_instance.congestion_factor(i)) * m_alpha[i]
+                         - 1 / (4 * m_instance.congestion_factor(i)) * m_gamma[i]
+                         - m_gamma[i] * t_master_solution.get(m_x[i])
+                )
+                +
+                idol_Sum(j,
+                         Range(n_clients),
+                         m_beta[j] * m_instance.demand(j)
+                         + m_omega[j] * m_instance.demand(j) * m_deviation
+                )
+                + m_lambda_0 * (sum_unitary_costs - t_master_solution.get(m_x_0) )
+        ;
+
+        m_separation_problem.set_obj_expr(objective);
+
+    }
+
+}
+
+double RAP::Solver::Gamma_tilde() const {
+    const double n_clients = m_instance.n_clients();
+    const double sum_demands = idol_Sum(j, Range(n_clients), m_instance.demand(j)).constant().numerical();
+    return std::ceil(m_Gamma * sum_demands / n_clients);
+}
+
+double RAP::Solver::compute_max_demand() const {
+    double result = 0;
+    const double n_clients = m_instance.n_clients();
+    for (unsigned int j = 0 ; j < n_clients ; ++j) {
+        result = std::max(result, m_instance.demand(j));
+    }
+    return result;
 }

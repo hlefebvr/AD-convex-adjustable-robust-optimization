@@ -10,8 +10,8 @@
 
 int main(int t_argc, const char** t_argv) {
 
-    if (t_argc != 7) {
-        throw std::invalid_argument("Arguments: <path_to_instance> <p> <deviation> <method=GBD|CCG|Nominal> <time_limit> <use_heuristic=0|1>");
+    if (t_argc != 9) {
+        throw std::invalid_argument("Arguments: <path_to_instance> <p> <deviation> <method=GBD|CCG|Nominal> <time_limit> <use_heuristic=0|1> <use_bilevel_sep=0|1> <use_budgeted_unc=0|1>");
     }
 
     const std::string path_to_instance = t_argv[1];
@@ -20,6 +20,8 @@ int main(int t_argc, const char** t_argv) {
     const std::string method = t_argv[4];
     const double time_limit = std::stof(t_argv[5]);
     const bool use_heuristic = std::stoi(t_argv[6]);
+    const bool use_bilevel_sep = std::stoi(t_argv[7]);
+    const bool use_budgeted_unc = std::stoi(t_argv[8]);
 
     if (percentage_for_Gamma < 0. || percentage_for_Gamma > 1.) {
         throw std::invalid_argument("Argument <p> must be between 0 and 1.");
@@ -32,9 +34,9 @@ int main(int t_argc, const char** t_argv) {
     std::unique_ptr<AbstractSolver> solver;
 
     if (method == "GBD") {
-        solver = std::make_unique<RAP::GBD>(instance, Gamma, deviation);
+        solver = std::make_unique<RAP::GBD>(instance, Gamma, deviation, use_bilevel_sep, use_budgeted_unc);
     } else if (method == "CCG") {
-        solver = std::make_unique<RAP::CCG>(instance, Gamma, deviation);
+        solver = std::make_unique<RAP::CCG>(instance, Gamma, deviation, use_bilevel_sep, use_budgeted_unc);
     } else if (method == "Nominal") {
         solver = std::make_unique<RAP::Nominal>(instance);
     } else {
