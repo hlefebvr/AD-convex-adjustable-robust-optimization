@@ -15,5 +15,4 @@ fi
 
 echo "-- Running $@"
 
-exit
 $@
