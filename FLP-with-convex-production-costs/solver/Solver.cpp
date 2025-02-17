@@ -3,7 +3,7 @@
 //
 
 #include "Solver.h"
-#include "idol/optimizers/mixed-integer-programming/wrappers/Mosek/Mosek.h"
+#include "idol/optimizers/mixed-integer-optimization/wrappers/Mosek/Mosek.h"
 
 using namespace idol;
 

@@ -12,7 +12,7 @@ set(USE_EIGEN ON)
 FetchContent_Declare(
         idol
         GIT_REPOSITORY https://github.com/hlefebvr/idol.git
-        GIT_TAG        origin/main
+        GIT_TAG        v0.8.2-alpha-fixed # origin/main
 )
 
 FetchContent_MakeAvailable(idol)

@@ -6,8 +6,8 @@
 #define CONVEXADJUSTALBEROBUSTOPTIMIZATION_CONVEXAROSOLVER_H
 
 #include "idol/modeling.h"
-#include "idol/optimizers/mixed-integer-programming/callbacks/CallbackFactory.h"
-#include "idol/optimizers/mixed-integer-programming/callbacks/Callback.h"
+#include "idol/optimizers/mixed-integer-optimization/callbacks/CallbackFactory.h"
+#include "idol/optimizers/mixed-integer-optimization/callbacks/Callback.h"
 
 class AbstractSolver {
 public:
