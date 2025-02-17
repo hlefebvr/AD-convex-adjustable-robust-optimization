@@ -23,24 +23,29 @@ do
     for DEV in .25 .50
     do
 
-      for METHOD in CCG GBD
+      for METHOD in CCG
       do
 
-        for USE_HEURISTIC in 0 1
+        for USE_HEURISTIC in 1
         do
 
-          ARGS="$PROJECT_DIRECTORY/$EXPERIMENTS_DIRECTORY/run_one.sh $PROJECT_DIRECTORY/$BUILD_DIRECTORY/$EXECUTABLE $FILE $P $DEV $METHOD 7200 $USE_HEURISTIC"
+          for BUDEGTED_UNC in 0 1
+          do
 
-          echo "Submitting $ARGS"
+            ARGS="$PROJECT_DIRECTORY/$EXPERIMENTS_DIRECTORY/run_one.sh $PROJECT_DIRECTORY/$BUILD_DIRECTORY/$EXECUTABLE $FILE $P $DEV $METHOD 7200 $USE_HEURISTIC 1 $BUDEGTED_UNC"
 
-          if [ "$(whoami)" = "utr_lefebvre" ]
-          then
-            sbatch $ARGS
-          else
-            $ARGS
-          fi
+            echo "Submitting $ARGS"
 
-          COUNTER=$(($COUNTER+1))
+            if [ "$(whoami)" = "utr_lefebvre" ]
+            then
+              sbatch $ARGS
+            else
+              $ARGS
+            fi
+
+            COUNTER=$(($COUNTER+1))
+
+          done
 
         done
 

@@ -60,7 +60,9 @@ int main(int t_argc, const char** t_argv) {
               << report.separation_time << ","
               << report.best_bound << ","
               << report.iteration_count << ","
-              << report.fail_flag
+              << report.fail_flag, << ","
+              << use_bilevel_sep << ","
+              << use_budgeted_unc
               << std::endl;
 
     return 0;
