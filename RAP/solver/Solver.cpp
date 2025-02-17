@@ -117,7 +117,7 @@ void RAP::Solver::create_separation_problem() {
     if (m_use_budgeted_uncertainty_set) {
         m_separation_problem.add_ctr(idol_Sum(j, Range(n_clients), m_xi[j]) <= m_Gamma);
     } else {
-        m_separation_problem.add_ctr(idol_Sum(j, Range(n_clients), m_deviation * m_instance.demand(j) * m_xi[j]) <= Gamma_tilde());
+        m_separation_problem.add_ctr(idol_Sum(j, Range(n_clients), std::ceil(m_deviation * m_instance.demand(j)) * m_xi[j]) <= Gamma_tilde());
     }
 
     if (m_use_bilevel_separation) {
@@ -144,6 +144,7 @@ void RAP::Solver::create_separation_problem() {
         }
 
         const auto add_linearization = [&](const Expr<>& t_a, const Expr<>& t_b, const Var& t_bin_var, double t_big_M) {
+            t_big_M = std::ceil(t_big_M);
             m_separation_problem.add_ctr(t_a <= t_big_M * t_bin_var);
             m_separation_problem.add_ctr(t_b <= t_big_M * (1 - t_bin_var));
         };

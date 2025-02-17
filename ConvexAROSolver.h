@@ -29,12 +29,15 @@ public:
 
 class ConvexAROSolver : public AbstractSolver {
     bool m_heuristic_mode = false;
+    std::vector<idol::Solution::Primal> m_scenarios;
 protected:
     virtual void initialize() = 0;
     virtual idol::Solution::Primal solve_master_problem(double t_time_limit) = 0;
     virtual idol::Solution::Primal solve_separation_problem(double t_time_limit) = 0;
     virtual void update_separation_objective_function(const idol::Solution::Primal& t_master_solution) = 0;
     virtual void augment_master_problem(const idol::Solution::Primal& t_separation_solution) = 0;
+
+    void store_and_check(const idol::Solution::Primal& t_separation_solution);
 public:
     Report solve(double t_time_limit, double t_tolerance_for_separation, bool t_heuristic_mode) override;
 

@@ -55,6 +55,8 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
             break;
         }
 
+        store_and_check(separation_solution);
+
         augment_master_problem( separation_solution );
 
         ++iteration_count;
@@ -83,6 +85,62 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
         (master_solution.status() != Optimal && master_solution.reason() != TimeLimit)
         || (separation_solution.status() != Optimal && separation_solution.reason() != TimeLimit)
     };
+
+}
+
+void ConvexAROSolver::store_and_check(const Solution::Primal &t_separation_solution) {
+
+    const auto is_same = [&](const Solution::Primal& t_lhs, const Solution::Primal& t_rhs) {
+
+        if (t_lhs.status() != t_rhs.status()) {
+            return false;
+        }
+
+        for (const auto& [var, val] : t_lhs) {
+            if (var.name().substr(0, 2) != "xi") {
+                continue;
+            }
+            if (std::abs(val - t_rhs.get(var)) > 1e-4) {
+                return false;
+            }
+        }
+
+        for (const auto& [var, val] : t_rhs) {
+            if (var.name().substr(0, 2) != "xi") {
+                continue;
+            }
+            if (std::abs(val - t_lhs.get(var)) > 1e-4) {
+                return false;
+            }
+        }
+
+        // PRINT FOR DEBUG
+        for (const auto& [var, val] : t_rhs) {
+            if (var.name().substr(0, 2) != "xi") {
+                continue;
+            }
+            std::cerr << var << " = " << val << std::endl;
+        }
+
+        std::cerr << "is the same as" << std::endl;
+
+        for (const auto& [var, val] : t_lhs) {
+            if (var.name().substr(0, 2) != "xi") {
+                continue;
+            }
+            std::cerr << var << " = " << val << std::endl;
+        }
+
+        return true;
+    };
+
+    for (const auto& scenario : m_scenarios ) {
+        if (is_same(scenario, t_separation_solution)) {
+            throw Exception("Scenario already exists.");
+        }
+    }
+
+    m_scenarios.push_back(t_separation_solution);
 
 }
 
@@ -115,7 +173,7 @@ void EarlyStopCallback::Strategy::operator()(idol::CallbackEvent t_event) {
         return;
     }
 
-    if (best_obj() < 1e-7) {
+    if (best_obj() < 1e-5) {
         return;
     }
 
