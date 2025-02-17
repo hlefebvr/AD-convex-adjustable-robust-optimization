@@ -12,4 +12,7 @@ then
   module load gcc
 fi
 
+echo "-- Running $@"
+
+exit
 $@
