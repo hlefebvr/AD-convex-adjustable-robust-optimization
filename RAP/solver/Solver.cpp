@@ -177,6 +177,15 @@ void RAP::Solver::create_separation_problem() {
             }
         }
 
+        // Strong-duality cut
+        const auto s_1 = m_separation_problem.add_vars(Dim<1>(n_clients), 0, 1, Continuous, "s_1");
+        const auto s_2 = m_separation_problem.add_vars(Dim<1>(n_clients), 0, 1, Continuous, "s_2");
+        for (unsigned int j = 0 ; j < n_clients ; ++j) {
+            m_separation_problem.add_ctr(m_beta[j] == s_1[j] - s_2[j]);
+        }
+        m_separation_problem.add_ctr(idol_Sum(j, Range(n_clients), (s_1[j] + s_2[j]) * m_instance.demand(j) * m_deviation)
+                    >= (m_use_budgeted_uncertainty_set ? m_Gamma : Gamma_tilde()) * m_dual_kp_lambda + idol_Sum(j, Range(n_clients), m_beta[j] * m_instance.demand(j) * m_deviation + m_dual_kp_mu[j]));
+
     } else {
 
         assert(m_use_budgeted_uncertainty_set);
