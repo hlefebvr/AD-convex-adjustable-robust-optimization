@@ -64,7 +64,7 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
         log_iteration();
 
         if (separation_solution.objective_value() <= t_tolerance_for_separation) {
-            if (m_heuristic_mode) {
+            if (m_heuristic_mode && separation_solution.status() != Optimal) {
                 m_heuristic_mode = false;
                 std::cout << "Turning off heuristic mode." << std::endl;
                 continue;

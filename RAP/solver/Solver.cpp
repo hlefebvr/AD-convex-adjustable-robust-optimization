@@ -272,7 +272,7 @@ void RAP::Solver::update_separation_objective_function(const Solution::Primal &t
 double RAP::Solver::Gamma_tilde() const {
     const double n_clients = m_instance.n_clients();
     const double sum_demands = idol_Sum(j, Range(n_clients), m_instance.demand(j)).constant().numerical();
-    return std::ceil(m_Gamma * sum_demands / n_clients);
+    return std::ceil( m_Gamma * sum_demands / n_clients);
 }
 
 double RAP::Solver::compute_max_demand() const {
