@@ -122,12 +122,6 @@ void RAP::Solver::create_separation_problem() {
 
     if (m_use_bilevel_separation) {
 
-        for (unsigned int j = 0 ; j < n_clients ; ++j) {
-            m_separation_problem.set_var_type(m_xi[j], Continuous);
-            m_separation_problem.set_var_ub(m_xi[j], 1);
-            m_separation_problem.set_var_lb(m_xi[j], 0);
-        }
-
         m_separation_problem.add(m_dual_kp_lambda);
         m_separation_problem.add_vector<Var, 1>(m_dual_kp_mu);
         m_separation_problem.add_vector<Var, 1>(m_dual_kp_nu);
@@ -138,6 +132,13 @@ void RAP::Solver::create_separation_problem() {
                 m_separation_problem.add_ctr(m_deviation * m_instance.demand(j) * m_beta[j] - m_dual_kp_lambda - m_dual_kp_mu[j] + m_dual_kp_nu[j] == 0);
             }
         } else {
+
+            for (unsigned int j = 0 ; j < n_clients ; ++j) {
+                m_separation_problem.set_var_type(m_xi[j], Continuous);
+                m_separation_problem.set_var_ub(m_xi[j], 1);
+                m_separation_problem.set_var_lb(m_xi[j], 0);
+            }
+
             for (unsigned int j = 0 ; j < n_clients ; ++j) {
                 m_separation_problem.add_ctr(m_deviation * m_instance.demand(j) * (m_beta[j] - m_dual_kp_lambda) - m_dual_kp_mu[j] + m_dual_kp_nu[j] == 0);
             }
