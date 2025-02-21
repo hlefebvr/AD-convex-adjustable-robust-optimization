@@ -55,10 +55,6 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
             break;
         }
 
-        store_and_check(separation_solution);
-
-        augment_master_problem( separation_solution );
-
         ++iteration_count;
 
         log_iteration();
@@ -71,6 +67,11 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
             }
             break;
         }
+
+        store_and_check(separation_solution);
+
+        augment_master_problem( separation_solution );
+
 
     } while ( true );
 

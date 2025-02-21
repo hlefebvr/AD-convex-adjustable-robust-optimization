@@ -64,6 +64,7 @@ idol::Solution::Primal RAP::Solver::solve_separation_problem(double t_time_limit
     if (const auto status = m_separation_problem.get_status() ; status != Optimal && status != Feasible ) {
         result.set_status(status);
         result.set_reason(m_separation_problem.get_reason());
+        std::cerr << "Separation problem ended with status " << status << "(" << m_separation_problem.get_reason() << ")" << std::endl;
         return result;
     }
 
@@ -117,7 +118,7 @@ void RAP::Solver::create_separation_problem() {
     if (m_use_budgeted_uncertainty_set) {
         m_separation_problem.add_ctr(idol_Sum(j, Range(n_clients), m_xi[j]) <= m_Gamma);
     } else {
-        m_separation_problem.add_ctr(idol_Sum(j, Range(n_clients), m_deviation * m_instance.demand(j) * m_xi[j]) <= Gamma_tilde());
+        m_separation_problem.add_ctr(idol_Sum(j, Range(n_clients), std::ceil(m_deviation * m_instance.demand(j)) * m_xi[j]) <= Gamma_tilde());
     }
 
     if (m_use_bilevel_separation) {
@@ -140,7 +141,7 @@ void RAP::Solver::create_separation_problem() {
             }
 
             for (unsigned int j = 0 ; j < n_clients ; ++j) {
-                m_separation_problem.add_ctr(m_deviation * m_instance.demand(j) * (m_beta[j] - m_dual_kp_lambda) - m_dual_kp_mu[j] + m_dual_kp_nu[j] == 0);
+                m_separation_problem.add_ctr(m_deviation * m_instance.demand(j) * m_beta[j] - std::ceil(m_deviation * m_instance.demand(j)) * m_dual_kp_lambda - m_dual_kp_mu[j] + m_dual_kp_nu[j] == 0);
             }
         }
 
@@ -166,15 +167,15 @@ void RAP::Solver::create_separation_problem() {
         } else {
             /// Knapsack
             const auto z_1 = m_separation_problem.add_var(0, 1, Binary, "z_1");
-            const double max_deviation_per_Gamma_tilde = m_deviation * compute_max_demand() / Gamma_tilde();
-            add_linearization(m_dual_kp_lambda, Gamma_tilde() - idol_Sum(j, Range(n_clients), m_deviation * m_instance.demand(j) * m_xi[j]), z_1, max_deviation_per_Gamma_tilde);
+            const double sum_deviation_per_Gamma_tilde = idol_Sum(j, Range(n_clients), m_deviation * m_instance.demand(j)).constant().as_numerical() / Gamma_tilde();
+            add_linearization(m_dual_kp_lambda, Gamma_tilde() - idol_Sum(j, Range(n_clients), std::ceil(m_deviation * m_instance.demand(j)) * m_xi[j]), z_1, std::max(sum_deviation_per_Gamma_tilde, Gamma_tilde()));
             /// Bounds
             for (unsigned int j = 0 ; j < n_clients ; ++j) {
                 const auto z_2 = m_separation_problem.add_var(0, 1, Binary, "z_2_" + std::to_string(j));
-                add_linearization(m_dual_kp_mu[j], 1 - m_xi[j], z_2, m_instance.demand(j)); // UB
+                add_linearization(m_dual_kp_mu[j], 1 - m_xi[j], z_2, std::max(1., m_deviation * m_instance.demand(j))); // UB
 
                 const auto z_3 = m_separation_problem.add_var(0, 1, Binary, "z_3_" + std::to_string(j));
-                add_linearization(m_dual_kp_nu[j], m_xi[j], z_3, 2 * m_instance.demand(j) + max_deviation_per_Gamma_tilde); // LB
+                add_linearization(m_dual_kp_nu[j], m_xi[j], z_3, std::max(1., 2 * m_deviation * m_instance.demand(j) + sum_deviation_per_Gamma_tilde)); // LB
             }
         }
 
@@ -208,7 +209,7 @@ void RAP::Solver::create_separation_problem() {
     m_separation_problem.use(
             Mosek()
                 .add_callback(EarlyStopCallback(*this))
-                //.with_log_level(Info, Black)
+                //.with_logs(true)
     );
 
 }
