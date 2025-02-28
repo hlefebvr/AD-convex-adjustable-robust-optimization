@@ -7,7 +7,7 @@ else
   PROJECT_DIRECTORY=/home/henri/Research/AD-convex-adjustable-robust-optimization
 fi
 
-INSTANCE_DIRECTORY=RAP/data
+INSTANCE_DIRECTORY=RAP/data/src
 BUILD_DIRECTORY=cmake-build-debug
 EXECUTABLE=RAP/solver/RAP_solve
 EXPERIMENTS_DIRECTORY=RAP/experiments

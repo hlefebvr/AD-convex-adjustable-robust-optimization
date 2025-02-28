@@ -77,8 +77,7 @@ void RAP::Solver::create_master_problem() {
     m_master_problem.add_vector<Var, 1>(m_x);
     m_master_problem.set_obj_expr(m_x_0);
 
-    m_master_problem.use(Mosek() );
-
+    m_master_problem.use(create_mosek());
 }
 
 void RAP::Solver::create_separation_problem() {
@@ -206,11 +205,7 @@ void RAP::Solver::create_separation_problem() {
 
     }
 
-    m_separation_problem.use(
-            Mosek()
-                .add_callback(EarlyStopCallback(*this))
-                //.with_logs(true)
-    );
+    m_separation_problem.use(create_mosek());
 
 }
 
@@ -284,4 +279,15 @@ double RAP::Solver::compute_max_demand() const {
         result = std::max(result, m_instance.demand(j));
     }
     return result;
+}
+
+idol::Mosek RAP::Solver::create_mosek() const {
+
+    auto mosek = Mosek();
+    mosek.with_external_parameter("intpntCoTolPfeas", 1e-6);
+    mosek.with_external_parameter("intpntCoTolRelGap", 1e-6);
+    mosek.with_external_parameter("intpntCoTolMuRed", 1e-6);
+    mosek.with_logs(false);
+
+    return std::move(mosek);
 }

@@ -42,6 +42,7 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
         master_timer.stop();
 
         if (master_solution.status() != Optimal) {
+            std::cerr << "Master problem ended with status " << master_solution.status() << "(" << master_solution.reason() << ")" << std::endl;
             break;
         }
 
@@ -76,6 +77,11 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
     } while ( true );
 
     timer.stop();
+
+    std::cout << master_solution.status() << std::endl;
+    std::cout << master_solution.reason() << std::endl;
+    std::cout << separation_solution.reason() << std::endl;
+    std::cout << separation_solution.reason() << std::endl;
 
     return {
         master_solution.has_objective_value() ? master_solution.objective_value() : Inf,

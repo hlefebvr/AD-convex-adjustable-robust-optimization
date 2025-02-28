@@ -4,6 +4,7 @@
 
 #include "CCG.h"
 #include "idol/optimizers/mixed-integer-optimization/wrappers/Mosek/Mosek.h"
+#include "idol/optimizers/mixed-integer-optimization/wrappers/Gurobi/Gurobi.h"
 
 using namespace idol;
 
@@ -17,24 +18,24 @@ void RAP::CCG::augment_master_problem(const idol::Solution::Primal &t_separation
     const unsigned int n_servers = m_instance.n_servers();
     const unsigned int n_clients = m_instance.n_clients();
 
-    auto y = m_master_problem.add_vars(Dim<2>(n_servers, n_clients), 0, Inf, Continuous);
+    auto y = m_master_problem.add_vars(Dim<2>(n_servers, n_clients), 0, Inf, Continuous, "y");
 
     m_master_problem.add_ctr(
         m_x_0 >= idol_Sum(i, Range(n_servers), m_instance.unitary_cost(i) * m_x[i])
     );
 
-    auto v = m_master_problem.add_vars(Dim<1>(n_servers), 0, Inf, Continuous);
+    auto v = m_master_problem.add_vars(Dim<1>(n_servers), 0, Inf, Continuous, "v");
 
     for (auto i : Range(n_servers)) {
         m_master_problem.add_ctr(idol_Sum(j, Range(n_clients), y[i][j]) == v[i]);
     }
 
     for (auto i : Range(n_servers)) {
-        m_master_problem.add_ctr(v[i] + m_instance.congestion_factor(i) * v[i] * v[i] <= m_x[i]);
+        m_master_problem.add_ctr(v[i] + m_instance.congestion_factor(i) * v[i] * v[i] <= m_x[i], "congestion_" + std::to_string(i));
     }
 
     for (auto j : Range(n_clients)) {
-        m_master_problem.add_ctr(idol_Sum(i, Range(n_servers), m_instance.service_rate(i, j) * y[i][j]) >= m_instance.demand(j) * ( 1 + m_deviation * t_separation_solution.get(m_xi[j]) ));
+        m_master_problem.add_ctr(idol_Sum(i, Range(n_servers), m_instance.service_rate(i, j) * y[i][j]) >= m_instance.demand(j) * ( 1 + m_deviation * t_separation_solution.get(m_xi[j]) ), "demand_satisfaction_" + std::to_string(j));
     }
 
     /*
@@ -48,5 +49,5 @@ void RAP::CCG::augment_master_problem(const idol::Solution::Primal &t_separation
     }
      */
 
-    m_master_problem.use( Mosek() );
+    m_master_problem.use( create_mosek() );
 }

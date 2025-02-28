@@ -7,6 +7,7 @@
 
 #include "../../ConvexAROSolver.h"
 #include "../instance/Instance.h"
+#include "idol/optimizers/mixed-integer-optimization/wrappers/Mosek/Mosek.h"
 
 namespace RAP {
     class Solver;
@@ -53,6 +54,8 @@ protected:
 
     double Gamma_tilde() const;
     double compute_max_demand() const;
+
+    idol::Mosek create_mosek() const;
 public:
     Solver(const Instance& t_instance, double t_Gamma, double t_deviation, bool t_use_bilevel_separation, bool t_use_budgeted_uncertainty_set);
 };

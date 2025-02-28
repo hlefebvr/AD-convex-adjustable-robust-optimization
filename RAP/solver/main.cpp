@@ -31,6 +31,9 @@ int main(int t_argc, const char** t_argv) {
 
     const double Gamma = std::floor( percentage_for_Gamma * instance.n_clients() );
 
+    std::cout << "p = " << percentage_for_Gamma << std::endl;
+    std::cout << "Gamma = " << Gamma << std::endl;
+
     std::unique_ptr<AbstractSolver> solver;
 
     if (method == "GBD") {
