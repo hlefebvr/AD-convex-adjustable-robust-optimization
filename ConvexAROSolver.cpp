@@ -143,7 +143,8 @@ void ConvexAROSolver::store_and_check(const Solution::Primal &t_separation_solut
 
     for (const auto& scenario : m_scenarios ) {
         if (is_same(scenario, t_separation_solution)) {
-            throw Exception("Scenario already exists.");
+            std::cerr << "Scenario already exists." << std::endl;
+            //throw Exception("Scenario already exists.");
         }
     }
 
