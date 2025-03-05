@@ -205,7 +205,7 @@ void RAP::Solver::create_separation_problem() {
 
     }
 
-    m_separation_problem.use(create_mosek());
+    m_separation_problem.use(create_mosek().add_callback(EarlyStopCallback(*this)));
 
 }
 
