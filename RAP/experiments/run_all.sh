@@ -26,7 +26,7 @@ do
       for METHOD in CCG
       do
 
-        for USE_HEURISTIC in 0 1
+        for USE_HEURISTIC in 0 # 1
         do
 
           for BUDEGTED_UNC in 0 1

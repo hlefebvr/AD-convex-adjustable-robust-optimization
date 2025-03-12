@@ -5,6 +5,7 @@
 #include <cassert>
 #include "Solver.h"
 #include "idol/optimizers/mixed-integer-optimization/wrappers/Mosek/Mosek.h"
+#include "idol/optimizers/mixed-integer-optimization/wrappers/Gurobi/Gurobi.h"
 
 using namespace idol;
 
@@ -268,8 +269,9 @@ void RAP::Solver::update_separation_objective_function(const Solution::Primal &t
 
 double RAP::Solver::Gamma_tilde() const {
     const double n_clients = m_instance.n_clients();
-    const double sum_demands = idol_Sum(j, Range(n_clients), m_instance.demand(j)).constant().numerical();
-    return std::ceil( m_Gamma * sum_demands / n_clients);
+    const double sum_demands = m_deviation * idol_Sum(j, Range(n_clients), m_instance.demand(j)).constant().numerical();
+    const double result = std::ceil( m_Gamma * sum_demands / n_clients);
+    return result;
 }
 
 double RAP::Solver::compute_max_demand() const {
@@ -284,9 +286,9 @@ double RAP::Solver::compute_max_demand() const {
 idol::Mosek RAP::Solver::create_mosek() const {
 
     auto mosek = Mosek();
-    mosek.with_external_parameter("intpntCoTolPfeas", 1e-6);
-    mosek.with_external_parameter("intpntCoTolRelGap", 1e-6);
-    mosek.with_external_parameter("intpntCoTolMuRed", 1e-6);
+    //mosek.with_external_parameter("intpntCoTolPfeas", 1e-6);
+    //mosek.with_external_parameter("intpntCoTolRelGap", 1e-6);
+    //mosek.with_external_parameter("intpntCoTolMuRed", 1e-6);
     mosek.with_logs(false);
 
     return std::move(mosek);

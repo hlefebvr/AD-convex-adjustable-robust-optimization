@@ -8,6 +8,7 @@
 #include "../../ConvexAROSolver.h"
 #include "../instance/Instance.h"
 #include "idol/optimizers/mixed-integer-optimization/wrappers/Mosek/Mosek.h"
+#include "idol/optimizers/mixed-integer-optimization/wrappers/Gurobi/Gurobi.h"
 
 namespace RAP {
     class Solver;
