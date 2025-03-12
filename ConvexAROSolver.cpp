@@ -78,10 +78,6 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
 
     timer.stop();
 
-    std::cout << master_solution.status() << std::endl;
-    std::cout << master_solution.reason() << std::endl;
-    std::cout << separation_solution.reason() << std::endl;
-    std::cout << separation_solution.reason() << std::endl;
 
     return {
         master_solution.has_objective_value() ? master_solution.objective_value() : Inf,
