@@ -36,7 +36,10 @@ int main(int t_argc, const char** t_argv) {
         solver = std::make_unique<FLP::CCG>(instance, Gamma, deviation);
     } else if (method == "Nominal") {
         solver = std::make_unique<FLP::Nominal>(instance);
-    } else {
+    } else if (method == "Static") {
+        solver = std::make_unique<FLP::Nominal>(instance, deviation);
+    }
+        else {
         throw std::invalid_argument("Argument <method> must be among GBD, CCG and Nominal. Received \" " + method + " \".");
     }
 

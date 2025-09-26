@@ -7,9 +7,10 @@
 
 using namespace idol;
 
-FLP::Nominal::Nominal(const FLP::Instance &t_instance)
+FLP::Nominal::Nominal(const FLP::Instance &t_instance, double t_deviation)
         : m_instance(t_instance),
-          m_model(m_env) {
+          m_model(m_env),
+          m_deviation(t_deviation) {
 
     const unsigned int n_facilities = m_instance.n_facilities();
     const unsigned int n_customers = m_instance.n_customers();
@@ -52,7 +53,7 @@ FLP::Nominal::Nominal(const FLP::Instance &t_instance)
     }
 
     for (auto j : Range(n_customers)) {
-        m_model.add_ctr(idol_Sum(i, Range(n_facilities), y[i][j]) == m_instance.demand(j));
+        m_model.add_ctr(idol_Sum(i, Range(n_facilities), y[i][j]) == m_instance.demand(j) * (1. + m_deviation));
     }
 
     for (auto i : Range(n_facilities)) {

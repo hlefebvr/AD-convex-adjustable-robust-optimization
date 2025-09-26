@@ -42,6 +42,8 @@ int main(int t_argc, const char** t_argv) {
         solver = std::make_unique<RAP::CCG>(instance, Gamma, deviation, use_bilevel_sep, use_budgeted_unc);
     } else if (method == "Nominal") {
         solver = std::make_unique<RAP::Nominal>(instance);
+    } else if (method == "Static") {
+        solver = std::make_unique<RAP::Nominal>(instance, deviation);
     } else {
         throw std::invalid_argument("Argument <method> must be among GBD, CCG and Nominal. Received \" " + method + " \".");
     }

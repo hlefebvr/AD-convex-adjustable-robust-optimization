@@ -7,7 +7,7 @@
 
 using namespace idol;
 
-RAP::Nominal::Nominal(const RAP::Instance &t_instance) : m_instance(t_instance), m_model(m_env) {
+RAP::Nominal::Nominal(const RAP::Instance &t_instance, double t_deviation) : m_instance(t_instance), m_model(m_env), m_deviation(t_deviation) {
 
 
     const unsigned int n_servers = m_instance.n_servers();
@@ -29,7 +29,7 @@ RAP::Nominal::Nominal(const RAP::Instance &t_instance) : m_instance(t_instance),
     }
 
     for (auto j : Range(n_clients)) {
-        m_model.add_ctr(idol_Sum(i, Range(n_servers), m_instance.service_rate(i, j) * y[i][j]) >= m_instance.demand(j));
+        m_model.add_ctr(idol_Sum(i, Range(n_servers), m_instance.service_rate(i, j) * y[i][j]) >= m_instance.demand(j) * (1. + m_deviation));
     }
 
     for (auto i : Range(n_servers)) {
