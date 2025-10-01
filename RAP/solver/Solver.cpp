@@ -49,6 +49,7 @@ idol::Solution::Primal RAP::Solver::solve_master_problem(double t_time_limit) {
     if (const auto status = m_master_problem.get_status() ; status != Optimal && status != Feasible ) {
         result.set_status(status);
         result.set_reason(m_master_problem.get_reason());
+        result.set_objective_value(m_master_problem.get_best_bound());
         return result;
     }
 
