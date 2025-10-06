@@ -16,6 +16,7 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
     idol::Solution::Primal separation_solution;
     unsigned int iteration_count = 0;
     m_heuristic_mode = t_heuristic_mode;
+    double m_best_bound = -Inf;
 
     const auto remaining_time = [&]() { return std::max(0., t_time_limit - timer.count()); };
 
@@ -25,7 +26,7 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
             << "<TotalTime=" << timer.count() << "> "
             << "<IterMasterTime=" << master_timer.count() << "> "
             << "<IterSepTime=" << separation_timer.count() << "> "
-            << "<BestBound=" << master_solution.objective_value() << "> "
+            << "<BestBound=" << m_best_bound << "> "
             << "<Violation=" << separation_solution.objective_value() << "> "
             << "<IterStatus=" << master_solution.status() << "," << separation_solution.status() << "> "
             << std::endl;
@@ -44,6 +45,10 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
         if (master_solution.status() != Optimal) {
             std::cerr << "Master problem ended with status " << master_solution.status() << "(" << master_solution.reason() << ")" << std::endl;
             break;
+        }
+
+        if (master_solution.objective_value() > m_best_bound) {
+            m_best_bound = master_solution.objective_value();
         }
 
         update_separation_objective_function(master_solution);
@@ -80,7 +85,7 @@ AbstractSolver::Report ConvexAROSolver::solve(double t_time_limit,
 
 
     return {
-        master_solution.has_objective_value() ? master_solution.objective_value() : Inf,
+        m_best_bound,
         timer.count(),
         master_timer.cumulative_count(),
         separation_timer.cumulative_count(),
